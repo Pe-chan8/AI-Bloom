@@ -261,6 +261,3 @@ AI があなたの小さな頑張りを抱きしめ、
 自分を好きになる明日へ導く。
 
 🌻 AI-bloom ― 今日も、あなたらしい一歩を。
-
-## 画面遷移図
-https://www.figma.com/design/myKGKtUEXA2VgPY9n5AGvO/project?node-id=60-4
