@@ -264,3 +264,6 @@ AI があなたの小さな頑張りを抱きしめ、
 
 ## 画面遷移図
 https://www.figma.com/design/myKGKtUEXA2VgPY9n5AGvO/project?node-id=60-4
+
+## ER図
+[![Image from Gyazo](https://i.gyazo.com/c4ffc77baf0580e93135da4e0a3bd9f3.png)](https://gyazo.com/c4ffc77baf0580e93135da4e0a3bd9f3)
