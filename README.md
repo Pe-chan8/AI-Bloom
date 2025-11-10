@@ -267,3 +267,9 @@ https://www.figma.com/design/myKGKtUEXA2VgPY9n5AGvO/project?node-id=60-4
 
 ## ER図
 [![Image from Gyazo](https://i.gyazo.com/c4ffc77baf0580e93135da4e0a3bd9f3.png)](https://gyazo.com/c4ffc77baf0580e93135da4e0a3bd9f3)
+
+## ProjectsのURL
+https://github.com/users/Pe-chan8/projects/16/views/1
+
+## MVPレビュー依頼予定日
+予定日：2025年 12月 21日
