@@ -2737,3 +2737,206 @@ Processing by TopController#index as TURBO_STREAM
 Completed 200 OK in 27ms (Views: 2.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
 
 
+Started GET "/users/sign_up" for 192.168.65.1 at 2025-11-15 10:20:07 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::RegistrationsController#new as HTML
+  [1m[36mUser Load (2.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='registrations'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 30ms (ActiveRecord: 2.0ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 192.168.65.1 at 2025-11-15 10:20:07 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.7ms | GC: 0.0ms)
+Completed 200 OK in 30ms (Views: 2.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:18:44 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 15.2ms | GC: 0.0ms)
+Completed 200 OK in 77ms (Views: 21.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/users/sign_in" for 151.101.1.227 at 2025-11-15 11:18:53 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::SessionsController#new as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='sessions'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 97ms (ActiveRecord: 34.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:18:53 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.3ms | GC: 0.0ms)
+Completed 200 OK in 23ms (Views: 1.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_in" for 151.101.1.227 at 2025-11-15 11:18:59 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::SessionsController#new as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='sessions'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 2ms (ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:18:59 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.8ms | GC: 0.0ms)
+Completed 200 OK in 27ms (Views: 1.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_up" for 151.101.1.227 at 2025-11-15 11:19:01 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::RegistrationsController#new as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='registrations'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 4ms (ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:19:01 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.1ms | GC: 0.0ms)
+Completed 200 OK in 28ms (Views: 1.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/users/sign_up" for 151.101.1.227 at 2025-11-15 11:19:19 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::RegistrationsController#new as HTML
+  [1m[36mUser Load (2.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='registrations'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 10ms (ActiveRecord: 2.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:19:19 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.7ms | GC: 0.0ms)
+Completed 200 OK in 24ms (Views: 2.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_up" for 151.101.1.227 at 2025-11-15 11:19:45 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::RegistrationsController#new as HTML
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='registrations'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 7ms (ActiveRecord: 1.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:19:45 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.6ms | GC: 0.0ms)
+Completed 200 OK in 26ms (Views: 1.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_up" for 151.101.1.227 at 2025-11-15 11:19:45 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::RegistrationsController#new as HTML
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='registrations'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 5ms (ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:19:45 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.8ms | GC: 0.7ms)
+Completed 200 OK in 30ms (Views: 2.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 1.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:24:36 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 1.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 27.5ms | GC: 3.2ms)
+Completed 200 OK in 69ms (Views: 31.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 3.2ms)
+
+
+Started GET "/users/sign_up" for 151.101.1.227 at 2025-11-15 11:28:34 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+Processing by Devise::RegistrationsController#new as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='registrations'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 54ms (ActiveRecord: 29.1ms (1 query, 0 cached) | GC: 20.1ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:28:34 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 8.3ms | GC: 0.2ms)
+Completed 200 OK in 41ms (Views: 10.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:32:48 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.6ms | GC: 0.0ms)
+Completed 200 OK in 27ms (Views: 3.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_in" for 151.101.1.227 at 2025-11-15 11:33:01 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::SessionsController#new as HTML
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='new',application='AiBloom',controller='sessions'*/[0m
+Redirected to http://localhost:3000/
+Filter chain halted as :require_no_authentication rendered or redirected
+Completed 302 Found in 8ms (ActiveRecord: 1.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 11:33:01 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.6ms | GC: 0.0ms)
+Completed 200 OK in 26ms (Views: 2.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
