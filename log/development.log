@@ -2940,3 +2940,240 @@ Processing by TopController#index as HTML
 Completed 200 OK in 26ms (Views: 2.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
 
 
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Writing tailwind-737d8a13.css
+Writing application-8b441ae0.css
+Writing application-bfcdf840.js
+Writing controllers/hello_controller-708796bd.js
+Writing controllers/index-ee64e1f1.js
+Writing controllers/application-3affb389.js
+Writing stimulus-importmap-autoloader-64cc03e1.js
+Writing stimulus-d59b3b7f.js
+Writing stimulus.min-2395e199.js.map
+Writing stimulus-loading-1fc53fe7.js
+Writing stimulus-autoloader-9d447422.js
+Writing stimulus.min-4b1e420e.js
+Writing turbo-3bd2ae57.js
+Writing turbo.min-b571832f.js.map
+Writing turbo.min-ad2c7b86.js
+Writing actiontext-c9c6c481.js
+Writing actiontext.esm-c376325e.js
+Writing trix-9a18fe03.js
+Writing trix-65afdb1d.css
+Writing actioncable.esm-e0ec9819.js
+Writing actioncable-ac25813f.js
+Writing action_cable-5212cfee.js
+Writing activestorage-f9e46063.js
+Writing activestorage.esm-81bb34bc.js
+Writing rails-ujs-20eaf715.js
+Writing rails-ujs.esm-e925103b.js
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Writing tailwind-89efea30.css
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:11:00 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:45
+  Rendered layout layouts/application.html.erb (Duration: 49.0ms | GC: 0.0ms)
+Completed 200 OK in 70ms (Views: 35.9ms | ActiveRecord: 19.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:11:50 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 2.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.3ms | GC: 0.3ms)
+Completed 200 OK in 9ms (Views: 6.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:11:51 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.0ms | GC: 0.5ms)
+Completed 200 OK in 8ms (Views: 4.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:11:52 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 1.4ms | GC: 1.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | GC: 1.3ms)
+Completed 200 OK in 9ms (Views: 4.5ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 1.3ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:14:26 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 2.2ms | GC: 0.0ms)
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:41
+  Rendered layout layouts/application.html.erb (Duration: 21.6ms | GC: 0.6ms)
+Completed 200 OK in 26ms (Views: 15.9ms | ActiveRecord: 7.9ms (1 query, 0 cached) | GC: 1.3ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:14:27 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:41
+  Rendered layout layouts/application.html.erb (Duration: 7.4ms | GC: 0.0ms)
+Completed 200 OK in 14ms (Views: 7.9ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:14:41 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 12.1ms | GC: 0.0ms)
+Completed 200 OK in 16ms (Views: 13.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:14:50 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:41
+  Rendered layout layouts/application.html.erb (Duration: 12.3ms | GC: 0.3ms)
+Completed 200 OK in 15ms (Views: 9.3ms | ActiveRecord: 4.2ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:18:25 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 1.4ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:45
+  Rendered layout layouts/application.html.erb (Duration: 23.2ms | GC: 2.2ms)
+Completed 200 OK in 29ms (Views: 21.7ms | ActiveRecord: 3.4ms (1 query, 0 cached) | GC: 2.2ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:18:26 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:45
+  Rendered layout layouts/application.html.erb (Duration: 6.5ms | GC: 0.0ms)
+Completed 200 OK in 13ms (Views: 8.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 1.4ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:19:09 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:42
+  Rendered layout layouts/application.html.erb (Duration: 30.0ms | GC: 12.8ms)
+Completed 200 OK in 34ms (Views: 27.8ms | ActiveRecord: 3.8ms (1 query, 0 cached) | GC: 12.8ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:19:10 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:42
+  Rendered layout layouts/application.html.erb (Duration: 6.5ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 7.0ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:51:16 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 2.9ms | GC: 0.0ms)
+  [1m[36mUser Load (38.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:42
+  Rendered layout layouts/application.html.erb (Duration: 73.1ms | GC: 2.8ms)
+Completed 200 OK in 81ms (Views: 33.7ms | ActiveRecord: 44.0ms (1 query, 0 cached) | GC: 5.7ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:51:17 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.0ms | GC: 0.0ms)
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:42
+  Rendered layout layouts/application.html.erb (Duration: 9.1ms | GC: 1.1ms)
+Completed 200 OK in 14ms (Views: 9.4ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-15 13:56:09 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:42
+  Rendered layout layouts/application.html.erb (Duration: 21.6ms | GC: 0.2ms)
+Completed 200 OK in 26ms (Views: 10.4ms | ActiveRecord: 12.7ms (1 query, 0 cached) | GC: 0.8ms)
+
+

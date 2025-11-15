@@ -17,12 +17,73 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# Tailwind（tailwindcss-rails が生成） %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="min-h-screen flex flex-col">
+    <!-- ヘッダー -->
+    <header class="bg-white/80 backdrop-blur shadow-sm">
+      <div class="main-container flex items-center justify-between py-4">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🌻</span>
+          <span class="font-bold text-lg">AI-bloom</span>
+        </div>
+
+        <nav class="flex items-center gap-4 text-sm">
+          <%= link_to "ホーム", root_path, class: "hover:underline" %>
+          <%# TODO: ルーティングができたら修正 %>
+          <%= link_to "投稿", "#", class: "hover:underline" %>
+          <%= link_to "診断", "#", class: "hover:underline" %>
+
+          <% if user_signed_in? %>
+            <span class="text-xs text-slate-500">
+              <%= current_user.email %>
+            </span>
+            <%= link_to "ログアウト", destroy_user_session_path,
+                        data: { turbo_method: :delete },
+                        class: "text-xs text-slate-500 hover:underline" %>
+          <% else %>
+            <%= link_to "ログイン", new_user_session_path,
+                        class: "text-xs text-slate-500 hover:underline" %>
+            <%= link_to "新規登録", new_user_registration_path,
+                        class: "btn-primary text-xs" %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <!-- フラッシュ -->
+    <div class="main-container mt-4 space-y-2">
+      <% flash.each do |type, message| %>
+        <% color =
+          if type.to_s == "notice"
+            "bg-emerald-100 border-emerald-300 text-emerald-800"
+          else
+            "bg-rose-100 border-rose-300 text-rose-800"
+          end
+        %>
+        <div class="border rounded-xl px-4 py-3 text-sm <%= color %>">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-1">
+      <div class="main-container">
+        <%= yield %>
+      </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="mt-8 border-t border-slate-200">
+      <div class="main-container py-4 text-xs text-slate-500 flex justify-between">
+        <span>© <%= Time.current.year %> AI-bloom</span>
+        <span>Made with 🐧 & 🌻</span>
+      </div>
+    </footer>
   </body>
 </html>
