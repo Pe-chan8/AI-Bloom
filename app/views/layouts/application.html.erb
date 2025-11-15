@@ -18,6 +18,19 @@
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <%# --- GA4: gtag.js （環境変数があるときだけ読み込む） --- %>
+    <% if ENV["GA_MEASUREMENT_ID"].present? %>
+      <meta name="ga-measurement-id" content="<%= ENV["GA_MEASUREMENT_ID"] %>">
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA_MEASUREMENT_ID"] %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<%= ENV["GA_MEASUREMENT_ID"] %>');
+      </script>
+    <% end %>
   </head>
 
   <body class="min-h-screen bg-sky-50 text-slate-800 pb-20 pt-16 flex flex-col">
