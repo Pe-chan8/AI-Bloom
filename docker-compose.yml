@@ -27,6 +27,7 @@ services:
       DB_HOST: db
       DB_USERNAME: postgres
       DB_PASSWORD: password
+      GA_MEASUREMENT_ID: "G-WQ3HE0E5QY"
 
 volumes:
   db-data:
