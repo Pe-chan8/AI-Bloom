@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Ai Bloom" %></title>
+    <title><%= content_for(:title) || "AI-bloom" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -10,53 +10,47 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Tailwind（tailwindcss-rails が生成） %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen flex flex-col">
-    <!-- ヘッダー -->
-    <header class="bg-white/80 backdrop-blur shadow-sm">
-      <div class="main-container flex items-center justify-between py-4">
+  <body class="min-h-screen bg-sky-50 text-slate-800 pb-20 pt-16 flex flex-col">
+    <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
+    <header
+      style="position: fixed; top: 0; left: 0; right: 0; z-index: 40;"
+      class="bg-white/90 backdrop-blur shadow-sm"
+    >
+      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span class="text-2xl">🌻</span>
+          <span class="text-xl">🌻</span>
           <span class="font-bold text-lg">AI-bloom</span>
         </div>
 
-        <nav class="flex items-center gap-4 text-sm">
-          <%= link_to "ホーム", root_path, class: "hover:underline" %>
-          <%# TODO: ルーティングができたら修正 %>
-          <%= link_to "投稿", "#", class: "hover:underline" %>
-          <%= link_to "診断", "#", class: "hover:underline" %>
-
+        <div class="flex items-center gap-3 text-xs text-slate-600">
           <% if user_signed_in? %>
-            <span class="text-xs text-slate-500">
-              <%= current_user.email %>
-            </span>
-            <%= link_to "ログアウト", destroy_user_session_path,
+            <span><%= current_user.email %></span>
+            <%= link_to "ログアウト",
+                        destroy_user_session_path,
                         data: { turbo_method: :delete },
-                        class: "text-xs text-slate-500 hover:underline" %>
+                        class: "hover:underline" %>
           <% else %>
-            <%= link_to "ログイン", new_user_session_path,
-                        class: "text-xs text-slate-500 hover:underline" %>
-            <%= link_to "新規登録", new_user_registration_path,
-                        class: "btn-primary text-xs" %>
+            <%= link_to "ログイン", new_user_session_path, class: "hover:underline" %>
+            <%= link_to "新規登録",
+                        new_user_registration_path,
+                        class: "px-3 py-1 rounded-full bg-sky-500 text-white text-xs" %>
           <% end %>
-        </nav>
+        </div>
       </div>
     </header>
 
-    <!-- フラッシュ -->
-    <div class="main-container mt-4 space-y-2">
+    <!-- フラッシュメッセージ -->
+    <div class="max-w-5xl mx-auto px-4 mt-3 space-y-2">
       <% flash.each do |type, message| %>
         <% color =
           if type.to_s == "notice"
@@ -71,19 +65,50 @@
       <% end %>
     </div>
 
-    <!-- メインコンテンツ -->
-    <main class="flex-1">
-      <div class="main-container">
+    <!-- メインコンテンツ（ボトムナビぶん余白を確保） -->
+    <main class="flex-1 pb-20">
+      <div class="max-w-5xl mx-auto px-4 py-8">
         <%= yield %>
       </div>
     </main>
 
-    <!-- フッター -->
-    <footer class="mt-8 border-t border-slate-200">
-      <div class="main-container py-4 text-xs text-slate-500 flex justify-between">
-        <span>© <%= Time.current.year %> AI-bloom</span>
-        <span>Made with 🐧 & 🌻</span>
+        <!-- ボトムナビ：画面下部に固定 -->
+    <nav 
+      style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;"
+      class="bg-white border-t border-slate-200"
+    >
+      <div class="max-w-5xl mx-auto flex justify-between px-4 py-2 text-xs text-slate-600">
+        <%= link_to root_path,
+                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
+          <span>🏠</span>
+          <span>ホーム</span>
+        <% end %>
+
+        <%# TODO: ルート実装後に path を差し替え %>
+        <%= link_to "#",
+                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
+          <span>🧭</span>
+          <span>診断</span>
+        <% end %>
+
+        <%= link_to "#",
+                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
+          <span>🤝</span>
+          <span>バディ</span>
+        <% end %>
+
+        <%= link_to "#",
+                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
+          <span>📝</span>
+          <span>投稿一覧</span>
+        <% end %>
+
+        <%= link_to "#",
+                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
+          <span>❓</span>
+          <span>その他</span>
+        <% end %>
       </div>
-    </footer>
+    </nav>
   </body>
 </html>
