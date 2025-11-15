@@ -21,4 +21,12 @@
     @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold
            bg-sky-500 text-white hover:bg-sky-600 transition;
   }
+
+  .bottom-nav-fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+  }
 }
