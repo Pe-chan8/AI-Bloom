@@ -3599,3 +3599,232 @@ Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.25
   
 ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
   
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/" for 192.168.65.1 at 2025-11-17 14:31:19 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:50
+  Rendered layout layouts/application.html.erb (Duration: 28.9ms | GC: 0.7ms)
+Completed 200 OK in 43ms (Views: 15.1ms | ActiveRecord: 17.1ms (1 query, 0 cached) | GC: 1.2ms)
+
+
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/" for 192.168.65.1 at 2025-11-17 17:07:20 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  
+SyntaxError (/app/config/routes.rb:23: syntax error, unexpected `end'):
+  
+config/routes.rb:23: syntax error, unexpected `end'
+Started GET "/favicon.ico" for 192.168.65.1 at 2025-11-17 17:07:20 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 17:09:34 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  
+SyntaxError (/app/config/routes.rb:23: syntax error, unexpected `end'):
+  
+config/routes.rb:23: syntax error, unexpected `end'
+Started GET "/" for 192.168.65.1 at 2025-11-17 17:11:57 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | GC: 0.3ms)
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.3ms)
+
+
+  
+ActionView::Template::Error (uninitialized constant #<Class:0x0000ffffa8128218>::Sentry)
+Caused by: NameError (uninitialized constant #<Class:0x0000ffffa8128218>::Sentry)
+
+Information for: ActionView::Template::Error (uninitialized constant #<Class:0x0000ffffa8128218>::Sentry):
+    32:       </script>
+    33:     <% end %>
+    34:     <%= Sentry.get_trace_propagation_meta.html_safe %>
+    35:   </head>
+    36: 
+    37:   <body class="min-h-screen bg-sky-50 text-slate-800 pb-20 pt-16 flex flex-col">
+    38:     <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
+  
+app/views/layouts/application.html.erb:35
+
+Information for cause: NameError (uninitialized constant #<Class:0x0000ffffa8128218>::Sentry):
+  
+app/views/layouts/application.html.erb:35
+Started GET "/" for 192.168.65.1 at 2025-11-17 17:32:11 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  [1m[36mUser Load (10.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:50
+  Rendered layout layouts/application.html.erb (Duration: 17.8ms | GC: 0.5ms)
+Completed 200 OK in 21ms (Views: 5.6ms | ActiveRecord: 13.3ms (1 query, 0 cached) | GC: 0.8ms)
+
+
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 17:33:10 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#sentry_test as HTML
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+  
+RuntimeError (Sentry test error from development):
+  
+app/controllers/top_controller.rb:7:in `sentry_test'
+Started GET "/" for 192.168.65.1 at 2025-11-17 17:36:42 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.8ms | GC: 0.0ms)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:50
+  Rendered layout layouts/application.html.erb (Duration: 36.6ms | GC: 1.3ms)
+Completed 200 OK in 66ms (Views: 24.6ms | ActiveRecord: 15.4ms (1 query, 0 cached) | GC: 2.8ms)
+
+
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 17:36:53 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#sentry_test as HTML
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+RuntimeError (Sentry test error from development):
+  
+app/controllers/top_controller.rb:7:in `sentry_test'
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/" for 192.168.65.1 at 2025-11-17 17:56:36 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:50
+  Rendered layout layouts/application.html.erb (Duration: 51.3ms | GC: 4.8ms)
+Completed 200 OK in 98ms (Views: 39.2ms | ActiveRecord: 16.6ms (1 query, 0 cached) | GC: 4.8ms)
+
+
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 17:56:41 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#sentry_test as HTML
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.4ms)
+
+
+  
+RuntimeError (Sentry test error from development):
+  
+app/controllers/top_controller.rb:7:in `sentry_test'
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 17:56:42 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#sentry_test as HTML
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+RuntimeError (Sentry test error from development):
+  
+app/controllers/top_controller.rb:7:in `sentry_test'
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 17:56:46 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#sentry_test as HTML
+Completed 500 Internal Server Error in 6ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+
+
+  
+RuntimeError (Sentry test error from development):
+  
+app/controllers/top_controller.rb:7:in `sentry_test'
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 18:00:10 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#sentry_test as HTML
+Completed 500 Internal Server Error in 6ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+RuntimeError (Sentry test error from development):
+  
+app/controllers/top_controller.rb:7:in `sentry_test'
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/sentry_test" for 192.168.65.1 at 2025-11-17 18:08:28 +0000
+[Tracing] Discarding <http.server> transaction </sentry_test> because traces_sampler returned 0 or false
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#sentry_test as HTML
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+RuntimeError (Sentry test error from development):
+  
+app/controllers/top_controller.rb:7:in `sentry_test'
+[Transport] Sending envelope with items [event] c6da93a94fab4552ad274182f711cef7 to Sentry
+[Transport] Sending envelope with items [sessions]  to Sentry
+Started GET "/" for 192.168.65.1 at 2025-11-17 18:15:30 +0000
+[Tracing] Discarding <http.server> transaction </> because traces_sampler returned 0 or false
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 2.0ms | GC: 0.0ms)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:50
+  Rendered layout layouts/application.html.erb (Duration: 40.8ms | GC: 0.0ms)
+Completed 200 OK in 107ms (Views: 23.3ms | ActiveRecord: 21.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+[Transport] Sending envelope with items [sessions]  to Sentry
