@@ -3828,3 +3828,21 @@ Completed 200 OK in 107ms (Views: 23.3ms | ActiveRecord: 21.1ms (1 query, 0 cach
 
 
 [Transport] Sending envelope with items [sessions]  to Sentry
+Started GET "/" for 192.168.65.1 at 2025-11-18 04:41:15 +0000
+[Tracing] Discarding <http.server> transaction </> because traces_sampler returned 0 or false
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 3.7ms | GC: 0.0ms)
+  [1m[36mUser Load (16.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:50
+  Rendered layout layouts/application.html.erb (Duration: 31.1ms | GC: 0.7ms)
+Completed 200 OK in 37ms (Views: 14.9ms | ActiveRecord: 19.2ms (1 query, 0 cached) | GC: 0.7ms)
+
+
+[Transport] Sending envelope with items [sessions]  to Sentry
