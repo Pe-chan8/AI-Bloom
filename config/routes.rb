@@ -16,4 +16,7 @@ Rails.application.routes.draw do
 
   # アプリのトップページを指定
   root "top#index"
+
+  # ソーシャルタイプ診断トップ
+  get "/diagnosis", to: "diagnoses#top", as: :diagnosis_top
 end

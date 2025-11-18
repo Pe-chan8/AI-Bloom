@@ -33,12 +33,9 @@
     <% end %>
   </head>
 
-  <body class="min-h-screen bg-sky-50 text-slate-800 pb-20 pt-16 flex flex-col">
+  <body class="min-h-screen bg-sky-50 text-slate-800 pb-20 flex flex-col">
     <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
-    <header
-      style="position: fixed; top: 0; left: 0; right: 0; z-index: 40;"
-      class="bg-white/90 backdrop-blur shadow-sm"
-    >
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <span class="text-xl">🌻</span>
@@ -85,7 +82,7 @@
       </div>
     </main>
 
-        <!-- ボトムナビ：画面下部に固定 -->
+    <!-- ボトムナビ：画面下部に固定 -->
     <nav 
       style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;"
       class="bg-white border-t border-slate-200"
@@ -97,8 +94,7 @@
           <span>ホーム</span>
         <% end %>
 
-        <%# TODO: ルート実装後に path を差し替え %>
-        <%= link_to "#",
+        <%= link_to diagnosis_top_path,
                     class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
           <span>🧭</span>
           <span>診断</span>
