@@ -1,0 +1,82 @@
+<div class="main-container space-y-8">
+  <!-- タイトル -->
+  <section class="mt-16 text-center space-y-2">
+    <h1 class="text-2xl font-bold tracking-wide">
+      ソーシャルタイプ診断
+    </h1>
+    <p class="text-sm text-slate-500">
+      自分の「コミュニケーションのクセ」を知って、バディとの付き合い方のヒントを見つけましょう。
+    </p>
+  </section>
+
+  <!-- 説明カード -->
+  <section class="card space-y-4">
+    <h2 class="text-lg font-semibold text-center">ソーシャルタイプとは？</h2>
+    <p class="text-sm leading-relaxed text-slate-600">
+      ソーシャルタイプは、
+      <span class="font-semibold">「Analytical（分析型）」「Amiable（協調型）」「Driving（行動型）」「Expressive（表現型）」</span>
+      の4つに分かれる、コミュニケーションスタイルの分類です。
+    </p>
+    <p class="text-sm leading-relaxed text-slate-600">
+      どれが良い悪いではなく、それぞれに強みと苦手があります。
+      自分のタイプを知ることで、「らしさ」を活かした関わり方や、
+      ストレスを感じやすい場面の傾向が見えてきます。
+    </p>
+    <p class="text-[11px] text-slate-500">
+      ※厳密な性格診断というより、<span class="font-semibold">「なんとなくの雰囲気」</span>を掴むためのイメージです。
+    </p>
+  </section>
+
+  <!-- 4タイプのイメージ（カード表示） -->
+  <section class="card space-y-4">
+    <h3 class="text-sm font-semibold text-center mb-2 text-slate-600">
+      タイプのイメージ（4タイプ）
+    </h3>
+
+    <div class="grid gap-4 md:grid-cols-2 text-sm">
+      <div class="border border-slate-200 rounded-xl p-4">
+        <div class="font-semibold text-slate-800">Expressive</div>
+        <div class="mt-1 text-xs text-slate-500">
+          感情豊か・アイデア・場を明るくするタイプ
+        </div>
+      </div>
+
+      <div class="border border-slate-200 rounded-xl p-4">
+        <div class="font-semibold text-slate-800">Driving</div>
+        <div class="mt-1 text-xs text-slate-500">
+          決断・スピード・結果にこだわるタイプ
+        </div>
+      </div>
+
+      <div class="border border-slate-200 rounded-xl p-4">
+        <div class="font-semibold text-slate-800">Amiable</div>
+        <div class="mt-1 text-xs text-slate-500">
+          やさしさ・調和・支えることが得意なタイプ
+        </div>
+      </div>
+
+      <div class="border border-slate-200 rounded-xl p-4">
+        <div class="font-semibold text-slate-800">Analytical</div>
+        <div class="mt-1 text-xs text-slate-500">
+          論理・慎重・じっくり考えるタイプ
+        </div>
+      </div>
+    </div>
+
+    <p class="text-[11px] text-slate-500 text-center">
+      まずは「自分はどのあたりが近そうかな？」と、気軽にイメージしてみてください。
+    </p>
+  </section>
+
+  <!-- スタートボタン -->
+  <section class="text-center">
+    <%# 質問ページがまだなので、一旦 # にしておく。後で診断画面のパスに差し替える %>
+    <%= link_to "#",
+                class: "btn-primary px-10 py-3 text-base" do %>
+      診断をスタートする
+    <% end %>
+    <p class="mt-2 text-[11px] text-slate-500">
+      ※全10問・所要時間の目安：3〜5分
+    </p>
+  </section>
+</div>
