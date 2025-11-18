@@ -1,13 +1,42 @@
-<div class="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-  <h1 class="text-3xl font-bold mb-4">
-    🌻 AI-bloom（仮）TOP
-  </h1>
+<div class="max-w-5xl mx-auto space-y-8">
+  <!-- キャッチコピー -->
+  <section class="text-center space-y-3 mt-16">
+    <p class="text-sm text-slate-600 tracking-wide">
+      日々の小さな頑張りを、やさしく抱きしめる自己理解アプリ。
+    </p>
+    <h1 class="text-3xl font-bold tracking-wide">
+      🌻 AI-bloom（仮）TOP
+    </h1>
+    <p class="text-xs text-slate-500">
+      ※TOPページ骨組みの表示テスト中です。
+    </p>
+  </section>
 
-  <p class="text-gray-700 mb-2">
-    日々の小さな頑張りを、やさしく抱きしめる自己理解アプリ。
-  </p>
+  <!-- マイルーム -->
+  <section class="grid md:grid-cols-2 gap-6">
+    <!-- 今日のバディ -->
+    <div class="card text-center space-y-4">
+      <h2 class="text-lg font-semibold">今日のバディ</h2>
+      <div class="flex justify-center">
+        <%= image_tag "/bottom_nav/buddy.png",
+                      alt: "今日のバディ",
+                      class: "w-24 h-24 object-contain" %>
+      </div>
+      <p class="text-xs text-slate-500">
+        ※ MVPではサンプルのバディを表示します。
+      </p>
+    </div>
 
-  <p class="text-gray-500 text-sm">
-    ※TOPページ骨組みの表示テスト中です。
-  </p>
+    <!-- AIバディからのメッセージ -->
+    <div class="card space-y-3">
+      <p class="text-xs text-rose-800">AIバディからのメッセージ</p>
+      <p class="text-sm leading-relaxed">
+        今日もここまでお疲れさま。小さな一歩でも、ちゃんと前に進んでいるよ。
+        気づいたことや感じたことを、そっとメモしてみよう。
+      </p>
+      <p class="text-[11px] text-gray-500">
+        ※ MVP では固定メッセージ、今後は投稿や診断結果に応じて少しずつ変化します。
+      </p>
+    </div>
+  </section>
 </div>

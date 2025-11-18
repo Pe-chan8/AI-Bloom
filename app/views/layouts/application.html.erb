@@ -33,7 +33,7 @@
     <% end %>
   </head>
 
-  <body class="min-h-screen bg-[#FAF5E6] text-slate-800 pb-20 flex flex-col">
+  <body class="min-h-screen pb-24 flex flex-col bg-[#FAF5E6] text-slate-800">
     <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -76,7 +76,7 @@
     </div>
 
     <!-- メインコンテンツ（ヘッダー＋ボトムナビぶん余白を確保） -->
-    <main class="flex-1 pt-4 pb-24">
+    <main class="flex-1 pt-4 pb-24 bg-transparent">
       <div class="max-w-5xl mx-auto px-4 py-8">
         <%= yield %>
       </div>

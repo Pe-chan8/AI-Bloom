@@ -6309,3 +6309,54 @@ Processing by TopController#index as HTML
 Completed 200 OK in 11ms (Views: 6.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
 
 
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Writing tailwind-8862e17e.css
+Writing diagnosis-c3f6b730.png
+Writing post-29ab88dc.png
+Writing others-72a18aa6.png
+Writing home-d57fddb4.png
+Writing buddy-24248f02.png
+Writing application-2a1b6ee6.js
+Writing controllers/hello_controller-08d93192.js
+Writing controllers/index-b069893a.js
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Writing tailwindcss-2701f771.js
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
