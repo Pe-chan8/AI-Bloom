@@ -4321,3 +4321,15 @@ Processing by DiagnosesController#top as HTML
 Completed 200 OK in 18ms (Views: 13.7ms | ActiveRecord: 2.3ms (1 query, 0 cached) | GC: 0.5ms)
 
 
+Started GET "/diagnosis" for 192.168.65.1 at 2025-11-18 08:18:58 +0000
+Cannot render console from 192.168.65.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  [1m[36mUser Load (4.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:47
+  Rendered layout layouts/application.html.erb (Duration: 24.5ms | GC: 0.0ms)
+Completed 200 OK in 30ms (Views: 21.5ms | ActiveRecord: 4.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
