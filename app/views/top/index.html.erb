@@ -1,13 +1,51 @@
-<div class="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-  <h1 class="text-3xl font-bold mb-4">
-    🌻 AI-bloom（仮）TOP
-  </h1>
+<div class="space-y-8">
+  <!-- ページタイトル -->
+  <header class="space-y-2">
+    <p class="text-xs text-sky-700">
+      日々の小さな頑張りを、やさしく抱きしめる自己理解アプリ。
+    </p>
+    <h1 class="text-2xl font-bold text-slate-800">
+      マイルーム
+    </h1>
+  </header>
 
-  <p class="text-gray-700 mb-2">
-    日々の小さな頑張りを、やさしく抱きしめる自己理解アプリ。
-  </p>
+  <!-- メイン2カラム（バディ画像 + メッセージ） -->
+  <section class="grid gap-6 md:grid-cols-[1.1fr,1.4fr]">
+    <!-- バディカード -->
+    <div class="bg-[#FFFBEB] rounded-3xl shadow-sm border border-amber-100 px-6 py-6 flex flex-col items-center justify-center">
+      <p class="text-sm font-semibold text-slate-700 mb-4">
+        今日のバディ
+      </p>
 
-  <p class="text-gray-500 text-sm">
-    ※TOPページ骨組みの表示テスト中です。
-  </p>
+      <!-- TODO: ペンギン画像に差し替え -->
+      <div class="w-32 h-32 rounded-full bg-gradient-to-br from-sky-100 to-amber-100 flex items-center justify-center mb-4">
+        <span class="text-5xl">🐧</span>
+      </div>
+
+      <p class="text-xs text-slate-500">
+        ※ MVP ではサンプルバディを表示します。
+      </p>
+    </div>
+
+    <!-- メッセージカード -->
+    <div class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 flex flex-col gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">💌</span>
+        <p class="text-sm font-semibold text-slate-700">
+          AIバディからのメッセージ
+        </p>
+      </div>
+
+      <div class="bg-[#FFF7ED] rounded-2xl px-4 py-4 text-sm leading-relaxed text-slate-700">
+        <p>
+          今日もここまでお疲れさま。小さな一歩でも、ちゃんと前に進んでいるよ。<br>
+          気づいたことや感じたことを、そっとメモしてみよう。
+        </p>
+      </div>
+
+      <p class="text-[11px] text-slate-400">
+        ※ バディのメッセージは、投稿や診断結果に応じて少しずつ変化していきます（MVPではサンプル文を表示）。
+      </p>
+    </div>
+  </section>
 </div>

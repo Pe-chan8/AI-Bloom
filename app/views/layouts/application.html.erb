@@ -12,6 +12,9 @@
 
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
+    <!-- 丸みのある日本語フォント -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
@@ -33,11 +36,17 @@
     <% end %>
   </head>
 
-  <body class="min-h-screen bg-[#FAF5E6] text-slate-800 pb-20 flex flex-col">
+  <body
+    class="min-h-screen bg-[#FAF5E6] text-slate-800 pb-24 flex flex-col"
+    style="font-family: 'Zen Maru Gothic', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;"
+  >
     <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-2">
+          <%# ロゴ画像を使う場合はコメントアウトを外す %>
+          <%#= image_tag 'header_logo.png', alt: 'AI-bloom', class: 'h-8 w-auto' %>
+          <%# 文字ロゴ版 %>
           <span class="text-xl">🌻</span>
           <span class="font-bold text-lg">AI-bloom</span>
         </div>
@@ -91,7 +100,7 @@
 
         <!-- ホーム -->
         <%= link_to root_path, class: "flex-1 flex justify-center" do %>
-          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
             <%= image_tag "/bottom_nav/home.png", class: "w-8 h-8", alt: "ホーム" %>
             <span class="text-[10px] mt-1">ホーム</span>
           </div>
@@ -99,7 +108,7 @@
 
         <!-- 診断 -->
         <%= link_to diagnosis_top_path, class: "flex-1 flex justify-center" do %>
-          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
             <%= image_tag "/bottom_nav/diagnosis.png", class: "w-8 h-8", alt: "診断" %>
             <span class="text-[10px] mt-1">診断</span>
           </div>
@@ -107,7 +116,7 @@
 
         <!-- バディ -->
         <%= link_to "#", class: "flex-1 flex justify-center" do %>
-          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
             <%= image_tag "/bottom_nav/buddy.png", class: "w-8 h-8", alt: "バディ" %>
             <span class="text-[10px] mt-1">バディ</span>
           </div>
@@ -115,7 +124,7 @@
 
         <!-- 投稿一覧 -->
         <%= link_to "#", class: "flex-1 flex justify-center" do %>
-          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
             <%= image_tag "/bottom_nav/post.png", class: "w-8 h-8", alt: "投稿一覧" %>
             <span class="text-[10px] mt-1">投稿一覧</span>
           </div>
@@ -123,7 +132,7 @@
 
         <!-- その他 -->
         <%= link_to "#", class: "flex-1 flex justify-center" do %>
-          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
             <%= image_tag "/bottom_nav/others.png", class: "w-8 h-8", alt: "その他" %>
             <span class="text-[10px] mt-1">その他</span>
           </div>
