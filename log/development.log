@@ -6309,3 +6309,448 @@ Processing by TopController#index as HTML
 Completed 200 OK in 11ms (Views: 6.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
 
 
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:38:55 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 23.1ms | GC: 0.0ms)
+Completed 200 OK in 33ms (Views: 12.4ms | ActiveRecord: 12.7ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:38:56 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 4.2ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 4.5ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:38:59 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 8.5ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 7.9ms | ActiveRecord: 1.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 14:39:01 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 9.3ms | GC: 0.0ms)
+Completed 200 OK in 16ms (Views: 10.3ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:39:02 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.7ms | GC: 0.0ms)
+Completed 200 OK in 11ms (Views: 6.3ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:39:08 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 7.2ms | GC: 0.0ms)
+Completed 200 OK in 11ms (Views: 7.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 14:39:09 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 7.1ms | GC: 0.0ms)
+Completed 200 OK in 13ms (Views: 7.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:40:37 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  [1m[36mUser Load (3.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 19.8ms | GC: 0.0ms)
+Completed 200 OK in 29ms (Views: 19.1ms | ActiveRecord: 3.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:49:16 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  [1m[36mUser Load (23.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 36.3ms | GC: 0.0ms)
+Completed 200 OK in 41ms (Views: 12.2ms | ActiveRecord: 25.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 14:49:17 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.5ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 6.3ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 14:49:18 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 6.9ms | GC: 0.0ms)
+Completed 200 OK in 13ms (Views: 8.3ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 14:49:20 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 4.6ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 5.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 14:49:21 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 4.9ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 5.2ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:05:11 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 23.8ms | GC: 0.0ms)
+Completed 200 OK in 37ms (Views: 14.0ms | ActiveRecord: 11.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:05:12 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 4.6ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 4.9ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 15:05:13 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 1.0ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 10.2ms | GC: 0.0ms)
+Completed 200 OK in 16ms (Views: 10.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:05:14 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.2ms | GC: 0.0ms)
+Completed 200 OK in 11ms (Views: 5.9ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:24:55 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 22.8ms | GC: 0.0ms)
+Completed 200 OK in 35ms (Views: 14.0ms | ActiveRecord: 11.7ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:24:58 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.5ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 5.8ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 15:24:59 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.8ms | GC: 0.0ms)
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 4.7ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 5.4ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:25:00 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 7.4ms | GC: 0.0ms)
+Completed 200 OK in 13ms (Views: 7.7ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:25:01 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 12.3ms | GC: 0.0ms)
+Completed 200 OK in 16ms (Views: 11.9ms | ActiveRecord: 1.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Shutting down background worker
+Shutting down background worker
+Please add the 'stackprof' gem to your Gemfile to use the StackProf profiler with Sentry.
+Sentry HTTP Transport will connect to https://o4510380894060544.ingest.us.sentry.io
+Initializing the Sentry background worker with 5 threads
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:29:39 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='AiBloom'*/[0m
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /app/config/routes.rb:2)
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 20.2ms | GC: 0.0ms)
+Completed 200 OK in 31ms (Views: 11.9ms | ActiveRecord: 10.2ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:29:40 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.3ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 5.7ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:29:42 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | GC: 0.0ms)
+Completed 200 OK in 8ms (Views: 4.2ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:29:43 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.3ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 5.6ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:42:43 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 1.4ms | GC: 0.0ms)
+  [1m[36mUser Load (20.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 34.3ms | GC: 0.0ms)
+Completed 200 OK in 39ms (Views: 11.2ms | ActiveRecord: 24.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:42:58 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.9ms | GC: 0.0ms)
+Completed 200 OK in 11ms (Views: 6.5ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 151.101.1.227 at 2025-11-18 15:43:02 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by TopController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering top/index.html.erb within layouts/application
+  Rendered top/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='AiBloom',controller='top'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 5.4ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 5.7ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 15:43:02 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 1.0ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 4.4ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 5.2ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/diagnosis" for 151.101.1.227 at 2025-11-18 15:43:05 +0000
+Cannot render console from 151.101.1.227! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by DiagnosesController#top as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering diagnoses/top.html.erb within layouts/application
+  Rendered diagnoses/top.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 ORDER BY "users"."id" ASC LIMIT 1 /*action='top',application='AiBloom',controller='diagnoses'*/[0m
+  ↳ app/views/layouts/application.html.erb:56
+  Rendered layout layouts/application.html.erb (Duration: 4.5ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 4.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
