@@ -33,7 +33,7 @@
     <% end %>
   </head>
 
-  <body class="min-h-screen bg-sky-50 text-slate-800 pb-20 flex flex-col">
+  <body class="min-h-screen bg-[#FAF5E6] text-slate-800 pb-20 flex flex-col">
     <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -75,47 +75,58 @@
       <% end %>
     </div>
 
-    <!-- メインコンテンツ（ボトムナビぶん余白を確保） -->
-    <main class="flex-1 pb-20">
+    <!-- メインコンテンツ（ヘッダー＋ボトムナビぶん余白を確保） -->
+    <main class="flex-1 pt-4 pb-24">
       <div class="max-w-5xl mx-auto px-4 py-8">
         <%= yield %>
       </div>
     </main>
 
-    <!-- ボトムナビ：画面下部に固定 -->
-    <nav 
+    <!-- ボトムナビ：画面下部に固定（画像は public/bottom_nav 配下） -->
+    <nav
       style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;"
-      class="bg-white border-t border-slate-200"
+      class="bg-white/95 border-t border-slate-200"
     >
-      <div class="max-w-5xl mx-auto flex justify-between px-4 py-2 text-xs text-slate-600">
-        <%= link_to root_path,
-                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
-          <span>🏠</span>
-          <span>ホーム</span>
+      <div class="max-w-5xl mx-auto flex justify-between px-4 py-2 text-xs text-slate-600 gap-2">
+
+        <!-- ホーム -->
+        <%= link_to root_path, class: "flex-1 flex justify-center" do %>
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+            <%= image_tag "/bottom_nav/home.png", class: "w-8 h-8", alt: "ホーム" %>
+            <span class="text-[10px] mt-1">ホーム</span>
+          </div>
         <% end %>
 
-        <%= link_to diagnosis_top_path,
-                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
-          <span>🧭</span>
-          <span>診断</span>
+        <!-- 診断 -->
+        <%= link_to diagnosis_top_path, class: "flex-1 flex justify-center" do %>
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+            <%= image_tag "/bottom_nav/diagnosis.png", class: "w-8 h-8", alt: "診断" %>
+            <span class="text-[10px] mt-1">診断</span>
+          </div>
         <% end %>
 
-        <%= link_to "#",
-                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
-          <span>🤝</span>
-          <span>バディ</span>
+        <!-- バディ -->
+        <%= link_to "#", class: "flex-1 flex justify-center" do %>
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+            <%= image_tag "/bottom_nav/buddy.png", class: "w-8 h-8", alt: "バディ" %>
+            <span class="text-[10px] mt-1">バディ</span>
+          </div>
         <% end %>
 
-        <%= link_to "#",
-                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
-          <span>📝</span>
-          <span>投稿一覧</span>
+        <!-- 投稿一覧 -->
+        <%= link_to "#", class: "flex-1 flex justify-center" do %>
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+            <%= image_tag "/bottom_nav/post.png", class: "w-8 h-8", alt: "投稿一覧" %>
+            <span class="text-[10px] mt-1">投稿一覧</span>
+          </div>
         <% end %>
 
-        <%= link_to "#",
-                    class: "flex-1 flex flex-col items-center gap-1 py-1 hover:text-sky-600" do %>
-          <span>❓</span>
-          <span>その他</span>
+        <!-- その他 -->
+        <%= link_to "#", class: "flex-1 flex justify-center" do %>
+          <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-sky-100 transition">
+            <%= image_tag "/bottom_nav/others.png", class: "w-8 h-8", alt: "その他" %>
+            <span class="text-[10px] mt-1">その他</span>
+          </div>
         <% end %>
       </div>
     </nav>
