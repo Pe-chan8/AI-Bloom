@@ -1,0 +1,27 @@
+# ---- log / tmp は Git 管理から除外 ----
+/log/*
+!/log/.keep
+
+/tmp/*
+!/tmp/.keep
+
+# ---- Rails でよく無視するもの ----
+/storage/*
+!/storage/.keep
+
+/public/assets
+/node_modules
+/vendor/bundle
+.bundle
+
+.byebug_history
+
+# mac / エディタ系
+.DS_Store
+/.idea
+/.vscode
+
+# 環境変数系
+.env
+.env.*
+/config/master.key
