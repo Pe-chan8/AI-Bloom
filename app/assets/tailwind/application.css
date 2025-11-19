@@ -3,7 +3,12 @@
 /* ------- base layer ------- */
 @layer base {
   body {
-    @apply bg-sky-50 text-slate-800;
+    @apply text-slate-800;
+
+    /* 背景色 */
+    background-color: #FAF5E6 !important;
+    font-family: 'Zen Maru Gothic', system-ui, -apple-system,
+                 BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 }
 
@@ -18,8 +23,9 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold
-           bg-sky-500 text-white hover:bg-sky-600 transition;
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2
+           text-sm font-semibold bg-sky-500 text-white
+           hover:bg-sky-600 transition;
   }
 
   .bottom-nav-fixed {
