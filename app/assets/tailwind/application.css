@@ -2,7 +2,14 @@
 
 /* ------- base layer ------- */
 @layer base {
-  /* ここでは body に何も書かない */
+  body {
+    @apply text-slate-800;
+
+    /* 背景色 */
+    background-color: #FAF5E6 !important;
+    font-family: 'Zen Maru Gothic', system-ui, -apple-system,
+                 BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
 }
 
 /* ------- component layer ------- */

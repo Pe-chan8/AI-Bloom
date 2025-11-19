@@ -36,15 +36,12 @@
     <% end %>
   </head>
 
-  <body
-    class="min-h-screen bg-[#FAF5E6] text-slate-800 pb-24 flex flex-col"
-    style="font-family: 'Zen Maru Gothic', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;"
-  >
+  <body class="min-h-screen pb-24 flex flex-col bg-[#FAF5E6] text-slate-800">
     <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <%# ロゴ画像を使う場合はコメントアウトを外す %>
+          <%# ロゴ画像を使う時はコメントアウトを外す %>
           <%#= image_tag 'header_logo.png', alt: 'AI-bloom', class: 'h-8 w-auto' %>
           <%# 文字ロゴ版 %>
           <span class="text-xl">🌻</span>
