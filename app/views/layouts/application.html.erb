@@ -37,9 +37,13 @@
     <!-- ヘッダー：ロゴ + ログイン / ログアウト -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+        <!-- ロゴ画像 -->
         <div class="flex items-center gap-2">
-          <span class="text-xl">🌻</span>
-          <span class="font-bold text-lg">AI-bloom</span>
+          <%= link_to root_path, class: "inline-flex items-center" do %>
+            <%= image_tag "ai_bloom_header.png",
+                  alt: "AI-bloom",
+                  class: "h-10 w-auto" %>
+          <% end %>
         </div>
 
         <div class="flex items-center gap-3 text-xs text-slate-600">
@@ -76,7 +80,7 @@
     </div>
 
     <!-- メインコンテンツ（ヘッダー＋ボトムナビぶん余白を確保） -->
-    <main class="flex-1 pt-4 pb-24 bg-transparent">
+    <main class="flex-1 pt-2 pb-24 bg-transparent">
       <div class="max-w-5xl mx-auto px-4 py-8">
         <%= yield %>
       </div>
