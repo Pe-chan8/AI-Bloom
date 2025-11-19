@@ -1,9 +1,20 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+DiagnosisQuestion.destroy_all
+
+questions = [
+  { position: 1, content: "初めて会う人とも、比較的すぐに打ち解けられる方だ。" },
+  { position: 2, content: "大人数の場よりも、少人数でじっくり話す方が落ち着く。" },
+  { position: 3, content: "話すよりも、聞き役にまわることが多い。" },
+  { position: 4, content: "予定はきっちり決めてから動きたいタイプだ。" },
+  { position: 5, content: "その場の雰囲気で、直感的に動くことが多い。" },
+  { position: 6, content: "感情よりも、事実やデータを重視して考える。" },
+  { position: 7, content: "相手の気持ちを想像しながら、言葉を選ぶことが多い。" },
+  { position: 8, content: "一人の時間がないと、少し疲れてしまうと感じる。" },
+  { position: 9, content: "人から相談されることが多いと感じる。" },
+  { position: 10, content: "“みんなでワイワイ”より、“落ち着いた安心できる空間”が好きだ。" }
+]
+
+questions.each do |q|
+  DiagnosisQuestion.create!(q)
+end
+
+puts "DiagnosisQuestion seeds created: #{DiagnosisQuestion.count}"
