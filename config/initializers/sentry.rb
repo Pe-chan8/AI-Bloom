@@ -6,7 +6,7 @@ Sentry.init do |config|
   config.enabled_environments = %w[production]
 
   # Rails.logger や HTTP リクエストをパンくずに残す
-  config.breadcrumbs_logger = [:active_support_logger, :http_logger]
+  config.breadcrumbs_logger = [ :active_support_logger, :http_logger ]
 
   # パフォーマンス計測（APM）のサンプリング率
   # MVP では低め（0.0 〜 0.1 程度）
