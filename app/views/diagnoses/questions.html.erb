@@ -1,0 +1,23 @@
+<h1>ソーシャルタイプ診断</h1>
+<p>当てはまる度合いを選んでください（1: まったく当てはまらない 〜 5: とても当てはまる）</p>
+
+<%= form_with url: diagnosis_result_path, method: :post do %>
+  <ol>
+    <% @questions.each do |question| %>
+      <li style="margin-bottom: 1rem;">
+        <p><%= question.position %>. <%= question.content %></p>
+
+        <% 1.upto(5) do |score| %>
+          <label style="margin-right: .5rem;">
+            <%= radio_button_tag "answers[#{question.id}]", score %>
+            <%= score %>
+          </label>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+
+  <div>
+    <%= submit_tag "診断結果を見る" %>
+  </div>
+<% end %>
