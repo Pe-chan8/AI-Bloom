@@ -1,22 +1,20 @@
 Rails.application.routes.draw do
+  # 認証
   devise_for :users
-  get "top/index"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
-
-  # アプリのトップページを指定
+  # アプリのトップ
+  get "top/index"
   root "top#index"
 
-  # ソーシャルタイプ診断トップ
-  get "/diagnosis", to: "diagnoses#top", as: :diagnosis_top
+  # ソーシャルタイプ診断
+  get  "/diagnosis",            to: "diagnoses#top",       as: :diagnosis_top
+  get  "/diagnosis/questions",  to: "diagnoses#questions", as: :diagnosis_questions
+  post "/diagnosis/result",     to: "diagnoses#result",    as: :diagnosis_result
+
+  # PWA 関連（使うときにコメントアウトを外す）
+  # get "manifest"       => "rails/pwa#manifest",        as: :pwa_manifest
+  # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
 end
