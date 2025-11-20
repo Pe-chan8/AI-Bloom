@@ -72,13 +72,10 @@
 
   <!-- スタートボタン -->
   <section class="max-w-md mx-auto text-center space-y-3 pb-4">
-    <%# TODO: 診断画面へのパスができたら link_to に差し替え %>
-    <button
-      type="button"
-      class="w-full inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition"
-    >
+    <%= link_to diagnosis_questions_path,
+        class: "w-full inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" do %>
       診断をスタートする
-    </button>
+    <% end %>
 
     <p class="text-[11px] text-slate-500">
       ※全10問・所要時間の目安：3〜5分
