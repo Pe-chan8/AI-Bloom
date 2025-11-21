@@ -1,23 +1,47 @@
-<h1>ソーシャルタイプ診断</h1>
-<p>当てはまる度合いを選んでください（1: まったく当てはまらない 〜 5: とても当てはまる）</p>
+<h1 class="text-xl font-bold mb-4">ソーシャルタイプ診断</h1>
+<p class="text-sm text-slate-600 mb-6">
+  当てはまる度合いを選んでください（1: まったく当てはまらない 〜 5: とても当てはまる）
+</p>
 
 <%= form_with url: diagnosis_result_path, method: :post do %>
-  <ol>
+  <ol class="space-y-6">
     <% @questions.each do |question| %>
-      <li style="margin-bottom: 1rem;">
-        <p><%= question.position %>. <%= question.content %></p>
+      <li class="bg-white border border-slate-200 rounded-2xl p-4">
+        <!-- 質問文 -->
+        <p class="font-semibold text-slate-800 mb-2">
+          <%= question.position %>. <%= question.content %>
+        </p>
 
-        <% 1.upto(5) do |score| %>
-          <label style="margin-right: .5rem;">
-            <%= radio_button_tag "answers[#{question.id}]", score %>
-            <%= score %>
-          </label>
-        <% end %>
+        <!-- 選択肢（1〜5） -->
+        <div class="space-y-1">
+          <% [
+            [1, "まったく当てはまらない"],
+            [2, "あまり当てはまらない"],
+            [3, "どちらともいえない"],
+            [4, "やや当てはまる"],
+            [5, "とても当てはまる"]
+          ].each do |score, label| %>
+
+            <% input_id = "q#{question.id}_#{score}" %>
+
+            <label for="<%= input_id %>" class="flex items-center gap-2 text-sm text-slate-700">
+              <%= radio_button_tag "answers[#{question.id}]", score, false, id: input_id, class: "peer" %>
+              <span><%= label %></span>
+            </label>
+
+          <% end %>
+        </div>
       </li>
     <% end %>
   </ol>
 
-  <div>
-    <%= submit_tag "診断結果を見る" %>
+  <!-- 送信 -->
+  <div class="text-center mt-6">
+    <%= submit_tag "診断結果を見る",
+                   class: "inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" %>
+
+    <p class="mt-2 text-[11px] text-slate-500">
+      ※全10問・所要時間の目安：3〜5分
+    </p>
   </div>
 <% end %>
