@@ -1,6 +1,7 @@
 require "test_helper"
 
 class DiagnosesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
   test "should get top" do
     get diagnosis_top_url
     assert_response :success
@@ -42,5 +43,35 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
   test "should redirect when answers empty" do
     post diagnosis_result_url, params: { answers: {} }
     assert_redirected_to diagnosis_questions_url
+  end
+
+  test "logged-in user gets social_type saved" do
+    # ユーザー作成（Devise の helper があればそれを使用）
+    user = User.create!(
+      email: "test@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
+
+    # 質問レコード（positionは他と被らないように100番台）
+    DiagnosisQuestion.delete_all
+    q1 = DiagnosisQuestion.create!(
+      position: 101,
+      content: "テスト質問1",
+      category: "analytical"
+    )
+
+    # ログイン状態にする
+    sign_in user
+
+    post diagnosis_result_url, params: {
+      answers: {
+        q1.id.to_s => "5"
+      }
+    }
+
+    assert_response :success
+    user.reload
+    assert_equal "analytical", user.social_type
   end
 end

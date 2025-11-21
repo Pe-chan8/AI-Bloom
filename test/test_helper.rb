@@ -1,4 +1,5 @@
 ENV["RAILS_ENV"] ||= "test"
+require "devise"
 require_relative "../config/environment"
 require "rails/test_help"
 
