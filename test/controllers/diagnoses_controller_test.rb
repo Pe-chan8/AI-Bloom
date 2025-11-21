@@ -12,7 +12,34 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should post result" do
-    post diagnosis_result_url, params: { answers: {} }
+    # テスト用の質問レコードを作成（カテゴリ付き）
+    q1 = DiagnosisQuestion.create!(
+      position: 1,
+      content: "テスト設問1",
+      category: "analytical"
+    )
+    q2 = DiagnosisQuestion.create!(
+      position: 2,
+      content: "テスト設問2",
+      category: "expressive"
+    )
+
+    post diagnosis_result_url, params: {
+      answers: {
+        q1.id.to_s => "3", # analytical に3点
+        q2.id.to_s => "5"  # expressive に5点
+      }
+    }
+
+    # 成功ステータスを期待
     assert_response :success
+
+    # 結果画面の見出しが出ているか簡単にチェック
+    assert_select "h1", "ソーシャルタイプ診断 結果"
+  end
+
+  test "should redirect when answers empty" do
+    post diagnosis_result_url, params: { answers: {} }
+    assert_redirected_to diagnosis_questions_url
   end
 end
