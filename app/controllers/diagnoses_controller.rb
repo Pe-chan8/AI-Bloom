@@ -161,5 +161,19 @@ class DiagnosesController < ApplicationController
     # メインタイプと説明／バディ相性をビューで使うための変数
     @current_type_info      = @type_definitions[@dominant_type]
     @current_buddy_relation = @buddy_relations[@dominant_type]
+
+    # 診断結果をログインユーザーに保存
+    if user_signed_in?
+      current_user.update(
+        social_type: @dominant_type,
+        recommended_buddy_type: case @dominant_type
+                                when "analytical" then "analytical"
+                                when "amiable"    then "amiable"
+                                when "driving"    then "driving"
+                                when "expressive" then "expressive"
+                                end
+      )
+      flash.now[:notice] = "あなたのタイプを保存しました。"
+    end
   end
 end
