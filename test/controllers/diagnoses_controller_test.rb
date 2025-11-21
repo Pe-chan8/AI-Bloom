@@ -1,6 +1,7 @@
 require "test_helper"
 
 class DiagnosesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
   test "should get top" do
     get diagnosis_top_url
     assert_response :success
