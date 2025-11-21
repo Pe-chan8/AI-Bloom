@@ -14,13 +14,14 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
   test "should post result" do
     # テスト用の質問レコードを作成（カテゴリ付き）
     q1 = DiagnosisQuestion.create!(
-      position: 1,
-      content: "テスト設問1",
+      position: 101,
+      content: "テスト内容1",
       category: "analytical"
     )
+
     q2 = DiagnosisQuestion.create!(
-      position: 2,
-      content: "テスト設問2",
+      position: 102,
+      content: "テスト内容2",
       category: "expressive"
     )
 
