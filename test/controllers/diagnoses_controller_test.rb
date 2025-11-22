@@ -51,7 +51,9 @@ class DiagnosesControllerTest < ActionController::TestCase
     assert_redirected_to diagnosis_questions_url
   end
 
-  test "logged-in user gets social_type saved", skip: "Devise mapping unstable in CI" do
+  test "logged-in user gets social_type saved" do
+    skip "Devise mapping unstable in CI"
+
     DiagnosisQuestion.delete_all
 
     q1 = DiagnosisQuestion.create!(
