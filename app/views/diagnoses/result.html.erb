@@ -1,4 +1,4 @@
-<div class="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-4 space-y-8">
 
   <!-- 見出し -->
   <header class="space-y-3 text-center">
@@ -7,6 +7,8 @@
     </h1>
     <p class="text-sm text-slate-600">
       今回の回答から見た「今のあなたらしさ」に近いタイプをお伝えします。
+    </p>
+    <p class="text-sm text-slate-600">
       ぴったり1つに決めつけるものではなく、あくまで“参考の目安”として読んでみてください。
     </p>
   </header>
@@ -33,6 +35,14 @@
           <%= @current_type_info[:name] %>
         </p>
       </div>
+
+      <% if @type_images[@dominant_type].present? %>
+        <div class="flex justify-center my-6">
+            <%= image_tag @type_images[@dominant_type],
+            alt: @current_type_info[:name],
+            class: "diagnosis-type-image mx-auto" %>
+        </div>
+      <% end %>
 
       <!-- ① 概要（summary + detail） -->
       <div class="space-y-3">
