@@ -4,7 +4,11 @@ class DiagnosesControllerTest < ActionController::TestCase
   include Devise::Test::ControllerHelpers
 
   setup do
-    @user = users(:one)
+    @user = User.create!(
+      email: "test@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
   end
 
   test "should get top" do
