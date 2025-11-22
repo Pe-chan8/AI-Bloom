@@ -33,7 +33,8 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
       category: "expressive"
     )
 
-    sign_in scope: :user, resource: @user
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+    sign_in @user
 
     post diagnosis_result_url, params: {
       answers: {
@@ -59,7 +60,9 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
       category: "analytical"
     )
 
-    # ログイン状態にする（fixture のユーザーを使用）
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+
+    # ログイン
     sign_in @user
 
     post diagnosis_result_url, params: {
