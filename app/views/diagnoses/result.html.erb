@@ -1,13 +1,3 @@
-<%# タイプごとの画像パス %>
-<%
-  type_images = {
-    "expressive"  => "diagnosis_types/expressive.png",
-    "driving"     => "diagnosis_types/driving.png",
-    "amiable"     => "diagnosis_types/amiable.png",
-    "analytical"  => "diagnosis_types/analytical.png"
-  }
-%>
-
 <div class="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8">
 
   <!-- 見出し -->
@@ -26,9 +16,9 @@
     <section class="bg-white border border-amber-100 rounded-3xl shadow-sm px-6 py-6 space-y-4">
 
       <!-- タイプ画像 -->
-      <% if type_images[@dominant_type].present? %>
+      <% if @type_image_path.present? %>
         <div class="flex justify-center mb-4">
-          <%= image_tag type_images[@dominant_type],
+          <%= image_tag @type_image_path,
                         alt: @current_type_info[:name],
                         class: "max-h-40 w-auto drop-shadow-sm" %>
         </div>
@@ -126,11 +116,11 @@
         「なんとなくこんな傾向があるかも？」という感覚で受け取ってみてください。
       </p>
 
-      <!-- ツイート用メタ情報 -->
+      <!-- ツイート用メタ情報（JS から使いたいとき用） -->
       <div
         id="diagnosis-type-meta"
         data-type="<%= @dominant_type %>"
-        data-image-url="<%= asset_path(type_images[@dominant_type]) %>">
+        data-image-url="<%= asset_path(@type_image_path) if @type_image_path.present? %>">
       </div>
 
     </section>
@@ -156,5 +146,13 @@
     <%= link_to "ホームに戻る",
                 root_path,
                 class: "inline-flex justify-center items-center rounded-full bg-sky-500 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" %>
+
+    <% if @twitter_intent_url.present? %>
+      <%= link_to "結果をシェアする",
+                  @twitter_intent_url,
+                  target: "_blank",
+                  rel: "noopener",
+                  class: "inline-flex justify-center items-center rounded-full bg-sky-500 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" %>
+    <% end %>
   </section>
 </div>

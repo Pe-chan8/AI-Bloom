@@ -9,7 +9,6 @@ class DiagnosesController < ApplicationController
   end
 
   # 結果ページ
-
   def result
     raw_answers = params[:answers] || {}
 
@@ -175,5 +174,34 @@ class DiagnosesController < ApplicationController
       )
       flash.now[:notice] = "あなたのタイプを保存しました。"
     end
+
+    @type_images = {
+      "expressive"  => "diagnosis_types/expressive.png",
+      "driving"     => "diagnosis_types/driving.png",
+      "amiable"     => "diagnosis_types/amiable.png",
+      "analytical"  => "diagnosis_types/analytical.png"
+    }
+
+    # --- シェア機能用の生成（Twitter/X）
+    type_name = @current_type_info[:name]
+    type_summary = @current_type_info[:summary]
+
+    # 画像のフルURL
+    @share_image_url = view_context.asset_url(@type_images[@dominant_type])
+
+    # シェアテキスト
+    raw_share_text = <<~TEXT
+      AI-Bloomでソーシャルタイプ診断をしました！
+      結果は「#{type_name}」でした。
+      タイプ概要：#{type_summary}
+      #AI_Bloom #ソーシャルタイプ診断
+      #{@share_image_url}
+    TEXT
+
+    @share_text = raw_share_text.strip
+    @share_url  = diagnosis_top_url
+
+    @twitter_intent_url =
+      "https://twitter.com/intent/tweet?text=#{ERB::Util.url_encode(@share_text)}&url=#{ERB::Util.url_encode(@share_url)}"
   end
 end
