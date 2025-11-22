@@ -1,3 +1,7 @@
+class ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+end
+
 ENV["RAILS_ENV"] ||= "test"
 require "devise"
 require_relative "../config/environment"
