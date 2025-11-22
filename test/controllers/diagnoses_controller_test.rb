@@ -1,5 +1,9 @@
 require "test_helper"
 
+class ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+end
+
 class DiagnosesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
   test "should get top" do
@@ -46,6 +50,9 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "logged-in user gets social_type saved" do
+    user = users(:one)
+    sign_in user
+
     # ユーザー作成（Devise の helper があればそれを使用）
     user = User.create!(
       email: "test@example.com",
