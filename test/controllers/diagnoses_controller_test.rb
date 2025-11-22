@@ -33,6 +33,8 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
       category: "expressive"
     )
 
+    sign_in scope: :user, resource: @user
+
     post diagnosis_result_url, params: {
       answers: {
         q1.id.to_s => "3",
