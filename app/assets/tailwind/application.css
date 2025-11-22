@@ -35,4 +35,9 @@
     bottom: 0;
     z-index: 50;
   }
+  /* 診断結果画像専用スタイル */
+  .diagnosis-type-image {
+    width: 140px;
+    height: auto;
+  }
 }

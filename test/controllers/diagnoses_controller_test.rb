@@ -1,19 +1,29 @@
 require "test_helper"
 
-class DiagnosesControllerTest < ActionDispatch::IntegrationTest
-  include Devise::Test::IntegrationHelpers
+class DiagnosesControllerTest < ActionController::TestCase
+  include Devise::Test::ControllerHelpers
+
+  setup do
+    @user = User.create!(
+      email: "test@example.com",
+      password: "password123",
+      password_confirmation: "password123"
+    )
+  end
+
   test "should get top" do
-    get diagnosis_top_url
+    get :top
     assert_response :success
   end
 
   test "should get questions" do
-    get diagnosis_questions_url
+    get :questions
     assert_response :success
   end
 
   test "should post result" do
-    # テスト用の質問レコードを作成（カテゴリ付き）
+    DiagnosisQuestion.delete_all
+
     q1 = DiagnosisQuestion.create!(
       position: 101,
       content: "テスト内容1",
@@ -26,22 +36,22 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
       category: "expressive"
     )
 
-    post diagnosis_result_url, params: {
+    # ログインしてリクエスト
+    sign_in @user
+
+    post :result, params: {
       answers: {
-        q1.id.to_s => "3", # analytical に3点
-        q2.id.to_s => "5"  # expressive に5点
+        q1.id.to_s => "3",
+        q2.id.to_s => "5"
       }
     }
 
-    # 成功ステータスを期待
     assert_response :success
-
-    # 結果画面の見出しが出ているか簡単にチェック
     assert_select "h1", "ソーシャルタイプ診断 結果"
   end
 
   test "should redirect when answers empty" do
-    post diagnosis_result_url, params: { answers: {} }
+    post :result, params: { answers: {} }
     assert_redirected_to diagnosis_questions_url
   end
 
