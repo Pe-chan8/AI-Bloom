@@ -1,20 +1,19 @@
 require "test_helper"
 
-class DiagnosesControllerTest < ActionDispatch::IntegrationTest
-  # ここで include はなくてもOK（test_helper で済ませる派）
-  # include Devise::Test::IntegrationHelpers
+class DiagnosesControllerTest < ActionController::TestCase
+  include Devise::Test::ControllerHelpers
 
   setup do
-    @user = users(:one)  # fixtures/users.yml の :one を使う想定
+    @user = users(:one)
   end
 
   test "should get top" do
-    get diagnosis_top_url
+    get :top
     assert_response :success
   end
 
   test "should get questions" do
-    get diagnosis_questions_url
+    get :questions
     assert_response :success
   end
 
@@ -33,10 +32,10 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
       category: "expressive"
     )
 
-    @request.env["devise.mapping"] = Devise.mappings[:user]
+    # ログインしてリクエスト
     sign_in @user
 
-    post diagnosis_result_url, params: {
+    post :result, params: {
       answers: {
         q1.id.to_s => "3",
         q2.id.to_s => "5"
@@ -48,24 +47,22 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect when answers empty" do
-    post diagnosis_result_url, params: { answers: {} }
+    post :result, params: { answers: {} }
     assert_redirected_to diagnosis_questions_url
   end
 
   test "logged-in user gets social_type saved" do
     DiagnosisQuestion.delete_all
+
     q1 = DiagnosisQuestion.create!(
       position: 101,
       content: "テスト質問1",
       category: "analytical"
     )
 
-    @request.env["devise.mapping"] = Devise.mappings[:user]
-
-    # ログイン
     sign_in @user
 
-    post diagnosis_result_url, params: {
+    post :result, params: {
       answers: {
         q1.id.to_s => "5"
       }
