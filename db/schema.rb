@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_21_174033) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_23_051954) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,20 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_21_174033) do
     t.integer "position", null: false
     t.datetime "updated_at", null: false
     t.index ["position"], name: "index_diagnosis_questions_on_position", unique: true
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.text "ai_summary"
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.text "image_url"
+    t.integer "mood"
+    t.datetime "posted_at"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "visibility", default: 0, null: false
+    t.index ["user_id"], name: "index_posts_on_user_id"
+    t.index ["visibility", "posted_at"], name: "index_posts_on_visibility_and_posted_at"
   end
 
   create_table "users", force: :cascade do |t|
@@ -36,4 +50,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_21_174033) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "posts", "users"
 end
