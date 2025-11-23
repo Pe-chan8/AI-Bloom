@@ -2,6 +2,10 @@ class User < ApplicationRecord
   # Devise モジュール
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  # -------------------------------------------------------
+  # アソシエーション
+  # -------------------------------------------------------
+  has_many :posts, dependent: :destroy
 
   # -------------------------------------------------------
   # ソーシャルタイプ診断のタイプ一覧
