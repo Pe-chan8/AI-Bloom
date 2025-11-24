@@ -17,4 +17,7 @@ Rails.application.routes.draw do
   # PWA 関連（使うときにコメントアウトを外す）
   # get "manifest"       => "rails/pwa#manifest",        as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
+
+  # 投稿関連
+  resources :posts, only: %i[new create]
 end
