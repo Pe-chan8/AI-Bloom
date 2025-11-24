@@ -36,6 +36,9 @@
     <% end %>
   </head>
 
+
+  <body class="min-h-screen">
+
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <!-- ロゴ画像 -->
@@ -87,11 +90,75 @@
       </div>
     </main>
 
-    <!-- ボトムナビ：画面下部に固定（画像は public/bottom_nav 配下） -->
+  <% if (controller_name == "top" && action_name == "index") ||
+        (controller_name == "posts" && action_name == "index") %>
+
+    <!-- 投稿ボタン -->
+    <button
+      id="open-post-modal"
+      class="fixed bottom-20 right-6 z-40 bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center px-4 py-3 hover:bg-amber-50 transition border border-slate-200"
+      style="width: 90px; height: 90px;"
+    >
+      <%= image_tag "/bottom_nav/newpost.png", class: "w-10 h-10 mb-1", alt: "新規投稿" %>
+      <span class="text-xs text-slate-700">新規投稿</span>
+    </button>
+
+    <!-- 投稿モーダル本体（Tailwind なし・純粋 CSS 版） -->
+    <div
+      id="post-modal"
+      style="
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.4);
+      "
+    >
+      <div
+        style="
+          background: white;
+          border-radius: 1rem;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+          width: 100%;
+          max-width: 640px;
+          max-height: 80vh;
+          overflow-y: auto;
+          padding: 24px;
+          position: relative;
+          margin: 0 16px;
+        "
+      >
+        <!-- 閉じるボタン -->
+        <button
+          id="close-post-modal"
+          style="
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 20px;
+            color: #9ca3af;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+          "
+        >
+          ✕
+        </button>
+
+        <!-- /posts/new のフォームをここに差し込む -->
+        <div id="post_form_frame"></div>
+      </div>
+    </div>
+  <% end %>
+
+    <!-- ボトムナビ：画面下部に固定 -->
     <nav
-      style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;"
+      style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;"
       class="bg-white/95 border-t border-slate-200"
     >
+
       <div class="max-w-5xl mx-auto flex justify-between px-4 py-2 text-xs text-slate-600 gap-2">
 
         <!-- ホーム -->
@@ -135,5 +202,46 @@
         <% end %>
       </div>
     </nav>
+    
+    <!-- 素の JavaScript でモーダル制御（display 切り替え） -->
+    <script>
+      function closePostModal() {
+        const modal  = document.getElementById("post-modal");
+        const frame  = document.getElementById("post_form_frame");
+
+        if (modal) modal.style.display = "none";
+        if (frame) frame.innerHTML = "";
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const openBtn  = document.getElementById("open-post-modal");
+        const closeBtn = document.getElementById("close-post-modal");
+        const modal    = document.getElementById("post-modal");
+        const frame    = document.getElementById("post_form_frame");
+
+        if (!openBtn || !modal || !frame) return;
+
+        // 開く
+        openBtn.addEventListener("click", () => {
+          fetch("/posts/new")
+            .then(res => res.text())
+            .then(html => {
+              frame.innerHTML = html;
+              modal.style.display = "flex";
+            });
+        });
+
+        // 閉じる（✕ボタン）
+        closeBtn.addEventListener("click", e => {
+          e.preventDefault();
+          closePostModal();
+        });
+
+        // モーダル外をクリックして閉じる
+        modal.addEventListener("click", e => {
+          if (e.target === modal) closePostModal();
+        });
+      });
+    </script>
   </body>
 </html>
