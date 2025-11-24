@@ -19,5 +19,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
 
   # 投稿関連
-  resources :posts, only: %i[new create edit update]
+  resources :posts, only: %i[new create edit update destroy]
 end

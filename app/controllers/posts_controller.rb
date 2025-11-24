@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: %i[edit update]
-  before_action :authorize_post!, only: %i[edit update]
+  before_action :set_post, only: %i[edit update destroy]
+  before_action :authorize_post!, only: %i[edit update destroy]
 
   # モーダル用：新規投稿
   def new
@@ -26,7 +26,7 @@ class PostsController < ApplicationController
 
   # ページ遷移版：投稿編集画面
   def edit
-    # @post は before_action でセット済み
+    # @post は before_action でセット＆権限チェック済み
   end
 
   def update
@@ -37,13 +37,19 @@ class PostsController < ApplicationController
     end
   end
 
+  # 投稿削除
+  def destroy
+    @post.destroy!
+    redirect_to root_path, notice: "投稿を削除しました"
+  end
+
   private
 
   def set_post
     @post = Post.find(params[:id])
   end
 
-  # 自分の投稿以外は編集させないようにする
+  # 自分の投稿以外は編集・削除させないようにする
   def authorize_post!
     redirect_to root_path, alert: "この投稿は編集できません" if @post.user_id != current_user.id
   end

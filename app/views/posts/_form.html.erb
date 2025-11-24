@@ -1,38 +1,43 @@
-<%# mode: :modal (新規) / :page (編集) を想定。デフォルトは :page %>
-<% mode ||= :page %>
-
+<%# 共通フォーム: mode によって「新規投稿モーダル」か「編集ページ」かを分岐 %>
 <%= form_with model: post do |f| %>
   <div class="mb-4">
-    <%= f.label :body, "今日のメモ" %><br>
+    <%= f.label :body, "今日のメモ", class: "block text-sm font-semibold mb-2" %>
     <%= f.text_area :body,
-          class: "w-full border rounded-lg p-3",
           rows: 6,
+          class: "w-full border rounded-xl p-3",
           placeholder: "いまの気持ちを書いてみよう…" %>
   </div>
 
   <div class="mt-4 flex justify-end gap-2">
     <% if mode == :modal %>
-      <!-- モーダル版：JavaScript で閉じる -->
+      <!-- 新規投稿モーダル用 -->
       <button
         type="button"
         class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600"
-        onclick="(function(){
-          var modal = document.getElementById('post-modal');
-          var frame = document.getElementById('post_form_frame');
-          if (modal) modal.style.display = 'none';
-          if (frame) frame.innerHTML = '';
-        })();"
+        onclick="closePostModal()"
       >
         やめる
       </button>
-    <% else %>
-      <!-- ページ版：前のページ or ホームに戻る -->
-      <%= link_to "やめる",
-                  request.referer.presence || root_path,
-                  class: "px-4 py-2 rounded-lg border border-slate-300 text-slate-600 inline-block" %>
-    <% end %>
 
-    <%= f.submit (post.persisted? ? "更新する" : "投稿する"),
-          class: "bg-sky-500 text-white px-4 py-2 rounded-lg hover:bg-sky-600" %>
+      <%= f.submit "投稿する",
+            class: "bg-sky-500 text-white px-4 py-2 rounded-lg hover:bg-sky-600" %>
+
+    <% else %>
+      <!-- 編集ページ用: やめる / 更新 / 削除 を1行に並べる -->
+      <%= link_to "やめる",
+            root_path,
+            class: "px-4 py-2 rounded-lg border border-slate-300 text-slate-600" %>
+
+      <%= f.submit "更新する",
+            class: "bg-sky-500 text-white px-4 py-2 rounded-lg hover:bg-sky-600" %>
+
+      <%= link_to "削除する",
+            post_path(post),
+            data: {
+              turbo_method: :delete,
+              turbo_confirm: "本当にこの投稿を削除しますか？"
+            },
+            class: "px-4 py-2 rounded-lg border border-rose-400 text-rose-600 hover:bg-rose-50" %>
+    <% end %>
   </div>
 <% end %>
