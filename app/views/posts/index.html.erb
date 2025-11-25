@@ -1,57 +1,47 @@
 <% content_for :title, "投稿一覧 - AI-bloom" %>
 
-    <!-- タイトル：画面全体で左端揃え -->
-    <div class="pt-3">
-    <h1 class="text-2xl font-bold text-slate-800">投稿一覧</h1>
-    </div>
+<!-- タイトル：画面全体で左端揃え -->
+<div class="pt-3">
+  <h1 class="text-2xl font-bold text-slate-800">投稿一覧</h1>
+</div>
 
-    <!-- ここから中央寄せのコンテンツ（検索フォーム + 投稿カード） -->
-    <div class="max-w-3xl mx-auto pt-6 space-y-4 px-6 py-6 mb-6">
+<!-- ここから中央寄せのコンテンツ（検索フォーム + 投稿カード + ページネーション） -->
+<div class="max-w-3xl mx-auto pt-6 space-y-6 px-6 pb-10">
 
-    <!-- 検索フォーム -->
-    <div class="bg-white rounded-2xl shadow-sm border border-amber-100 px-6 py-6 space-y-3">
+  <!-- 検索フォームカード -->
+  <div class="bg-white rounded-2xl shadow-sm border border-amber-100 px-6 py-6 space-y-3">
 
     <!-- タイトル行（アイコン＋説明） -->
     <div class="flex items-center gap-2 text-slate-600 text-sm">
-        <span class="text-lg">🔍</span>
-        <span>メモの内容からキーワードでさがす</span>
+      <span class="text-lg">🔍</span>
+      <span>メモの内容からキーワードでさがす</span>
     </div>
 
-    <%= form_with url: posts_path, method: :get, local: true do |f| %>
-        <div class="flex gap-3">
+    <!-- ▼▼▼ Ransack 用フォーム ▼▼▼ -->
+    <%= search_form_for @q, url: posts_path, method: :get, local: true do |f| %>
+      <div class="flex gap-3">
+        <%= f.search_field :body_cont,
+              placeholder: "例）仕事 / 勉強 / うれしかったこと…",
+              class: "flex-1 border border-slate-200 rounded-xl px-4 py-2 text-sm
+                      focus:ring-2 focus:ring-sky-300 focus:outline-none" %>
 
-        <!-- テキスト入力欄 -->
-        <%= f.text_field :q,
-                value: params[:q],
-                placeholder: "例）仕事 / 勉強 / うれしかったこと…",
-                class: "flex-1 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-        %>
-
-        <!-- 検索ボタン（右側） -->
         <%= f.submit "検索",
-                class: "px-6 py-2 bg-sky-500 text-white rounded-xl text-sm font-semibold hover:bg-sky-600 transition" %>
-        </div>
+              class: "px-6 py-2 bg-sky-500 text-white rounded-xl text-sm font-semibold hover:bg-sky-600 transition" %>
+      </div>
     <% end %>
 
     <% if params[:q].present? %>
-        <p class="text-xs text-slate-500">
-        「<%= params[:q] %>」で絞り込み中
+      <p class="text-xs text-slate-500 mt-4">
+        「<%= params[:q][:body_cont] %>」で絞り込み中
         <%= link_to "検索条件をクリア", posts_path, class: "text-sky-600 underline" %>
-        </p>
+      </p>
     <% end %>
-    </div>
 
-    <% if @query.present? %>
-      <div class="mt-1 text-[11px] text-slate-500 flex items-center gap-2">
-        <span>「<%= @query %>」で絞り込み中</span>
-        <%= link_to "検索条件をクリア",
-              posts_path,
-              class: "underline hover:no-underline" %>
-      </div>
-    <% end %>
-  </div>
+    <!-- ▲▲▲ Ransack 用フォームここまで ▲▲▲ -->
+  </div> <!-- /検索フォームカード -->
 
   <% if @posts.any? %>
+    <!-- 投稿カード一覧 -->
     <div class="space-y-4">
       <% @posts.each do |post| %>
         <div class="bg-white rounded-2xl shadow-sm px-4 py-3">
@@ -62,14 +52,14 @@
             </span>
 
             <div class="flex items-center gap-2">
-              <%# mood %>
+              <%# mood バッジ %>
               <% if post.mood.present? %>
                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-sky-50 text-sky-700 border border-sky-100">
                   気分: <%= post.mood_i18n rescue post.mood %>
                 </span>
               <% end %>
 
-              <%# visibility %>
+              <%# visibility バッジ %>
               <% if post.visibility.present? %>
                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-amber-50 text-amber-700 border border-amber-100">
                   <%= post.visibility_private? ? "非公開" : "公開" %>
@@ -99,48 +89,50 @@
 
     <!-- ページネーション -->
     <% if @posts.total_pages > 1 %>
-    <div class="mt-10 flex justify-center">
+      <div class="mt-6 flex justify-center">
         <div class="flex items-center gap-2">
 
-        <!-- 前へ -->
-        <% if @posts.prev_page %>
-            <%= link_to "◀", url_for(page: @posts.prev_page), 
-                class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
-        <% else %>
+          <!-- 前へ -->
+          <% if @posts.prev_page %>
+            <%= link_to "◀", url_for(page: @posts.prev_page),
+                  class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+          <% else %>
             <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">◀</span>
-        <% end %>
+          <% end %>
 
-        <!-- ページ番号 -->
-        <% @posts.total_pages.times do |i| %>
+          <!-- ページ番号 -->
+          <% @posts.total_pages.times do |i| %>
             <% page_num = i + 1 %>
 
             <% if page_num == @posts.current_page %>
-            <span class="px-3 py-1.5 rounded-full bg-sky-500 text-white text-sm font-semibold">
+              <span class="px-3 py-1.5 rounded-full bg-sky-500 text-white text-sm font-semibold">
                 <%= page_num %>
-            </span>
+              </span>
             <% else %>
-            <%= link_to page_num,
+              <%= link_to page_num,
                     url_for(page: page_num),
                     class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
             <% end %>
-        <% end %>
+          <% end %>
 
-        <!-- 次へ -->
-        <% if @posts.next_page %>
+          <!-- 次へ -->
+          <% if @posts.next_page %>
             <%= link_to "▶", url_for(page: @posts.next_page),
-                class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
-        <% else %>
+                  class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+          <% else %>
             <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">▶</span>
-        <% end %>
+          <% end %>
 
         </div>
-    </div>
+      </div>
     <% end %>
 
   <% else %>
+    <!-- 投稿がないとき -->
     <div class="bg-white rounded-2xl shadow-sm px-4 py-6 text-center text-sm text-slate-500">
       まだ投稿がありません。<br>
       右下の<strong>「新規投稿」</strong>ボタンから、今日の気持ちを残してみましょう 🌻
     </div>
   <% end %>
-</div>
+
+</div> <!-- /max-w wrapper -->

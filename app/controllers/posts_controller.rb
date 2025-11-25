@@ -3,25 +3,15 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[edit update destroy]
   before_action :authorize_post!, only: %i[edit update destroy]
 
-  # 一覧表示（自分の投稿のみ）
+  # 一覧表示（検索 + ページネーション）
   def index
-    # 検索キーワード（nil 回避して trim）
-    @query = params[:q].to_s.strip
+    # ログインユーザーの投稿だけをベースに Ransack 検索オブジェクトを作成
+    base_scope = current_user.posts.order(posted_at: :desc)
 
-    base_scope =
-      current_user.posts
-                  .order(posted_at: :desc)
+    @q = base_scope.ransack(params[:q])
 
-    # 検索ワードがあれば body をあいまい検索
-    @posts =
-      if @query.present?
-        base_scope.where("body ILIKE ?", "%#{@query}%")
-      else
-        base_scope
-      end
-
-    # ページネーション（1ページ10件）
-    @posts = @posts.page(params[:page]).per(10)
+    # 検索結果にページネーションを適用（1ページ10件）
+    @posts = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
   # モーダル用：新規投稿
