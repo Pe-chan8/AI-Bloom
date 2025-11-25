@@ -23,8 +23,8 @@ Rails.application.routes.draw do
   # 投稿関連
   resources :posts, only: %i[index new create edit update destroy]
 
-  # バディ関連
-    resources :buddies, only: [:index] do
+    # バディ関連
+    resources :buddies, only: [ :index ] do
     post :select, on: :member
   end
 end
