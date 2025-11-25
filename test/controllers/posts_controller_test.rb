@@ -1,15 +1,13 @@
 require "test_helper"
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
-  # Devise の専用ヘルパーは使わず、自前でログイン処理を書く
+  include Devise::Test::IntegrationHelpers
 
   setup do
-    @password = "password123"
-
     @user = User.create!(
       email: "test-post@example.com",
-      password: @password,
-      password_confirmation: @password
+      password: "password123",
+      password_confirmation: "password123"
     )
 
     @post = Post.create!(
@@ -20,26 +18,21 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     )
   end
 
-  # 共通ログインヘルパー（通常のログインと同じリクエストを送る）
-  def log_in(user, password: @password)
-    post user_session_path, params: {
-      user: {
-        email:    user.email,
-        password: password
-      }
-    }
-    follow_redirect! # ログイン後のリダイレクトまで追う
+  test "should get index when logged in" do
+    sign_in @user
+    get posts_path
+    assert_response :success
+    assert_includes @response.body, "最初の投稿"
   end
 
   test "should get edit when logged in" do
-    log_in(@user)
-
+    sign_in @user
     get edit_post_path(@post)
     assert_response :success
   end
 
   test "should update post" do
-    log_in(@user)
+    sign_in @user
 
     patch post_path(@post), params: {
       post: {

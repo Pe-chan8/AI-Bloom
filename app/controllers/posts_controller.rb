@@ -3,6 +3,11 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[edit update destroy]
   before_action :authorize_post!, only: %i[edit update destroy]
 
+  # 一覧表示（自分の投稿のみ）
+  def index
+    @posts = current_user.posts.order(posted_at: :desc)
+  end
+
   # モーダル用：新規投稿
   def new
     @post = Post.new
