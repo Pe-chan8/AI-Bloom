@@ -1,7 +1,55 @@
 <% content_for :title, "投稿一覧 - AI-bloom" %>
 
-<div class="max-w-3xl mx-auto pt-6 space-y-4">
-  <h1 class="text-lg font-semibold">投稿一覧</h1>
+    <!-- タイトル：画面全体で左端揃え -->
+    <div class="pt-3">
+    <h1 class="text-2xl font-bold text-slate-800">投稿一覧</h1>
+    </div>
+
+    <!-- ここから中央寄せのコンテンツ（検索フォーム + 投稿カード） -->
+    <div class="max-w-3xl mx-auto pt-6 space-y-4 px-6 py-6 mb-6">
+
+    <!-- 検索フォーム -->
+    <div class="bg-white rounded-2xl shadow-sm border border-amber-100 px-6 py-6 space-y-3">
+
+    <!-- タイトル行（アイコン＋説明） -->
+    <div class="flex items-center gap-2 text-slate-600 text-sm">
+        <span class="text-lg">🔍</span>
+        <span>メモの内容からキーワードでさがす</span>
+    </div>
+
+    <%= form_with url: posts_path, method: :get, local: true do |f| %>
+        <div class="flex gap-3">
+
+        <!-- テキスト入力欄 -->
+        <%= f.text_field :q,
+                value: params[:q],
+                placeholder: "例）仕事 / 勉強 / うれしかったこと…",
+                class: "flex-1 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+        %>
+
+        <!-- 検索ボタン（右側） -->
+        <%= f.submit "検索",
+                class: "px-6 py-2 bg-sky-500 text-white rounded-xl text-sm font-semibold hover:bg-sky-600 transition" %>
+        </div>
+    <% end %>
+
+    <% if params[:q].present? %>
+        <p class="text-xs text-slate-500">
+        「<%= params[:q] %>」で絞り込み中
+        <%= link_to "検索条件をクリア", posts_path, class: "text-sky-600 underline" %>
+        </p>
+    <% end %>
+    </div>
+
+    <% if @query.present? %>
+      <div class="mt-1 text-[11px] text-slate-500 flex items-center gap-2">
+        <span>「<%= @query %>」で絞り込み中</span>
+        <%= link_to "検索条件をクリア",
+              posts_path,
+              class: "underline hover:no-underline" %>
+      </div>
+    <% end %>
+  </div>
 
   <% if @posts.any? %>
     <div class="space-y-4">

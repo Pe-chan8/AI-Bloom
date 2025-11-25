@@ -83,9 +83,7 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: ai_bloom_production
-    username: ai_bloom
-    password: <%= ENV["AI_BLOOM_DATABASE_PASSWORD"] %>
+    url: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *primary_production
     database: ai_bloom_production_cache

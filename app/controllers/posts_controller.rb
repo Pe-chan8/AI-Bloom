@@ -5,10 +5,23 @@ class PostsController < ApplicationController
 
   # 一覧表示（自分の投稿のみ）
   def index
-    @posts = current_user.posts
-                         .order(posted_at: :desc)
-                         .page(params[:page])
-                         .per(10) # 1ページに10件
+    # 検索キーワード（nil 回避して trim）
+    @query = params[:q].to_s.strip
+
+    base_scope =
+      current_user.posts
+                  .order(posted_at: :desc)
+
+    # 検索ワードがあれば body をあいまい検索
+    @posts =
+      if @query.present?
+        base_scope.where("body ILIKE ?", "%#{@query}%")
+      else
+        base_scope
+      end
+
+    # ページネーション（1ページ10件）
+    @posts = @posts.page(params[:page]).per(10)
   end
 
   # モーダル用：新規投稿
@@ -48,7 +61,7 @@ class PostsController < ApplicationController
   # 投稿削除
   def destroy
     @post.destroy!
-    redirect_to root_path, notice: "投稿を削除しました"
+    redirect_to posts_path, notice: "投稿を削除しました"
   end
 
   private
