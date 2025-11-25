@@ -3,12 +3,15 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[edit update destroy]
   before_action :authorize_post!, only: %i[edit update destroy]
 
-  # 一覧表示（自分の投稿のみ）
+  # 一覧表示（検索 + ページネーション）
   def index
-    @posts = current_user.posts
-                         .order(posted_at: :desc)
-                         .page(params[:page])
-                         .per(10) # 1ページに10件
+    # ログインユーザーの投稿だけをベースに Ransack 検索オブジェクトを作成
+    base_scope = current_user.posts.order(posted_at: :desc)
+
+    @q = base_scope.ransack(params[:q])
+
+    # 検索結果にページネーションを適用（1ページ10件）
+    @posts = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
   # モーダル用：新規投稿
@@ -48,7 +51,7 @@ class PostsController < ApplicationController
   # 投稿削除
   def destroy
     @post.destroy!
-    redirect_to root_path, notice: "投稿を削除しました"
+    redirect_to posts_path, notice: "投稿を削除しました"
   end
 
   private
