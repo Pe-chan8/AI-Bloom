@@ -48,6 +48,47 @@
         </div>
       <% end %>
     </div>
+
+    <!-- ページネーション -->
+    <% if @posts.total_pages > 1 %>
+    <div class="mt-10 flex justify-center">
+        <div class="flex items-center gap-2">
+
+        <!-- 前へ -->
+        <% if @posts.prev_page %>
+            <%= link_to "◀", url_for(page: @posts.prev_page), 
+                class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+        <% else %>
+            <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">◀</span>
+        <% end %>
+
+        <!-- ページ番号 -->
+        <% @posts.total_pages.times do |i| %>
+            <% page_num = i + 1 %>
+
+            <% if page_num == @posts.current_page %>
+            <span class="px-3 py-1.5 rounded-full bg-sky-500 text-white text-sm font-semibold">
+                <%= page_num %>
+            </span>
+            <% else %>
+            <%= link_to page_num,
+                    url_for(page: page_num),
+                    class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+            <% end %>
+        <% end %>
+
+        <!-- 次へ -->
+        <% if @posts.next_page %>
+            <%= link_to "▶", url_for(page: @posts.next_page),
+                class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+        <% else %>
+            <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">▶</span>
+        <% end %>
+
+        </div>
+    </div>
+    <% end %>
+
   <% else %>
     <div class="bg-white rounded-2xl shadow-sm px-4 py-6 text-center text-sm text-slate-500">
       まだ投稿がありません。<br>

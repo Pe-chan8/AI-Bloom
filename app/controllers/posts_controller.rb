@@ -5,7 +5,10 @@ class PostsController < ApplicationController
 
   # 一覧表示（自分の投稿のみ）
   def index
-    @posts = current_user.posts.order(posted_at: :desc)
+    @posts = current_user.posts
+                         .order(posted_at: :desc)
+                         .page(params[:page])
+                         .per(10) # 1ページに10件
   end
 
   # モーダル用：新規投稿
