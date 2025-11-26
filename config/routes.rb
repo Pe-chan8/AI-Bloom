@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get "buddies/index"
-  get "buddies/select"
   # 認証
   devise_for :users
 

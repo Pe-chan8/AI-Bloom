@@ -53,11 +53,13 @@
         <div class="flex items-center gap-3 text-xs text-slate-600">
           <% if user_signed_in? %>
             <span><%= current_user.email %></span>
-            <%= link_to "ログアウト",
-                        destroy_user_session_path,
-                        data: { turbo_method: :delete },
-                        class: "hover:underline" %>
+            <%= button_to "ログアウト",
+                          destroy_user_session_path,
+                          method: :delete,
+                          class: "hover:underline",
+                          form: { class: "inline" } %>
           <% else %>
+
             <%= link_to "ログイン", new_user_session_path, class: "hover:underline" %>
             <%= link_to "新規登録",
                         new_user_registration_path,
