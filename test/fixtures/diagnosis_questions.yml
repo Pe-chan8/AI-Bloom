@@ -1,9 +1,50 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  content: MyText
+  id: 1
+  content: "質問1"
   position: 1
 
 two:
-  content: MyText
-  position: 1
+  id: 2
+  content: "質問2"
+  position: 2
+
+three:
+  id: 3
+  content: "質問3"
+  position: 3
+
+four:
+  id: 4
+  content: "質問4"
+  position: 4
+
+five:
+  id: 5
+  content: "質問5"
+  position: 5
+
+six:
+  id: 6
+  content: "質問6"
+  position: 6
+
+seven:
+  id: 7
+  content: "質問7"
+  position: 7
+
+eight:
+  id: 8
+  content: "質問8"
+  position: 8
+
+nine:
+  id: 9
+  content: "質問9"
+  position: 9
+
+ten:
+  id: 10
+  content: "質問10"
+  position: 10
+  

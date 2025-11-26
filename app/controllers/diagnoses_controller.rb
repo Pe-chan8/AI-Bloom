@@ -20,17 +20,12 @@ class DiagnosesController < ApplicationController
     end
 
     # タイプごとのスコア初期値
-    scores = {
-      "expressive"  => 0,
-      "driving"     => 0,
-      "amiable"     => 0,
-      "analytical"  => 0
-    }
+    scores = Hash.new(0)
 
     # 各質問のスコアを加算
     raw_answers.each do |question_id, value|
       question = DiagnosisQuestion.find_by(id: question_id)
-      next if question.nil?        # seed や ID のズレで見つからない場合はスキップ
+      next if question.nil?
 
       score = value.to_i
       scores[question.category] += score
@@ -45,6 +40,13 @@ class DiagnosesController < ApplicationController
 
     # 一番スコアが高いタイプ
     @dominant_type, @dominant_score = scores.max_by { |_, v| v }
+
+    # 万が一 nil や未知のキーだったときのフォールバック
+    valid_types = %w[expressive driving amiable analytical]
+
+    @dominant_type = @dominant_type.to_s
+    @dominant_type = "amiable" unless valid_types.include?(@dominant_type)
+
     @scores = scores
 
     # タイプごとの説明データ
