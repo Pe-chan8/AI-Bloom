@@ -1,0 +1,167 @@
+<% content_for :title, "バディ選択 - AI-Bloom" %>
+
+<div class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+
+  <!-- タイトル -->
+  <header class="space-y-1">
+    <p class="text-xs text-sky-700">あなたにぴったりのバディを選ぼう</p>
+    <h1 class="text-2xl font-bold text-slate-800">バディ選択</h1>
+  </header>
+
+  <!-- サブタイトル -->
+  <p class="text-xs text-slate-500">
+    ※ バディの性格によって、AIからのメッセージの雰囲気が少し変わります。あとから変更もできます。
+  </p>
+
+  <%# ======================================================= %>
+  <%#  画像パスの対応表                                         %>
+  <%# ======================================================= %>
+  <% buddy_image_paths = {
+       "normal"      => "buddies/normal_buddy.png",
+       "analytical"  => "buddies/analytical_buddy.png",
+       "amiable"     => "buddies/amiable_buddy.png",
+       "driving"     => "buddies/driving_buddy.png",
+       "expressive"  => "buddies/expressive_buddy.png"
+     } %>
+
+  <%# ノーマル / タイプ別 に分割 %>
+  <% normal_buddy, type_buddies = @buddies.partition { |b| b.code == "normal" } %>
+  <% normal_buddy = normal_buddy.first %>
+
+  <% if normal_buddy.present? %>
+    <% is_current_normal = (current_buddy&.id == normal_buddy.id) %>
+
+    <%# ----------------------------------------------------- %>
+    <%#  ノーマルバディ：上段の横長カード                     %>
+    <%# ----------------------------------------------------- %>
+    <section class="bg-[#FFF7EA] rounded-3xl shadow-sm border
+                    <%= is_current_normal ? 'border-amber-400 ring-2 ring-amber-200' : 'border-amber-100' %>
+                    px-6 py-6">
+
+      <!-- テキスト左 ＋ 画像＆ボタン右 -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+        <!-- 左：テキスト -->
+        <div class="flex-1 space-y-2">
+          <p class="text-lg font-semibold text-slate-800"><%= normal_buddy.name %></p>
+
+          <p class="text-sm text-slate-700 leading-relaxed">
+            <%= normal_buddy.description %>
+          </p>
+
+          <% if normal_buddy.tone_hint.present? %>
+            <p class="text-[11px] text-slate-500 bg-white/60 rounded-2xl px-3 py-2 inline-block">
+              <span class="font-semibold">話し方のイメージ：</span>
+              <%= normal_buddy.tone_hint %>
+            </p>
+          <% end %>
+        </div>
+
+        <!-- 右：アイコン＋ボタン（カード右端寄せ） -->
+        <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end gap-3 md:w-56 md:self-stretch">
+
+          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
+                      flex items-center justify-center overflow-hidden border border-amber-100">
+            <% if buddy_image_paths[normal_buddy.code].present? %>
+              <%= image_tag buddy_image_paths[normal_buddy.code],
+                    alt: "#{normal_buddy.name}のアイコン",
+                    class: "w-full h-full object-contain" %>
+            <% else %>
+              <span class="text-4xl">🐧</span>
+            <% end %>
+          </div>
+
+          <% if is_current_normal %>
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-xs
+                          bg-emerald-100 text-emerald-700 border border-emerald-200">
+              ✓ このバディを使用中
+            </span>
+          <% else %>
+            <%= button_to "このバディにする",
+                  select_buddy_path(normal_buddy),
+                  method: :post,
+                  class: "px-4 py-2 rounded-full text-xs font-semibold
+                          bg-sky-500 text-white hover:bg-sky-600 transition" %>
+          <% end %>
+        </div>
+
+      </div>
+    </section>
+  <% end %>
+
+  <!-- 区切りラベル -->
+  <div class="pt-4">
+    <p class="text-xs font-semibold text-slate-500 tracking-wide">
+      タイプ別バディ
+    </p>
+  </div>
+
+  <%# ------------------------------------------------------- %>
+  <%#  タイプ別バディ：診断と同じ 2×2 グリッド                 %>
+  <%# ------------------------------------------------------- %>
+  <section class="grid gap-6 md:grid-cols-2">
+    <% type_buddies.each do |buddy| %>
+      <% is_current = (current_buddy&.id == buddy.id) %>
+
+      <article
+        class="bg-[#FFF7EA] rounded-3xl shadow-sm border px-6 py-5 flex flex-col gap-3
+               <%= is_current ? 'border-amber-400 ring-2 ring-amber-200' : 'border-amber-100' %>">
+
+        <!-- 上段：タイトル + アイコン -->
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-lg font-semibold text-slate-800">
+              <%= buddy.name %>
+            </p>
+          </div>
+
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
+                      flex items-center justify-center overflow-hidden
+                      border border-amber-100">
+            <% if buddy_image_paths[buddy.code].present? %>
+              <%= image_tag buddy_image_paths[buddy.code],
+                    alt: "#{buddy.name}のアイコン",
+                    class: "w-full h-full object-contain" %>
+            <% else %>
+              <span class="text-3xl">🐧</span>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- 説明 -->
+        <p class="text-sm text-slate-700 leading-relaxed">
+          <%= buddy.description %>
+        </p>
+
+        <!-- 口調のヒント -->
+        <% if buddy.tone_hint.present? %>
+          <p class="text-[11px] text-slate-500 bg-white/70 rounded-2xl px-3 py-2">
+            <span class="font-semibold">話し方のイメージ：</span>
+            <%= buddy.tone_hint %>
+          </p>
+        <% end %>
+
+        <!-- ボタン -->
+        <div class="mt-1 flex justify-end">
+          <% if is_current %>
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-xs
+                          bg-emerald-100 text-emerald-700 border border-emerald-200">
+              ✓ このバディを使用中
+            </span>
+          <% else %>
+            <%= button_to "このバディにする",
+                  select_buddy_path(buddy),
+                  method: :post,
+                  class: "px-4 py-2 rounded-full text-xs font-semibold
+                          bg-sky-500 text-white hover:bg-sky-600 transition" %>
+          <% end %>
+        </div>
+      </article>
+    <% end %>
+  </section>
+
+  <!-- フッターの説明 -->
+  <p class="text-[11px] text-slate-500">
+    ※ バディを選択していない場合は、自動的に「ノーマルバディ」が設定された状態として扱います。
+  </p>
+</div>

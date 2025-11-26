@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_23_051954) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_25_192518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "buddies", force: :cascade do |t|
+    t.string "code", null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.boolean "is_active", default: true, null: false
+    t.string "name", null: false
+    t.text "persona_prompt"
+    t.text "tone_hint"
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_buddies_on_code", unique: true
+  end
 
   create_table "diagnosis_questions", force: :cascade do |t|
     t.string "category"
@@ -38,7 +50,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_23_051954) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.bigint "buddy_id"
     t.datetime "created_at", null: false
+    t.bigint "current_buddy_id"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "recommended_buddy_type"
@@ -47,9 +61,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_23_051954) do
     t.string "reset_password_token"
     t.string "social_type"
     t.datetime "updated_at", null: false
+    t.index ["buddy_id"], name: "index_users_on_buddy_id"
+    t.index ["current_buddy_id"], name: "index_users_on_current_buddy_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "posts", "users"
+  add_foreign_key "users", "buddies"
 end

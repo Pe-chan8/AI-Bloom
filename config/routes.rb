@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "buddies/index"
+  get "buddies/select"
   # 認証
   devise_for :users
 
@@ -20,4 +22,9 @@ Rails.application.routes.draw do
 
   # 投稿関連
   resources :posts, only: %i[index new create edit update destroy]
+
+    # バディ関連
+    resources :buddies, only: [ :index ] do
+    post :select, on: :member
+  end
 end
