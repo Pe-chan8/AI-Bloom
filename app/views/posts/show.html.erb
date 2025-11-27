@@ -1,0 +1,20 @@
+<% content_for :title, "投稿詳細 - AI-Bloom" %>
+
+<div class="max-w-2xl mx-auto px-4 py-8 space-y-4">
+  <h1 class="text-xl font-bold text-slate-800">投稿詳細</h1>
+
+  <div class="bg-[#FFF7EA] rounded-2xl px-4 py-3 space-y-2">
+    <p class="text-sm text-slate-700 whitespace-pre-wrap">
+      <%= @post.body %>
+    </p>
+
+    <p class="text-xs text-slate-400 text-right">
+      <%= @post.created_at.strftime("%Y-%m-%d %H:%M") %>
+    </p>
+  </div>
+
+  <div class="flex justify-between text-sm">
+    <%= link_to "← 投稿一覧に戻る", posts_path, class: "text-sky-600 hover:underline" %>
+    <%= link_to "編集する", edit_post_path(@post), class: "text-amber-600 hover:underline" %>
+  </div>
+</div>

@@ -14,6 +14,10 @@ class PostsController < ApplicationController
     @posts = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
+  def show
+    @post = current_user.posts.find(params[:id])
+  end
+
   # モーダル用：新規投稿
   def new
     @post = Post.new
