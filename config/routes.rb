@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
 
   # 投稿関連
-  resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+  resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
 
     # バディ関連
     resources :buddies, only: [ :index ] do
