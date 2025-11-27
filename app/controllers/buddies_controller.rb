@@ -7,10 +7,8 @@ class BuddiesController < ApplicationController
 
   def select
     buddy = Buddy.find(params[:id])
-
     current_user.update!(buddy: buddy)
-
-    redirect_to root_path, notice: "#{buddy.name} をバディに設定しました。"
+    redirect_to buddies_path, notice: "#{buddy.name} をバディに設定しました。"
   end
 
   private
