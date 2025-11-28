@@ -1,16 +1,25 @@
 DiagnosisQuestion.destroy_all
 
 questions = [
-  { position: 1,  content: "誰かが困っていると、自然と気づいて助けたくなる。", category: "amiable" },
-  { position: 2,  content: "物事を決める前に、できるだけ情報を集めて比較したい。", category: "analytical" },
-  { position: 3,  content: "新しいアイデアを考えたり、誰かと盛り上がる時間が好きだ。", category: "expressive" },
-  { position: 4,  content: "目標が決まると、すぐに行動に移したくなる。", category: "driving" },
-  { position: 5,  content: "相手の気持ちを考えすぎて、自分の意見を後回しにしてしまうことがある。", category: "amiable" },
-  { position: 6,  content: "感情よりも、事実・データを優先して判断する方だ。", category: "analytical" },
-  { position: 7,  content: "話していると、つい思いついたことを口にしてしまうことが多い。", category: "expressive" },
-  { position: 8,  content: "結果がはっきりしない状況が続くと、ストレスを感じやすい。", category: "driving" },
-  { position: 9,  content: "人との関係を大切にし、できるだけ衝突を避けたいと思う。", category: "amiable" },
-  { position: 10, content: "予定や計画は、きちんと整理されている方が安心する。", category: "analytical" }
+  # Amiable
+  { position: 1,  content: "困っている人がいると、自分の予定を変えてでも手を差し伸べたくなることがある。", category: "amiable" },
+  { position: 2,  content: "本当は違う意見を持っていても、その場の空気を乱したくなくて言わないことがある。", category: "amiable" },
+  { position: 3,  content: "誰かに感謝されると、「もっと力になりたい」と思う自分がいる。", category: "amiable" },
+
+  # Analytical
+  { position: 4,  content: "決めごとは、感情より「根拠」「情報量」「確度」で判断したいほうだ。", category: "analytical" },
+  { position: 5,  content: "何かを始める前に、できるだけ「最悪のシナリオ」も想定しておきたい。", category: "analytical" },
+  { position: 6,  content: "人から相談されたとき、まず状況の整理から入ってしまうことが多い。", category: "analytical" },
+
+  # Expressive
+  { position: 7,  content: "話しているうちに、アイデアが湧いてきて話題がどんどん広がることがある。", category: "expressive" },
+  { position: 8,  content: "落ち込んでいる人を見ると、つい気持ちを明るくする言葉をかけたくなる。", category: "expressive" },
+  { position: 9,  content: "テンションが上がると、ついつい身振り手振りやリアクションが大きくなってしまう。", category: "expressive" },
+
+  # Driving
+  { position: 10, content: "やるべきことが明確になると、つい他の予定よりも優先して動きたくなる。", category: "driving" },
+  { position: 11, content: "曖昧な状態が続くより、多少荒くても“結論を早く出す”方がスッキリする。", category: "driving" },
+  { position: 12, content: "「できるかどうか」より「まずやってみる」が先にくることが多い。", category: "driving" }
 ]
 
 questions.each do |q|
