@@ -72,4 +72,10 @@ class PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:body, :mood, :visibility)
   end
+
+    private
+
+  def set_bottom_nav
+    @bottom_nav_key = "posts"
+  end
 end

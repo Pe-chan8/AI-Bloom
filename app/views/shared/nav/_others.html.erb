@@ -1,0 +1,17 @@
+<div class="max-w-5xl mx-auto flex justify-between px-4 py-2 text-xs text-slate-600 gap-2">
+  <!-- ホーム -->
+  <%= link_to root_path, class: "flex-1 flex justify-center" do %>
+    <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
+      <%= image_tag "/bottom_nav/home.png", class: "w-8 h-8", alt: "ホーム" %>
+      <span class="text-[10px] mt-1 font-semibold text-amber-800">ホーム</span>
+    </div>
+  <% end %>
+
+  <!-- その他（アクティブ） -->
+  <%= link_to others_path, class: "flex-1 flex justify-center" do %>
+    <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 shadow-md ring-1 ring-amber-200">
+      <%= image_tag "/bottom_nav/others.png", class: "w-8 h-8", alt: "その他" %>
+      <span class="text-[10px] mt-1 font-semibold text-amber-800">その他</span>
+    </div>
+  <% end %>
+</div>
