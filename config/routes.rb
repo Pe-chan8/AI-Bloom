@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   get "top/index"
   root "top#index"
 
+  # その他
+  get "/others", to: "others#index", as: :others
+
   # ソーシャルタイプ診断
   get  "/diagnosis",            to: "diagnoses#top",       as: :diagnosis_top
   get  "/diagnosis/questions",  to: "diagnoses#questions", as: :diagnosis_questions

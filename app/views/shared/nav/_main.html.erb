@@ -1,0 +1,155 @@
+<%# ------------------------------------------------------ %>
+<%#  Bottom Navigation ＋ 新規投稿モーダル %>
+<%# ------------------------------------------------------ %>
+
+<% if (controller_name == "top" && action_name == "index") ||
+      (controller_name == "posts" && action_name == "index") %>
+
+  <!-- 投稿ボタン -->
+  <button
+    id="open-post-modal"
+    class="fixed bottom-20 right-6 z-40 bg-white rounded-2xl shadow-none flex flex-col items-center justify-center 
+            px-4 py-3 hover:bg-amber-50 transition border border-slate-200 
+            outline-none focus:outline-none focus-visible:outline-none"
+    style="width: 90px; height: 90px;"
+ >
+
+    <%= image_tag "/bottom_nav/newpost.png", class: "w-10 h-10 mb-1", alt: "新規投稿" %>
+    <span class="text-[10px] mt-1 font-semibold text-amber-800">新規投稿</span>
+  </button>
+
+  <!-- 投稿モーダル -->
+  <div
+    id="post-modal"
+    style="
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.4);
+    "
+  >
+    <div
+      style="
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 640px;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 24px;
+        position: relative;
+        margin: 0 16px;
+      "
+    >
+      <button
+        id="close-post-modal"
+        style="
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          font-size: 20px;
+          color: #9ca3af;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+        "
+      >
+
+      </button>
+
+      <div id="post_form_frame"></div>
+    </div>
+  </div>
+<% end %>
+
+<!-- ▼ ボトムナビ（共通） -->
+<nav
+  style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;"
+  class="bg-white/95 border-top border-slate-200"
+>
+  <div class="max-w-5xl mx-auto flex justify-between px-4 py-2 text-xs text-slate-600 gap-2">
+
+    <!-- ホーム -->
+    <%= link_to root_path, class: "flex-1 flex justify-center" do %>
+      <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 shadow-md ring-1 ring-amber-200">
+        <%= image_tag "/bottom_nav/home.png", class: "w-8 h-8", alt: "ホーム" %>
+        <span class="text-[10px] mt-1 font-semibold text-amber-800">ホーム</span>
+      </div>
+    <% end %>
+
+    <!-- 診断 -->
+    <%= link_to diagnosis_top_path, class: "flex-1 flex justify-center" do %>
+      <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
+        <%= image_tag "/bottom_nav/diagnosis.png", class: "w-8 h-8", alt: "診断" %>
+        <span class="text-[10px] mt-1 font-semibold text-amber-800">診断</span>
+      </div>
+    <% end %>
+
+    <!-- バディ -->
+    <%= link_to buddies_path, class: "flex-1 flex justify-center" do %>
+      <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
+        <%= image_tag "/bottom_nav/buddy.png", class: "w-8 h-8", alt: "バディ" %>
+        <span class="text-[10px] mt-1 font-semibold text-amber-800">バディ</span>
+      </div>
+    <% end %>
+
+    <!-- 投稿一覧 -->
+    <%= link_to posts_path, class: "flex-1 flex justify-center" do %>
+      <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
+        <%= image_tag "/bottom_nav/post.png", class: "w-8 h-8", alt: "投稿一覧" %>
+        <span class="text-[10px] mt-1 font-semibold text-amber-800">投稿一覧</span>
+      </div>
+    <% end %>
+
+    <!-- その他 -->
+    <%= link_to "#", class: "flex-1 flex justify-center" do %>
+      <div class="flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm hover:bg-amber-50 transition">
+        <%= image_tag "/bottom_nav/others.png", class: "w-8 h-8", alt: "その他" %>
+        <span class="text-[10px] mt-1 font-semibold text-amber-800">その他</span>
+      </div>
+    <% end %>
+
+  </div>
+</nav>
+
+<!-- ▼ モーダル制御（JS） -->
+<script>
+  function closePostModal() {
+    const modal  = document.getElementById("post-modal");
+    const frame  = document.getElementById("post_form_frame");
+
+    if (modal) modal.style.display = "none";
+    if (frame) frame.innerHTML = "";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const openBtn  = document.getElementById("open-post-modal");
+    const closeBtn = document.getElementById("close-post-modal");
+    const modal    = document.getElementById("post-modal");
+    const frame    = document.getElementById("post_form_frame");
+
+    if (!openBtn || !modal || !frame) return;
+
+    openBtn.addEventListener("click", () => {
+      fetch("/posts/new")
+        .then(res => res.text())
+        .then(html => {
+          frame.innerHTML = html;
+          modal.style.display = "flex";
+        });
+    });
+
+    closeBtn.addEventListener("click", e => {
+      e.preventDefault();
+      closePostModal();
+    });
+
+    modal.addEventListener("click", e => {
+      if (e.target === modal) closePostModal();
+    });
+  });
+</script>

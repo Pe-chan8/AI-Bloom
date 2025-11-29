@@ -206,4 +206,10 @@ class DiagnosesController < ApplicationController
     @twitter_intent_url =
       "https://twitter.com/intent/tweet?text=#{ERB::Util.url_encode(@share_text)}&url=#{ERB::Util.url_encode(@share_url)}"
   end
+
+    private
+
+  def set_bottom_nav
+    @bottom_nav_key = "diagnosis"
+  end
 end

@@ -40,4 +40,24 @@
     width: 140px;
     height: auto;
   }
+
+  /* すべての要素のフォーカスリングを完全に消す */
+  *:focus,
+  *:focus-visible,
+  *:focus-within {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* aタグのフォーカスを完全に無効化 */
+  a:focus,
+  a:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Safari/Chromeモバイルのタップ枠も完全除去 */
+  * {
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  }
 }
