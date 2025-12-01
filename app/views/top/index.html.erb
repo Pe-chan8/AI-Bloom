@@ -1,32 +1,61 @@
-<% content_for :title, "マイルーム - AI-bloom" %>
+<% content_for :title, "マイルーム - AI-Bloom" %>
 
-<div class="space-y-8">
-  <!-- ページタイトル -->
-  <header class="space-y-2">
-    <p class="text-xs text-sky-700">
-      日々の小さな頑張りを、やさしく抱きしめる自己理解アプリ。
-    </p>
-    <h1 class="text-2xl font-bold text-slate-800">
-      マイルーム
-    </h1>
+<div class="max-w-5xl mx-auto px-6 py-8 space-y-8">
+
+  <!-- タイトル -->
+  <header class="space-y-1">
+    <p class="text-xs text-sky-700">日々の小さな頑張りを、やさしく抱きとめる自己理解アプリ。</p>
+    <h1 class="text-2xl font-bold text-slate-800">マイルーム</h1>
   </header>
 
-  <!-- メイン2カラム（バディ画像 + メッセージ） -->
-  <section class="grid gap-6 md:grid-cols-[1.1fr,1.4fr]">
-    <!-- バディカード -->
-    <div class="bg-[#FFFBEB] rounded-3xl shadow-sm border border-amber-100 px-6 py-6 flex flex-col items-center justify-center">
-      <p class="text-sm font-semibold text-slate-700 mb-4">
-        今日のバディ
-      </p>
+  <%# ====================================== %>
+  <%# 今日のバディ（current_buddy を反映） %>
+  <%# ====================================== %>
 
-      <div class="w-32 h-32 rounded-full bg-gradient-to-br from-sky-100 to-amber-100 flex items-center justify-center mb-4">
-        <span class="text-5xl">🐧</span>
+  <% buddy = current_buddy %>
+
+  <% buddy_image_paths = {
+       "normal"      => "buddies/normal_buddy.png",
+       "analytical"  => "buddies/analytical_buddy.png",
+       "amiable"     => "buddies/amiable_buddy.png",
+       "driving"     => "buddies/driving_buddy.png",
+       "expressive"  => "buddies/expressive_buddy.png"
+     } %>
+
+  <section class="bg-[#FFF7EA] rounded-3xl border border-amber-100 shadow-sm px-6 py-6 space-y-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-base font-semibold text-slate-800">今日のバディ</h2>
+      <%= link_to "バディを変更する",
+                  buddies_path,
+                  class: "text-xs text-sky-600 hover:underline" %>
+    </div>
+
+    <div class="flex flex-col items-center gap-3 mt-2">
+      <!-- バディアイコン -->
+      <div class="w-28 h-28 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
+                  flex items-center justify-center overflow-hidden border border-amber-100">
+        <% if buddy && buddy_image_paths[buddy.code].present? %>
+          <%= image_tag buddy_image_paths[buddy.code],
+                alt: "#{buddy.name} のアイコン",
+                class: "w-full h-full object-contain" %>
+        <% else %>
+          <span class="text-4xl">🐧</span>
+        <% end %>
       </div>
 
-      <p class="text-xs text-slate-500">
-        ※ MVP ではサンプルバディを表示します。
-      </p>
+      <!-- バディ名・タイプ -->
+      <div class="text-center space-y-1">
+        <p class="text-sm text-slate-500">今日あなたを応援してくれるのは</p>
+        <p class="text-lg font-semibold text-slate-800">
+          <%= buddy&.name || "ノーマルバディ" %>
+        </p>
+      </div>
     </div>
+
+    <p class="mt-3 text-[11px] text-slate-500">
+      ※ バディは診断結果や選択に応じて変更できます。あとから「バディ選択」画面で変更可能です。
+    </p>
+  </section>
 
     <!-- メッセージカード -->
     <div class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 flex flex-col gap-4">
