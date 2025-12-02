@@ -14,7 +14,7 @@ class PostsController < ApplicationController
   # 投稿詳細：ここで自動的にAIメッセージを生成する
   def show
     @buddy = current_user.buddy
-    
+
     service = Ai::EmpathyMessageService.new
 
     raw_message = service.generate_for(
