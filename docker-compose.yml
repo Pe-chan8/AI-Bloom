@@ -23,12 +23,12 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
       DB_HOST: db
       DB_USERNAME: postgres
       DB_PASSWORD: password
-      GA_MEASUREMENT_ID: "G-WQ3HE0E5QY"
-      SENTRY_DSN: "https://4fb15cf205fa9c11cb587971d9bcc00a@o4510380894060544.ingest.us.sentry.io/4510380969164800"
 
 volumes:
   db-data:

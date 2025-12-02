@@ -22,10 +22,13 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
 
   # 投稿関連
-  resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
+  resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
+    # この投稿に対する AI 共感メッセージをプレビューする
+    post :preview_ai, on: :member
+  end
 
-    # バディ関連
-    resources :buddies, only: [ :index ] do
+  # バディ関連
+  resources :buddies, only: [ :index ] do
     post :select, on: :member
   end
 end
