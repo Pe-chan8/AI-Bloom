@@ -13,12 +13,14 @@ class PostsController < ApplicationController
 
   # 投稿詳細：ここで自動的にAIメッセージを生成する
   def show
+    @buddy = current_user.buddy
+    
     service = Ai::EmpathyMessageService.new
 
     raw_message = service.generate_for(
       post:  @post,
       user:  current_user,
-      buddy: current_user.buddy
+      buddy: @buddy
     )
 
     # 先頭の半角・全角スペース/改行をまとめて削る

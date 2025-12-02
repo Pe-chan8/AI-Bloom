@@ -27,17 +27,31 @@
 
         <!-- アイコン-->
         <div class="mt-1 flex-shrink-0">
+          <% buddy = @buddy %>
+
+          <% buddy_image_paths = {
+               "normal"      => "buddies/normal_buddy.png",
+               "analytical"  => "buddies/analytical_buddy.png",
+               "amiable"     => "buddies/amiable_buddy.png",
+               "driving"     => "buddies/driving_buddy.png",
+               "expressive"  => "buddies/expressive_buddy.png"
+             } %>
+
           <div class="w-12 h-12 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
                       flex items-center justify-center overflow-hidden border border-amber-200">
-            <%= image_tag "buddies/analytical_buddy.png",
-                  alt: "バディアイコン",
-                  class: "w-full h-full object-contain" %>
+            <% if buddy && buddy_image_paths[buddy.code].present? %>
+              <%= image_tag buddy_image_paths[buddy.code],
+                    alt: "#{buddy.name} のアイコン",
+                    class: "w-full h-full object-contain" %>
+            <% else %>
+              <span class="text-xl">🐧</span>
+            <% end %>
           </div>
         </div>
 
         <!-- 吹き出し -->
         <div class="flex-1 rounded-2xl border border-sky-200 bg-white shadow-sm pl-2 pr-4 py-3">
-          <p class="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed" style="text-indent: 0;"><%= @ai_preview_message %></p>  
+          <p class="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed" style="text-indent: 0;"><%= @ai_preview_message %></p>
         </div>
       </div>
     </section>
