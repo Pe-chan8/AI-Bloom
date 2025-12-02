@@ -74,3 +74,5 @@ gem "sentry-rails"
 gem "kaminari", "~> 1.2"
 
 gem "ransack"
+
+gem "ruby-openai", "~> 7.0"

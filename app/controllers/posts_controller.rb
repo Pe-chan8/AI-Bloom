@@ -1,21 +1,28 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: %i[edit update destroy]
+  before_action :set_post, only: %i[show edit update destroy]
   before_action :authorize_post!, only: %i[edit update destroy]
+  before_action :set_bottom_nav
 
   # 一覧表示（検索 + ページネーション）
   def index
-    # ログインユーザーの投稿だけをベースに Ransack 検索オブジェクトを作成
     base_scope = current_user.posts.order(posted_at: :desc)
-
     @q = base_scope.ransack(params[:q])
-
-    # 検索結果にページネーションを適用（1ページ10件）
     @posts = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
+  # 投稿詳細：ここで自動的にAIメッセージを生成する
   def show
-    @post = current_user.posts.find(params[:id])
+    service = Ai::EmpathyMessageService.new
+
+    raw_message = service.generate_for(
+      post:  @post,
+      user:  current_user,
+      buddy: current_user.buddy
+    )
+
+    # 先頭の半角・全角スペース/改行をまとめて削る
+    @ai_preview_message = raw_message.to_s.sub(/\A[　[:space:]]+/, "")
   end
 
   # モーダル用：新規投稿
@@ -31,7 +38,6 @@ class PostsController < ApplicationController
     if @post.save
       redirect_to root_path, notice: "投稿しました"
     else
-      # モーダル内でバリデーションエラーを表示したいので layout: false
       render partial: "form",
              locals: { post: @post, mode: :modal },
              layout: false,
@@ -39,9 +45,7 @@ class PostsController < ApplicationController
     end
   end
 
-  # ページ遷移版：投稿編集画面
   def edit
-    # @post は before_action でセット＆権限チェック済み
   end
 
   def update
@@ -52,7 +56,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # 投稿削除
   def destroy
     @post.destroy!
     redirect_to posts_path, notice: "投稿を削除しました"
@@ -61,10 +64,9 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    @post = Post.find(params[:id])
+    @post = current_user.posts.find(params[:id])
   end
 
-  # 自分の投稿以外は編集・削除させないようにする
   def authorize_post!
     redirect_to root_path, alert: "この投稿は編集できません" if @post.user_id != current_user.id
   end
@@ -72,8 +74,6 @@ class PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:body, :mood, :visibility)
   end
-
-    private
 
   def set_bottom_nav
     @bottom_nav_key = "posts"
