@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  buddy: one
+  post: one
+  kind: 1
+  content: MyText
+  sentiment: 1
+
+two:
+  user: two
+  buddy: two
+  post: two
+  kind: 1
+  content: MyText
+  sentiment: 1

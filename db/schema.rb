@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_25_192518) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_03_053927) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "ai_messages", force: :cascade do |t|
+    t.bigint "buddy_id"
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.integer "kind", default: 2, null: false
+    t.bigint "post_id"
+    t.integer "sentiment"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["buddy_id"], name: "index_ai_messages_on_buddy_id"
+    t.index ["post_id"], name: "index_ai_messages_on_post_id"
+    t.index ["user_id"], name: "index_ai_messages_on_user_id"
+  end
 
   create_table "buddies", force: :cascade do |t|
     t.string "code", null: false
@@ -67,6 +81,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_25_192518) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "ai_messages", "buddies"
+  add_foreign_key "ai_messages", "posts"
+  add_foreign_key "ai_messages", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "users", "buddies"
 end

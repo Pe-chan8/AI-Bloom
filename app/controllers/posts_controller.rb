@@ -15,16 +15,26 @@ class PostsController < ApplicationController
   def show
     @buddy = current_user.buddy
 
-    service = Ai::EmpathyMessageService.new
+    # ① まずはこの投稿に紐づく最新の AiMessage を探す
+    @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
 
-    raw_message = service.generate_for(
-      post:  @post,
-      user:  current_user,
-      buddy: @buddy
-    )
+    # ② なければ生成して保存（service 内で create! 済み）
+    if @ai_message.nil?
+      service = Ai::EmpathyMessageService.new
 
-    # 先頭の半角・全角スペース/改行をまとめて削る
-    @ai_preview_message = raw_message.to_s.sub(/\A[　[:space:]]+/, "")
+      text = service.generate_for(
+        post:  @post,
+        user:  current_user,
+        buddy: @buddy
+      )
+
+      # 直近のレコードを取り直す（万一に備えて）
+      @ai_message = @post.ai_messages.reply.order(created_at: :desc).first ||
+                    AiMessage.new(content: text, user: current_user, buddy: @buddy, post: @post, kind: :reply)
+    end
+
+    # ビューで使いやすいように文字列も用意しておく
+    @ai_preview_message = @ai_message.content
   end
 
   # モーダル用：新規投稿
