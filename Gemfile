@@ -75,4 +75,4 @@ gem "kaminari", "~> 1.2"
 
 gem "ransack"
 
-gem "ruby-openai", "~> 7.0"
+gem "ruby-openai", "~> 8.3"
