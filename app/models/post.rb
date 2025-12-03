@@ -19,4 +19,5 @@ class Post < ApplicationRecord
       visibility
     ]
   end
+  has_many :ai_messages, dependent: :destroy
 end

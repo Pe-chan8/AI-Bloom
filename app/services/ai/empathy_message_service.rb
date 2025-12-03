@@ -21,8 +21,20 @@ module Ai
 
       raw = response.dig("choices", 0, "message", "content").to_s
 
-      # ここで AiMessage / AiResponse に保存するならこのあたりで
-      raw
+      # 先頭の空白・改行を削る（ビュー側と合わせる）
+      cleaned = raw.sub(/\A[　[:space:]]+/, "")
+
+      # ★ここでDBに保存する
+      AiMessage.create!(
+          user:     user,
+          buddy:    buddy,
+          post:     post,
+          kind:     :reply,
+          content:  cleaned,
+        # sentiment: は今はnilでOK
+      )
+
+      cleaned
     end
 
     private
