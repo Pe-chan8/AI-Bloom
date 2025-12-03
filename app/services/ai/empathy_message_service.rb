@@ -31,7 +31,7 @@ module Ai
           post:     post,
           kind:     :reply,
           content:  cleaned,
-          # sentiment: は今はnilでOK
+        # sentiment: は今はnilでOK
       )
 
       cleaned
