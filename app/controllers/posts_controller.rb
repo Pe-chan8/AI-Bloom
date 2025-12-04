@@ -13,28 +13,37 @@ class PostsController < ApplicationController
 
   # 投稿詳細：ここで自動的にAIメッセージを生成する
   def show
-    @buddy = current_user.buddy
+    @buddy        = current_user.buddy
+    @rate_limited = false
 
-    # ① まずはこの投稿に紐づく最新の AiMessage を探す
+    # ① この投稿に紐づく最新の AiMessage を探す
     @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
 
     # ② なければ生成して保存（service 内で create! 済み）
     if @ai_message.nil?
-      service = Ai::EmpathyMessageService.new
+      begin
+        service = Ai::EmpathyMessageService.new
 
-      text = service.generate_for(
-        post:  @post,
-        user:  current_user,
-        buddy: @buddy
-      )
+        text = service.generate_for(
+          post:  @post,
+          user:  current_user,
+          buddy: @buddy
+        )
 
-      # 直近のレコードを取り直す（万一に備えて）
-      @ai_message = @post.ai_messages.reply.order(created_at: :desc).first ||
-                    AiMessage.new(content: text, user: current_user, buddy: @buddy, post: @post, kind: :reply)
+        # 念のため取り直し（何かあっても最低限 new だけは用意）
+        @ai_message = @post.ai_messages.reply.order(created_at: :desc).first ||
+                      AiMessage.new(
+                        content: text,
+                        user:    current_user,
+                        buddy:   @buddy,
+                        post:    @post,
+                        kind:    :reply
+                      )
+      rescue Ai::RateLimiter::LimitExceeded
+        # レート制限に引っかかったときはフラグだけON
+        @rate_limited = true
+      end
     end
-
-    # ビューで使いやすいように文字列も用意しておく
-    @ai_preview_message = @ai_message.content
   end
 
   # モーダル用：新規投稿

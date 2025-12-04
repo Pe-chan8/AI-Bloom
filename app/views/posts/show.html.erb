@@ -7,17 +7,22 @@
 
   <!-- 投稿本文 -->
   <div class="bg-[#FFF7EA] rounded-2xl px-4 py-3 space-y-2 shadow-sm border border-amber-100">
-    <p class="text-sm text-slate-700 whitespace-pre-wrap">
-      <%= @post.body %>
-    </p>
+    <p class="text-sm text-slate-700 whitespace-pre-wrap"><%= @post.body %></p>
 
-    <p class="text-xs text-slate-400 text-right">
-      <%= @post.created_at.strftime("%Y-%m-%d %H:%M") %>
-    </p>
+    <p class="text-xs text-slate-400 text-right"><%= @post.created_at.strftime("%Y-%m-%d %H:%M") %></p>
   </div>
 
   <!-- AIバディからのメッセージ -->
-  <% if @ai_message.present? %><%= render "shared/ai_buddy_message",ai_message: @ai_message,buddy: @buddy %><% end %>
+  <% if @rate_limited %>
+    <section class="mt-4 text-xs text-slate-500 text-center">
+      <p>今日はAIバディへの新しいお願いが上限に達しました。</p>
+      <p>またあした、ゆっくり一緒にふりかえりましょうね。</p>
+    </section>
+  <% elsif @ai_message.present? %>
+    <%= render "shared/ai_buddy_message",
+          ai_message: @ai_message,
+          buddy:      @buddy %>
+  <% end %>
 
   <!-- 戻る・編集リンク -->
   <div class="flex justify-between text-sm mt-6">
