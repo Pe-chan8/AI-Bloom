@@ -6,35 +6,34 @@ module Ai
 
     # 投稿 + ユーザー(+任意でバディ) を渡すと共感メッセージ(文字列)を返す
     def generate_for(post:, user:, buddy: nil)
-      buddy ||= user.buddy
+    buddy ||= user.buddy
 
-      response = @client.chat(
+    # ここでレート制限
+    Ai::RateLimiter.new(user).check_and_count!(kind: :reply)
+
+    response = @client.chat(
         parameters: {
-          model: "gpt-4o-mini",
-          messages: [
+        model: "gpt-4o-mini",
+        messages: [
             { role: "system", content: system_prompt_for(user:, buddy:) },
             { role: "user",   content: user_prompt(post) }
-          ],
-          temperature: 0.85
+        ],
+        temperature: 0.85
         }
-      )
+    )
 
-      raw = response.dig("choices", 0, "message", "content").to_s
+    raw = response.dig("choices", 0, "message", "content").to_s
+    cleaned = raw.sub(/\A[　[:space:]]+/, "")
 
-      # 先頭の空白・改行を削る（ビュー側と合わせる）
-      cleaned = raw.sub(/\A[　[:space:]]+/, "")
+    AiMessage.create!(
+        user:    user,
+        buddy:   buddy,
+        post:    post,
+        kind:    :reply,
+        content: cleaned
+    )
 
-      # ★ここでDBに保存する
-      AiMessage.create!(
-          user:     user,
-          buddy:    buddy,
-          post:     post,
-          kind:     :reply,
-          content:  cleaned,
-        # sentiment: は今はnilでOK
-      )
-
-      cleaned
+    cleaned
     end
 
     private
