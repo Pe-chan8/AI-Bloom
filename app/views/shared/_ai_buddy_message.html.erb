@@ -1,0 +1,58 @@
+<%# 
+  共感メッセージ表示用パーシャル
+  期待するローカル変数:
+    - ai_message : AiMessage（必須想定）
+    - buddy      : Buddy（任意。なければ ai_message.buddy を使う）
+%>
+
+<% return if ai_message.blank? %>
+
+<% buddy ||= ai_message.buddy %>
+
+<% buddy_image_paths = {
+     "normal"      => "buddies/normal_buddy.png",
+     "analytical"  => "buddies/analytical_buddy.png",
+     "amiable"     => "buddies/amiable_buddy.png",
+     "driving"     => "buddies/driving_buddy.png",
+     "expressive"  => "buddies/expressive_buddy.png"
+   } %>
+
+<section class="mt-4">
+  <p class="text-xm font-semibold text-sky-700 mb-4">
+    AIバディからのメッセージ
+  </p>
+
+  <div class="flex items-start gap-3">
+
+    <!-- アイコン -->
+    <div class="mt-1 flex-shrink-0">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
+                  flex items-center justify-center overflow-hidden border border-amber-200">
+        <% if buddy && buddy_image_paths[buddy.code].present? %>
+          <%= image_tag buddy_image_paths[buddy.code],
+                alt: "#{buddy.name} のアイコン",
+                class: "w-full h-full object-contain" %>
+        <% else %>
+          <span class="text-xl">🐧</span>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 吹き出し -->
+    <div class="flex-1 rounded-2xl border border-sky-200 bg-white shadow-sm pl-2 pr-4 py-3">
+      <p class="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed" style="text-indent: 0;"><%= ai_message.content %></p>
+    </div>
+  </div>
+
+  <!-- 生成日時 -->
+  <% if ai_message.created_at.present? %>
+    <p class="text-xs text-slate-400 text-right mt-2">
+      生成日時：<%= ai_message.created_at.strftime("%Y-%m-%d %H:%M") %>
+    </p>
+  <% end %>
+
+  <!-- 説明文 -->
+  <p class="text-[11px] text-slate-400 mt-1">
+    ※ 同じ投稿を開いたときは、前回生成されたメッセージを再表示しています。
+  </p>
+</section>
