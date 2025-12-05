@@ -10,6 +10,7 @@ class User < ApplicationRecord
   # -------------------------------------------------------
   has_many :posts, dependent: :destroy
   has_many :ai_messages, dependent: :destroy
+  has_many :ai_message_feedbacks, dependent: :destroy
 
   # Buddy との関連付け（NULL 許可）
   belongs_to :buddy, optional: true

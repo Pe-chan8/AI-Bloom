@@ -1,4 +1,4 @@
-<%# 
+<%#
   共感メッセージ表示用パーシャル
   期待するローカル変数:
     - ai_message : AiMessage（必須想定）
@@ -38,9 +38,30 @@
       </div>
     </div>
 
-    <!-- 吹き出し -->
+    <!-- 吹き出し + 評価 -->
     <div class="flex-1 rounded-2xl border border-sky-200 bg-white shadow-sm pl-2 pr-4 py-3">
+      <!-- メッセージ本文 -->
       <p class="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed" style="text-indent: 0;"><%= ai_message.content %></p>
+
+      <%# このユーザーのフィードバックを取得（あればハイライト用に使う） %>
+      <% user_feedback = ai_message.ai_message_feedbacks.find_by(user: current_user) %>
+
+      <!-- 👍👎 評価エリア -->
+      <div class="mt-3 flex items-center justify-end gap-2 text-xs text-slate-500">
+        <span>このメッセージはどう感じた？</span>
+
+        <%= button_to "👍",
+              ai_message_feedback_path(ai_message_id: ai_message.id, value: 1),
+              method: :post,
+              class: "px-2 py-1 rounded-full border text-xs " \
+                     "#{user_feedback&.positive? ? 'bg-sky-100 border-sky-300' : 'border-slate-200'}" %>
+
+        <%= button_to "👎",
+              ai_message_feedback_path(ai_message_id: ai_message.id, value: -1),
+              method: :post,
+              class: "px-2 py-1 rounded-full border text-xs " \
+                     "#{user_feedback&.negative? ? 'bg-amber-100 border-amber-300' : 'border-slate-200'}" %>
+      </div>
     </div>
   </div>
 

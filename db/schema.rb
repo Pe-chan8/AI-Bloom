@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_03_053927) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_05_064615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "ai_message_feedbacks", force: :cascade do |t|
+    t.bigint "ai_message_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "value", null: false
+    t.index ["ai_message_id"], name: "index_ai_message_feedbacks_on_ai_message_id"
+    t.index ["user_id", "ai_message_id"], name: "index_ai_message_feedbacks_on_user_id_and_ai_message_id", unique: true
+    t.index ["user_id"], name: "index_ai_message_feedbacks_on_user_id"
+  end
 
   create_table "ai_messages", force: :cascade do |t|
     t.bigint "buddy_id"
@@ -81,6 +92,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_03_053927) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "ai_message_feedbacks", "ai_messages"
+  add_foreign_key "ai_message_feedbacks", "users"
   add_foreign_key "ai_messages", "buddies"
   add_foreign_key "ai_messages", "posts"
   add_foreign_key "ai_messages", "users"
