@@ -6,7 +6,9 @@ class PostsController < ApplicationController
 
   # 一覧表示（検索 + ページネーション）
   def index
-    base_scope = current_user.posts.order(posted_at: :desc)
+    base_scope = current_user.posts
+                            .order(posted_at: :desc)
+
     @q = base_scope.ransack(params[:q])
     @posts = @q.result(distinct: true).page(params[:page]).per(10)
   end
@@ -57,12 +59,34 @@ class PostsController < ApplicationController
     @post.posted_at = Time.current
 
     if @post.save
-      redirect_to root_path, notice: "投稿しました"
+      # ▼ ここでAIバディからのメッセージを同期生成・保存
+      begin
+        buddy   = current_user.buddy
+        service = Ai::EmpathyMessageService.new
+
+        text = service.generate_for(
+          post:  @post,
+          user:  current_user,
+          buddy: buddy
+        )
+
+        @post.ai_messages.create!(
+          user:    current_user,
+          buddy:   buddy,
+          kind:    :reply,
+          content: text
+        )
+      rescue => e
+        Rails.logger.error "[AI] create時のメッセージ生成に失敗: #{e.class} #{e.message}"
+        # 失敗しても投稿自体は成功扱いにする
+      end
+
+      redirect_to post_path(@post), notice: "投稿しました"
     else
       render partial: "form",
-             locals: { post: @post, mode: :modal },
-             layout: false,
-             status: :unprocessable_entity
+            locals: { post: @post, mode: :modal },
+            layout: false,
+            status: :unprocessable_entity
     end
   end
 

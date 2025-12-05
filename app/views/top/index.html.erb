@@ -4,7 +4,7 @@
 
   <!-- タイトル -->
   <header class="space-y-1">
-    <p class="text-xs text-sky-700">日々の小さな頑張りを、やさしく抱きとめる自己理解アプリ。</p>
+    <p class="text-xs text-sky-700">日々の小さな頑張りを、やさしく抱きしめる自己理解アプリ。</p>
     <h1 class="text-2xl font-bold text-slate-800">マイルーム</h1>
   </header>
 
@@ -19,7 +19,8 @@
        "analytical"  => "buddies/analytical_buddy.png",
        "amiable"     => "buddies/amiable_buddy.png",
        "driving"     => "buddies/driving_buddy.png",
-       "expressive"  => "buddies/expressive_buddy.png"
+       "expressive"  => "buddies/expressive_buddy.png",
+       "kansai_friend" => "buddies/kansai_friend_buddy.png"
      } %>
 
   <section class="bg-[#FFF7EA] rounded-3xl border border-amber-100 shadow-sm px-6 py-6 space-y-4">
@@ -67,9 +68,8 @@
       </div>
 
       <div class="bg-[#FFF7ED] rounded-2xl px-4 py-4 text-sm leading-relaxed text-slate-700">
-        <p>
-          今日もここまでお疲れさま。小さな一歩でも、ちゃんと前に進んでいるよ。<br>
-          気づいたことや感じたことを、そっとメモしてみよう。
+        <p class="text-sm text-slate-700 leading-relaxed">
+          <%= sample_message_for(buddy) %>
         </p>
       </div>
 
