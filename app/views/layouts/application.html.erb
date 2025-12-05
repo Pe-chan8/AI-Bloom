@@ -22,38 +22,23 @@
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
-    <%# --- GA4: gtag.js （環境変数があるときだけ読み込む） --- %>
-    <% if ENV["GA_MEASUREMENT_ID"].present? %>
-      <meta name="ga-measurement-id" content="<%= ENV["GA_MEASUREMENT_ID"] %>">
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA_MEASUREMENT_ID"] %>"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '<%= ENV["GA_MEASUREMENT_ID"] %>');
-      </script>
-    <% end %>
-
     <style>
       /* iOS/Android タップ時の黒い枠・青ハイライトを完全に消す */
       * {
         -webkit-tap-highlight-color: transparent !important;
         outline: none !important;
       }
-
       a, div, img, button {
         outline: none !important;
       }
     </style>
   </head>
 
-
-  <body class="min-h-screen flex flex-col">
-
+  <body class="min-h-screen flex flex-col bg-[#FFF6E5]">
+    <!-- ヘッダー -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-        <!-- ロゴ画像 -->
+        <!-- ロゴ -->
         <div class="flex items-center gap-2">
           <%= link_to root_path, class: "inline-flex items-center" do %>
             <%= image_tag "ai_bloom_header.png",
@@ -71,7 +56,6 @@
                           class: "hover:underline",
                           form: { class: "inline" } %>
           <% else %>
-
             <%= link_to "ログイン", new_user_session_path, class: "hover:underline" %>
             <%= link_to "新規登録",
                         new_user_registration_path,
@@ -97,20 +81,21 @@
       <% end %>
     </div>
 
-    <!-- メインコンテンツ（ヘッダー＋ボトムナビぶん余白を確保） -->
+    <!-- メインコンテンツ（下ナビぶん余白を確保） -->
     <main class="flex-1 pt-2 pb-24">
       <div class="max-w-5xl mx-auto px-4 py-8">
         <%= yield %>
       </div>
     </main>
 
-      <!-- ボトムナビ：画面下部に固定 -->
+    <!-- ボトムナビ：partial を切り替え -->
+    <% if (partial = current_bottom_nav_partial).present? %>
       <nav
         style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;"
         class="bg-white/95 border-t border-slate-200"
       >
-        <%= render "shared/nav/#{bottom_nav_key}" %>
+        <%= render "shared/nav/#{partial}" %>
       </nav>
-
+    <% end %>
   </body>
 </html>

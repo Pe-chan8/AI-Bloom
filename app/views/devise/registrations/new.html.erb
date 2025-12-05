@@ -1,0 +1,94 @@
+<% content_for :title, "アカウント登録 - AI-Bloom" %>
+
+<div class="min-h-[calc(100vh-80px)] bg-[#FFF3D6] flex items-start md:items-center justify-center px-4 py-10">
+
+  <div class="w-full max-w-2xl">
+    <!-- タイトル -->
+    <header class="space-y-1 text-center mb-6">
+      <h1 class="text-2xl font-bold text-slate-800">AI-Bloomへようこそ</h1>
+      <p class="text-xs text-sky-700">日々の記録を、やさしく抱きしめるための一歩。</p>
+      <p class="text-xs text-slate-500 mt-1">
+        まずはメールアドレスとパスワードを入力して、マイルームを作りましょう。
+      </p>
+    </header>
+
+    <!-- カード -->
+    <section class="bg-white rounded-[32px] shadow-md border border-amber-100 px-8 py-8 space-y-6">
+
+      <%= form_with model: resource,
+                    url: registration_path(resource_name),
+                    local: true do |f| %>
+
+        <!-- エラー表示 -->
+        <% if resource.errors.any? %>
+          <div class="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2">
+            <p class="text-[11px] font-semibold text-rose-700 mb-1">入力内容を確認してください。</p>
+            <ul class="text-[11px] text-rose-600 list-disc list-inside space-y-0.5">
+              <% resource.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- メールアドレス -->
+        <div class="space-y-1">
+          <%= f.label :email, "Eメール", class: "block text-xs font-semibold text-slate-700" %>
+          <%= f.email_field :email,
+                autofocus: true,
+                autocomplete: "email",
+                class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
+                         text-sm text-slate-800 placeholder:text-slate-300
+                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+        </div>
+
+        <!-- パスワード -->
+        <div class="space-y-1 mt-4">
+          <%= f.label :password, "パスワード（6文字以上）",
+                      class: "block text-xs font-semibold text-slate-700" %>
+          <%= f.password_field :password,
+                autocomplete: "new-password",
+                class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
+                         text-sm text-slate-800 placeholder:text-slate-300
+                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+        </div>
+
+        <!-- パスワード確認 -->
+        <div class="space-y-1 mt-4">
+          <%= f.label :password_confirmation, "パスワード（確認用）",
+                      class: "block text-xs font-semibold text-slate-700" %>
+          <%= f.password_field :password_confirmation,
+                autocomplete: "new-password",
+                class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
+                         text-sm text-slate-800 placeholder:text-slate-300
+                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+        </div>
+
+        <!-- ボタン -->
+        <div class="mt-6 space-y-3">
+          <%= f.submit "アカウント登録",
+                class: "w-full inline-flex items-center justify-center rounded-full
+                        bg-sky-500 hover:bg-sky-600 text-white text-[13px] font-semibold
+                        px-4 py-2 transition hover:bg-sky-50" %>
+
+          <!-- 診断だけ遊ぶボタン -->
+          <%= link_to "新規登録せずにソーシャル診断で遊ぶ",
+                diagnosis_top_path,
+                class: "w-full inline-flex items-center justify-center rounded-full
+                        border border-sky-300 bg-white text-sky-600 text-[13px] font-semibold
+                        px-4 py-2 transition hover:bg-sky-50" %>
+        </div>
+      <% end %>
+
+      <!-- 下部リンク -->
+      <div class="pt-3 border-t border-amber-100 text-center space-y-1">
+        <p class="text-sm text-slate-500">
+          すでにアカウントをお持ちの方は、
+          <%= link_to "ログイン", new_session_path(resource_name),
+                      class: "text-sky-600 font-semibold hover:underline" %>
+          からお入りください。
+        </p>
+      </div>
+    </section>
+  </div>
+</div>
