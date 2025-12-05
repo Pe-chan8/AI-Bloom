@@ -17,6 +17,11 @@ Rails.application.routes.draw do
   get  "/diagnosis/questions",  to: "diagnoses#questions", as: :diagnosis_questions
   post "/diagnosis/result",     to: "diagnoses#result",    as: :diagnosis_result
 
+  # 応対評価
+  post "ai_messages/:ai_message_id/feedback",
+     to: "ai_message_feedbacks#create",
+     as: :ai_message_feedback
+
   # PWA 関連（使うときにコメントアウトを外す）
   # get "manifest"       => "rails/pwa#manifest",        as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
