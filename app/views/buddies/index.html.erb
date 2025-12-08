@@ -66,18 +66,14 @@
           <% end %>
         </div>
 
-        <!-- 右：アイコン＋ボタン（カード右端寄せ） -->
+        <!-- 右：アイコン＋ボタン（関西バディと同じレイアウト） -->
         <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end gap-3 md:w-56 md:self-stretch">
 
           <div class="w-24 h-24 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
                       flex items-center justify-center overflow-hidden border border-amber-100">
-            <% if buddy_image_paths[normal_buddy.code].present? %>
-              <%= image_tag buddy_image_paths[normal_buddy.code],
-                    alt: "#{normal_buddy.name}のアイコン",
-                    class: "w-full h-full object-contain" %>
-            <% else %>
-              <span class="text-4xl">🐧</span>
-            <% end %>
+            <%= image_tag buddy_image_for(normal_buddy),
+                  alt: normal_buddy.name,
+                  class: "w-full h-full object-contain" %>
           </div>
 
           <% if is_current_normal %>
@@ -94,6 +90,7 @@
                       bg-sky-500 text-white hover:bg-sky-600 transition" %>
           <% end %>
         </div>
+
       </div>
     </section>
   <% end %>

@@ -20,8 +20,7 @@
     </section>
   <% elsif @ai_message.present? %>
     <%= render "shared/ai_buddy_message",
-          ai_message: @ai_message,
-          buddy:      @buddy %>
+          ai_message: @ai_message %>
   <% end %>
 
   <!-- 戻る・編集リンク -->

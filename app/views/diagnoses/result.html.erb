@@ -126,6 +126,13 @@
         「なんとなくこんな傾向があるかも？」という感覚で受け取ってみてください。
       </p>
 
+      <% unless user_signed_in? %>
+        <p class="text-xs text-slate-600 mt-2">
+          ※ バディ選択や診断結果の保存など、他の画面へ進んで活用するには
+          <span class="font-semibold">ログイン（または新規登録）が必要</span>です。
+        </p>
+      <% end %>
+
       <!-- ツイート用メタ情報（JS から使いたいとき用） -->
       <div
         id="diagnosis-type-meta"
@@ -148,21 +155,36 @@
   <% end %>
 
   <!-- ボタン -->
-  <section class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+  <section class="flex flex-col sm:flex-row flex-wrap gap-3 justify-center pt-2">
+
+    <!-- もう一度診断する：ゲストでもOK -->
     <%= link_to "もう一度診断する",
                 diagnosis_questions_path,
                 class: "inline-flex justify-center items-center rounded-full border border-slate-200 bg-white px-6 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition" %>
 
-    <%= link_to "ホームに戻る",
-                root_path,
-                class: "inline-flex justify-center items-center rounded-full bg-sky-500 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" %>
-
+    <!-- 結果シェア：ゲストでもOK -->
     <% if @twitter_intent_url.present? %>
       <%= link_to "結果をシェアする",
                   @twitter_intent_url,
                   target: "_blank",
                   rel: "noopener",
                   class: "inline-flex justify-center items-center rounded-full bg-sky-500 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" %>
+    <% end %>
+
+    <% if user_signed_in? %>
+      <!-- ログイン済み：普通にホームへ戻る -->
+      <%= link_to "ホームに戻る",
+                  root_path,
+                  class: "inline-flex justify-center items-center rounded-full bg-amber-400 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 transition" %>
+    <% else %>
+      <!-- ゲスト：ホームなど他画面に進む前にログインを促す -->
+      <%= link_to "ログインして続きへ",
+                  new_user_session_path,
+                  class: "inline-flex justify-center items-center rounded-full bg-amber-400 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 transition" %>
+
+      <%= link_to "新規登録して続きへ",
+                  new_user_registration_path,
+                  class: "inline-flex justify-center items-center rounded-full border border-amber-300 bg-white px-6 py-2 text-sm font-semibold text-amber-600 hover:bg-amber-50 transition" %>
     <% end %>
   </section>
 </div>
