@@ -1,4 +1,9 @@
 class DiagnosesController < ApplicationController
+  before_action :set_bottom_nav
+
+  # 診断の表示系はログイン不要
+  skip_before_action :authenticate_user!, only: [:top, :questions, :result]
+
   # 説明ページ
   def top
   end
@@ -43,11 +48,18 @@ class DiagnosesController < ApplicationController
 
     # 万が一 nil や未知のキーだったときのフォールバック
     valid_types = %w[expressive driving amiable analytical]
-
     @dominant_type = @dominant_type.to_s
     @dominant_type = "amiable" unless valid_types.include?(@dominant_type)
 
     @scores = scores
+
+    # ゲストの場合は session に結果を一時保存
+    unless user_signed_in?
+      session[:guest_diagnosis_result] = {
+        social_type: @dominant_type,
+        scores:      @scores
+      }
+    end
 
     # タイプごとの説明データ
     @type_definitions = {
@@ -90,71 +102,95 @@ class DiagnosesController < ApplicationController
     }
 
     @buddy_relations = {
-      # Analytical（分析型）がユーザーのとき
       "analytical" => {
         best:  "Analytical（分析型）バディ",
         reason: "物事の捉え方やペースが近く、落ち着いて相談できる“安心感の大きい相棒”だからです。",
         ranking: [
-          # 1位：同タイプ同士が最高の相棒
-          [ "Analytical（分析型）",
-           "ロジカルに整理しながら話せる最高の相棒。就活・婚活の作戦会議や情報整理にぴったりです。" ],
-          # 2位：支え合えるパートナー
-          [ "Amiable（協調型）",
-           "気持ちをやさしく受け止めてくれる聞き役バディ。考えすぎて疲れたときのクールダウンにも向いています。" ],
-          # 3位：良い意味での刺激になる相手
-          [ "Driving（行動型）",
-           "「いつ動く？」「まず一歩やってみよう！」と背中を押してくれる存在。慎重さとのバランスが取れると◎。" ],
-          # 4位：少しすれ違いやすい相手
-          [ "Expressive（表現型）",
-           "感情表現が賑やかで刺激的な一方、情報量が多く疲れてしまうことも。テーマを絞って話すと相性アップ。" ]
+          [
+            "Analytical（分析型）",
+            "ロジカルに整理しながら話せる最高の相棒。就活・婚活の作戦会議や情報整理にぴったりです。"
+          ],
+          [
+            "Amiable（協調型）",
+            "気持ちをやさしく受け止めてくれる聞き役バディ。考えすぎて疲れたときのクールダウンにも向いています。"
+          ],
+          [
+            "Driving（行動型）",
+            "「いつ動く？」「まず一歩やってみよう！」と背中を押してくれる存在。慎重さとのバランスが取れると◎。"
+          ],
+          [
+            "Expressive（表現型）",
+            "感情表現が賑やかで刺激的な一方、情報量が多く疲れてしまうことも。テーマを絞って話すと相性アップ。"
+          ]
         ]
       },
 
-      # Amiable（協調型）がユーザーのとき
       "amiable" => {
         best:  "Amiable（協調型）バディ",
         reason: "お互いの気持ちを大切にし合える、“安心して弱音も本音も話せる関係”をつくりやすいからです。",
         ranking: [
-          [ "Amiable（協調型）",
-           "安心して相談し合える相互支援関係。就活や人間関係のモヤモヤをじっくり吐き出す場として最適です。" ],
-          [ "Analytical（分析型）",
-           "冷静な視点で状況を整理してくれるサポート役。感情と事実をバランスよく見直したいときに心強い存在です。" ],
-          [ "Expressive（表現型）",
-           "明るいテンションに引っ張られて元気をもらえる相手。落ち込んだときに気分転換したいときに相性◎。" ],
-          [ "Driving（行動型）",
-           "行動のスピード感が合わないと、少し強引に感じることも。自分のペースを言葉にして共有できると◎。" ]
+          [
+            "Amiable（協調型）",
+            "安心して相談し合える相互支援関係。就活や人間関係のモヤモヤをじっくり吐き出す場として最適です。"
+          ],
+          [
+            "Analytical（分析型）",
+            "冷静な視点で状況を整理してくれるサポート役。感情と事実をバランスよく見直したいときに心強い存在です。"
+          ],
+          [
+            "Expressive（表現型）",
+            "明るいテンションに引っ張られて元気をもらえる相手。落ち込んだときに気分転換したいときに相性◎。"
+          ],
+          [
+            "Driving（行動型）",
+            "行動のスピード感が合わないと、少し強引に感じることも。自分のペースを言葉にして共有できると◎。"
+          ]
         ]
       },
 
-      # Driving（行動型）がユーザーのとき
       "driving" => {
         best:  "Driving（行動型）バディ",
         reason: "目標志向やテンポ感が近く、“一緒に前へ進んでくれる相棒”として最もストレスなく動けるからです。",
         ranking: [
-          [ "Driving（行動型）",
-           "目標設定や行動計画をどんどん前に進めてくれる同志。就活・転職・婚活の「やること整理」に最強の相棒です。" ],
-          [ "Expressive（表現型）",
-           "勢いとアイデアを形にしていくコンビ。新しいチャレンジをするときの発想・モチベーション源になってくれます。" ],
-          [ "Amiable（協調型）",
-           "頑張りすぎて疲れたときに、やさしく受け止めてくれる癒やし枠。オン／オフの切り替えに役立つ存在です。" ],
-          [ "Analytical（分析型）",
-           "リスクや懸念を丁寧に指摘してくれる一方、スピード感の違いから“ブレーキ役”に感じることもあります。" ]
+          [
+            "Driving（行動型）",
+            "目標設定や行動計画をどんどん前に進めてくれる同志。就活・転職・婚活の「やること整理」に最強の相棒です。"
+          ],
+          [
+            "Expressive（表現型）",
+            "あなたのひらめきを行動プランに落とし込んでくれる実行担当。新しいチャレンジをするときの発想・モチベーション源になってくれます。"
+          ],
+          [
+            "Amiable（協調型）",
+            "頑張りすぎて疲れたときに、やさしく受け止めてくれる癒やし枠。オン／オフの切り替えに役立つ存在です。"
+          ],
+          [
+            "Analytical（分析型）",
+            "リスクや懸念を丁寧に指摘してくれる一方、スピード感の違いから“ブレーキ役”に感じることもあります。"
+          ]
         ]
       },
 
-      # Expressive（表現型）がユーザーのとき
       "expressive" => {
         best:  "Expressive（表現型）バディ",
         reason: "気持ちやアイデアをのびのび表現できて、“ノリと感情で共鳴し合える心強い味方”だからです。",
         ranking: [
-          [ "Expressive（表現型）",
-           "感情もアイデアも遠慮なく共有できる、共鳴タイプのバディ。日々の出来事を楽しく振り返りたい人にぴったり。" ],
-          [ "Driving（行動型）",
-           "あなたのひらめきを行動プランに落とし込んでくれる実行担当。就活や新しい挑戦を加速させたいときに◎。" ],
-          [ "Amiable（協調型）",
-           "気持ちをやさしく受け止めてくれるクッション役。落ち込んだときに「話を聞いてもらう」相手として相性が良いです。" ],
-          [ "Analytical（分析型）",
-           "ロジカルな問いかけで冷静さをくれる一方、勢いを止められたように感じることも。テーマを決めて相談すると◎。" ]
+          [
+            "Expressive（表現型）",
+            "感情もアイデアも遠慮なく共有できる、共鳴タイプのバディ。日々の出来事を楽しく振り返りたい人にぴったり。"
+          ],
+          [
+            "Driving（行動型）",
+            "あなたのひらめきを行動プランに落とし込んでくれる実行担当。就活や新しい挑戦を加速させたいときに◎。"
+          ],
+          [
+            "Amiable（協調型）",
+            "気持ちをやさしく受け止めてくれるクッション役。落ち込んだときに「話を聞いてもらう」相手として相性が良いです。"
+          ],
+          [
+            "Analytical（分析型）",
+            "ロジカルな問いかけで冷静さをくれる一方、勢いを止められたように感じることも。テーマを決めて相談すると◎。"
+          ]
         ]
       }
     }
@@ -185,13 +221,11 @@ class DiagnosesController < ApplicationController
     }
 
     # --- シェア機能用の生成（Twitter/X）
-    type_name = @current_type_info[:name]
+    type_name    = @current_type_info[:name]
     type_summary = @current_type_info[:summary]
 
-    # 画像のフルURL
     @share_image_url = view_context.asset_url(@type_images[@dominant_type])
 
-    # シェアテキスト
     raw_share_text = <<~TEXT
       AI-Bloomでソーシャルタイプ診断をしました！
       結果は「#{type_name}」でした。
@@ -207,7 +241,7 @@ class DiagnosesController < ApplicationController
       "https://twitter.com/intent/tweet?text=#{ERB::Util.url_encode(@share_text)}&url=#{ERB::Util.url_encode(@share_url)}"
   end
 
-    private
+  private
 
   def set_bottom_nav
     @bottom_nav_key = "diagnosis"

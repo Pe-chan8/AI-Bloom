@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_05_064615) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_06_002323) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "ai_logs", force: :cascade do |t|
+    t.bigint "ai_message_id"
+    t.integer "completion_tokens"
+    t.datetime "created_at", null: false
+    t.string "error_class"
+    t.text "error_message"
+    t.integer "latency_ms"
+    t.string "model", null: false
+    t.bigint "post_id"
+    t.integer "prompt_tokens"
+    t.string "provider", default: "openai", null: false
+    t.datetime "requested_at"
+    t.datetime "responded_at"
+    t.string "status", default: "success", null: false
+    t.integer "total_tokens"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.string "variant"
+    t.index ["ai_message_id"], name: "index_ai_logs_on_ai_message_id"
+    t.index ["post_id", "created_at"], name: "index_ai_logs_on_post_id_and_created_at"
+    t.index ["post_id"], name: "index_ai_logs_on_post_id"
+    t.index ["status"], name: "index_ai_logs_on_status"
+    t.index ["user_id", "created_at"], name: "index_ai_logs_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_ai_logs_on_user_id"
+  end
 
   create_table "ai_message_feedbacks", force: :cascade do |t|
     t.bigint "ai_message_id", null: false
@@ -92,6 +118,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_05_064615) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "ai_logs", "ai_messages"
+  add_foreign_key "ai_logs", "posts"
+  add_foreign_key "ai_logs", "users"
   add_foreign_key "ai_message_feedbacks", "ai_messages"
   add_foreign_key "ai_message_feedbacks", "users"
   add_foreign_key "ai_messages", "buddies"

@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  post: one
+  ai_message: one
+  provider: MyString
+  model: MyString
+  variant: MyString
+  prompt_tokens: 1
+  completion_tokens: 1
+  total_tokens: 1
+  latency_ms: 1
+  status: MyString
+  error_class: MyString
+  error_message: MyText
+  requested_at: 2025-12-06 00:23:23
+  responded_at: 2025-12-06 00:23:23
+
+two:
+  user: two
+  post: two
+  ai_message: two
+  provider: MyString
+  model: MyString
+  variant: MyString
+  prompt_tokens: 1
+  completion_tokens: 1
+  total_tokens: 1
+  latency_ms: 1
+  status: MyString
+  error_class: MyString
+  error_message: MyText
+  requested_at: 2025-12-06 00:23:23
+  responded_at: 2025-12-06 00:23:23
