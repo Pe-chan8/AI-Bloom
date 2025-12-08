@@ -25,8 +25,8 @@ class CreateAiLogs < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :ai_logs, [:user_id, :created_at]
-    add_index :ai_logs, [:post_id, :created_at]
+    add_index :ai_logs, [ :user_id, :created_at ]
+    add_index :ai_logs, [ :post_id, :created_at ]
     add_index :ai_logs, :status
   end
 end

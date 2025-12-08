@@ -5,7 +5,7 @@ module BuddiesHelper
     "driving"       => "buddies/driving_buddy.png",
     "expressive"    => "buddies/expressive_buddy.png",
     "kansai_friend" => "buddies/kansai_friend_buddy.png",
-    "normal"        => "buddies/normal_buddy.png",
+    "normal"        => "buddies/normal_buddy.png"
   }.freeze
 
   def buddy_image_for(buddy)

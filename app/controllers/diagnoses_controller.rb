@@ -2,7 +2,7 @@ class DiagnosesController < ApplicationController
   before_action :set_bottom_nav
 
   # 診断の表示系はログイン不要
-  skip_before_action :authenticate_user!, only: [:top, :questions, :result]
+  skip_before_action :authenticate_user!, only: [ :top, :questions, :result ]
 
   # 説明ページ
   def top

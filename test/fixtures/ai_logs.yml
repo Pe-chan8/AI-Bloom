@@ -1,35 +1,19 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
+# test/fixtures/ai_messages.yml
 one:
   user: one
+  buddy: amiable
   post: one
-  ai_message: one
-  provider: MyString
-  model: MyString
-  variant: MyString
-  prompt_tokens: 1
-  completion_tokens: 1
-  total_tokens: 1
-  latency_ms: 1
-  status: MyString
-  error_class: MyString
-  error_message: MyText
-  requested_at: 2025-12-06 00:23:23
-  responded_at: 2025-12-06 00:23:23
+  kind: reply
+  content: "テスト用のメッセージ"
 
-two:
-  user: two
-  post: two
-  ai_message: two
-  provider: MyString
-  model: MyString
-  variant: MyString
-  prompt_tokens: 1
-  completion_tokens: 1
-  total_tokens: 1
-  latency_ms: 1
-  status: MyString
-  error_class: MyString
-  error_message: MyText
-  requested_at: 2025-12-06 00:23:23
-  responded_at: 2025-12-06 00:23:23
+# test/fixtures/ai_logs.yml
+one:
+  ai_message: one
+  user: one
+  post: one
+  model: gpt-4o-mini
+  total_tokens: 123
+  prompt_tokens: 45
+  completion_tokens: 78
+  latency_ms: 500
+  status: success
