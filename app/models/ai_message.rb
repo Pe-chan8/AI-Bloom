@@ -4,6 +4,7 @@ class AiMessage < ApplicationRecord
   belongs_to :buddy, optional: true
 
   has_many :ai_message_feedbacks, dependent: :destroy
+  has_many :ai_logs, dependent: :destroy
 
   # kind: daily / weekly / reply / tip
   enum :kind, {

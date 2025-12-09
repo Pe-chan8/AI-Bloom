@@ -83,42 +83,60 @@
 
       <hr class="my-4 border-slate-200">
 
-      <% if @current_buddy_relation.present? %>
-        <!-- ⑤ 相性の良いバディ -->
-        <div class="space-y-2">
-          <p class="text-center font-semibold">
-            あなたと相性の良いバディは
-            <span class="px-4 py-1 rounded-full bg-sky-100 text-sky-700">
-              <%= @current_buddy_relation[:best_name] %>
-            </span>
-            ！
-          </p>
+        <% if @current_buddy_relation.present? %>
+        <!-- 相性バディまとめカード（白枠の中におさめる） -->
+        <div class="mt-8 p-4 sm:p-5 bg-amber-50 rounded-2xl border border-amber-100 space-y-6">
 
-          <p class="text-sm text-slate-700 text-center">
-            <%= @current_buddy_relation[:reason] %>
-          </p>
-        </div>
+          <!-- ⑤ あなたと相性の良いバディ -->
+          <div class="text-center space-y-3">
+            <p class="font-semibold">
+              あなたと相性の良いバディは
+            </p>
 
-        <hr class="my-4 border-slate-200">
+            <div class="mt-1 flex items-center justify-center gap-3">
+              <!-- バディのタイプ画像 -->
+              <%= diagnosis_type_image(@current_buddy_relation[:best_name],
+                    class: "w-14 h-14 rounded-full object-cover") if @current_buddy_relation[:best_name].present? %>
 
-        <!-- ⑥ その他バディとの相性 1〜4位 -->
-        <div class="space-y-2">
-          <p class="font-semibold text-slate-800 text-sm">その他バディとの相性</p>
+              <!-- バディ名のバッジ -->
+              <span class="px-4 py-1 rounded-full bg-sky-100 text-sky-700 font-semibold">
+                <%= @current_buddy_relation[:best_name] %>
+              </span>
+              <span>！</span>
+            </div>
 
-          <ol class="space-y-2 text-sm text-slate-700">
-            <% @current_buddy_relation[:ranking].each_with_index do |(code, desc), idx| %>
-              <% buddy = Buddy.find_by(code: code) %>
-              <li class="flex gap-2">
-                <span class="font-semibold w-10">
-                  <%= "#{idx + 1}位：" %>
-                </span>
-                <div>
-                  <p class="font-semibold"><%= buddy&.name || code %></p>
-                  <p class="text-xs text-slate-600"><%= desc %></p>
+            <p class="text-sm text-slate-700">
+              <%= @current_buddy_relation[:reason] %>
+            </p>
+          </div>
+
+          <!-- ⑥ その他バディとの相性 -->
+          <div>
+            <h3 class="font-semibold text-base mb-3 text-left sm:text-start">
+              その他バディとの相性
+            </h3>
+
+            <div class="space-y-3">
+              <% @current_buddy_relation[:ranking].each_with_index do |(name, desc), idx| %>
+                <div class="flex items-start gap-3">
+                  <!-- 1位／2位… -->
+                  <div class="w-10 text-sm font-semibold">
+                    <%= "#{idx + 1}位：" %>
+                  </div>
+
+                  <!-- タイプ画像（診断結果用ペンギン） -->
+                  <%= diagnosis_type_image(name,
+                        class: "w-10 h-10 rounded-full mt-0.5 object-cover") %>
+
+                  <!-- バディ名＋説明 -->
+                  <div class="flex-1">
+                    <div class="text-sm font-semibold"><%= name %></div>
+                    <p class="text-xs text-slate-600"><%= desc %></p>
+                  </div>
                 </div>
-              </li>
-            <% end %>
-          </ol>
+              <% end %>
+            </div>
+          </div>
         </div>
       <% end %>
 
