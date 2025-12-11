@@ -25,10 +25,7 @@
 
   <section class="bg-[#FFF7EA] rounded-3xl border border-amber-100 shadow-sm px-6 py-6 space-y-4">
     <div class="flex items-center justify-between">
-      <h2 class="text-base font-semibold text-slate-800">今日のバディ</h2>
-      <%= link_to "バディを変更する",
-                  buddies_path,
-                  class: "text-xs text-sky-600 hover:underline" %>
+      <h2 class="text-base font-semibold text-slate-800">あなたのバディ</h2>
     </div>
 
     <div class="flex flex-col items-center gap-3 mt-2">
@@ -46,7 +43,6 @@
 
       <!-- バディ名・タイプ -->
       <div class="text-center space-y-1">
-        <p class="text-sm text-slate-500">今日あなたを応援してくれるのは</p>
         <p class="text-lg font-semibold text-slate-800">
           <%= buddy&.name || "ノーマルバディ" %>
         </p>
@@ -57,6 +53,9 @@
       ※ バディは診断結果や選択に応じて変更できます。
       あとから「バディ選択」画面で変更可能です。
     </p>
+    <%= link_to "バディを変更する",
+             buddies_path,
+             class: "text-xs text-sky-600 hover:underline" %>
   </section>
 
     <!-- メッセージカード -->
