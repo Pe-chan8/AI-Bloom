@@ -52,7 +52,7 @@
 
         <!-- 左：テキスト -->
         <div class="flex-1 space-y-2">
-          <p class="text-lg font-semibold text-slate-800"><%= normal_buddy.name %></p>
+          <p class="text-lg font-semibold text-slate-800"><%= normal_buddy.display_name %></p>
 
           <p class="text-sm text-slate-700 leading-relaxed">
             <%= normal_buddy.description %>
@@ -72,7 +72,7 @@
           <div class="w-24 h-24 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
                       flex items-center justify-center overflow-hidden border border-amber-100">
             <%= image_tag buddy_image_for(normal_buddy),
-                  alt: normal_buddy.name,
+                  alt: normal_buddy.display_name,
                   class: "w-full h-full object-contain" %>
           </div>
 
@@ -85,7 +85,7 @@
             <%= button_to "このバディにする",
               select_buddy_path(normal_buddy),
               method: :post,
-              onclick: "return confirm('#{normal_buddy.name} にバディを変更しますか？')",
+              onclick: "return confirm('#{normal_buddy.display_name} にバディを変更しますか？')",
               class: "px-4 py-2 rounded-full text-xs font-semibold
                       bg-sky-500 text-white hover:bg-sky-600 transition" %>
           <% end %>
@@ -117,7 +117,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-lg font-semibold text-slate-800">
-              <%= buddy.name %>
+              <%= buddy.display_name %>
             </p>
           </div>
 
@@ -126,7 +126,7 @@
                       border border-amber-100">
             <% if buddy_image_paths[buddy.code].present? %>
               <%= image_tag buddy_image_paths[buddy.code],
-                    alt: "#{buddy.name}のアイコン",
+                    alt: "#{buddy.display_name}のアイコン",
                     class: "w-full h-full object-contain" %>
             <% else %>
               <span class="text-3xl">🐧</span>
@@ -158,7 +158,7 @@
             <%= button_to "このバディにする",
               select_buddy_path(buddy),
               method: :post,
-              onclick: "return confirm('#{buddy.name} にバディを変更しますか？')",
+              onclick: "return confirm('#{buddy.display_name} にバディを変更しますか？')",
               class: "px-4 py-2 rounded-full text-xs font-semibold
                       bg-sky-500 text-white hover:bg-sky-600 transition" %>
           <% end %>
@@ -188,7 +188,7 @@
 
         <!-- 左：テキスト -->
         <div class="flex-1 space-y-2">
-          <p class="text-lg font-semibold text-slate-800"><%= kansai_buddy.name %></p>
+          <p class="text-lg font-semibold text-slate-800"><%= kansai_buddy.display_name %></p>
 
           <p class="text-sm text-slate-700 leading-relaxed">
             <%= kansai_buddy.description %>
@@ -209,7 +209,7 @@
                       flex items-center justify-center overflow-hidden border border-amber-100">
             <% if buddy_image_paths[kansai_buddy.code].present? %>
               <%= image_tag buddy_image_paths[kansai_buddy.code],
-                    alt: "#{kansai_buddy.name}のアイコン",
+                    alt: "#{kansai_buddy.display_name}のアイコン",
                     class: "w-full h-full object-contain" %>
             <% else %>
               <span class="text-4xl">🐧</span>
@@ -225,7 +225,7 @@
             <%= button_to "このバディにする",
               select_buddy_path(kansai_buddy),
               method: :post,
-              onclick: "return confirm('#{kansai_buddy.name} にバディを変更しますか？')",
+              onclick: "return confirm('#{kansai_buddy.display_name} にバディを変更しますか？')",
               class: "px-4 py-2 rounded-full text-xs font-semibold
                       bg-sky-500 text-white hover:bg-sky-600 transition" %>
           <% end %>
