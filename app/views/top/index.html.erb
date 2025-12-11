@@ -34,7 +34,7 @@
                   flex items-center justify-center overflow-hidden border border-amber-100">
         <% if buddy && buddy_image_paths[buddy.code].present? %>
           <%= image_tag buddy_image_paths[buddy.code],
-                alt: "#{buddy.name} のアイコン",
+                alt: "#{buddy.display_name} のアイコン",
                 class: "w-full h-full object-contain" %>
         <% else %>
           <span class="text-4xl">🐧</span>
