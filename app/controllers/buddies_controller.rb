@@ -10,7 +10,7 @@ class BuddiesController < ApplicationController
   # バディ変更
   def select
     current_user.update!(buddy: @buddy)
-    redirect_to buddies_path, notice: "#{@buddy.name} にバディを変更しました。"
+    redirect_to buddies_path, notice: "#{@buddy.display_name} にバディを変更しました。"
   end
 
   private
