@@ -4,10 +4,11 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   setup do
     # ログインユーザーを作成
     @user = User.create!(
-      email: "test-post@example.com",
-      password: "password123",
-      password_confirmation: "password123"
-    )
+    email: "test-post@example.com",
+    password: "password123",
+    password_confirmation: "password123",
+    nickname: "ぺぺ"
+  )
 
     # 紐づく投稿を作成
     @post = Post.create!(
