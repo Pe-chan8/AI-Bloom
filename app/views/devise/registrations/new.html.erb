@@ -31,6 +31,15 @@
           </div>
         <% end %>
 
+        <!-- ニックネーム -->
+        <div class="space-y-1">
+          <%= f.label :nickname, "ニックネーム", class: "block text-xs font-semibold text-slate-700" %>
+          <%= f.text_field :nickname,autofocus: true,autocomplete: "nickname",
+                class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
+                         text-sm text-slate-800 placeholder:text-slate-300
+                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+        </div>
+
         <!-- メールアドレス -->
         <div class="space-y-1">
           <%= f.label :email, "Eメール", class: "block text-xs font-semibold text-slate-700" %>
