@@ -32,6 +32,10 @@ class User < ApplicationRecord
             inclusion: { in: BUDDY_TYPES },
             allow_nil: true
 
+  validates :nickname,
+            presence: true,
+            length: { maximum: 30 }
+
   # -------------------------------------------------------
   # 現在のバディを返すヘルパー
   # （未設定なら code: "normal" のバディを返す）

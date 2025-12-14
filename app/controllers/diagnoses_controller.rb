@@ -234,14 +234,14 @@ class DiagnosesController < ApplicationController
       結果は「#{type_name}」でした。
       タイプ概要：#{type_summary}
       #AI_Bloom #ソーシャルタイプ診断
-      #{@share_image_url}
     TEXT
 
-    @share_text = raw_share_text.strip
     @share_url  = diagnosis_top_url
 
     @twitter_intent_url =
-      "https://twitter.com/intent/tweet?text=#{ERB::Util.url_encode(@share_text)}&url=#{ERB::Util.url_encode(@share_url)}"
+      "https://twitter.com/intent/tweet" \
+      "?text=#{ERB::Util.url_encode(raw_share_text.strip)}" \
+      "&url=#{ERB::Util.url_encode(@share_url)}"
   end
 
   private

@@ -20,7 +20,7 @@ module Ai
             model: "gpt-4o-mini",
             messages: [
               { role: "system", content: system_prompt_for(user:, buddy:) },
-              { role: "user",   content: user_prompt(post) }
+              { role: "user", content: user_prompt(post, user: user) }
             ],
             temperature: 0.85
           }
@@ -132,8 +132,8 @@ module Ai
     # ① ここで「どのタイプのプロンプトを使うか」を決める
     def system_prompt_for(user:, buddy:)
       type = prompt_type_for(user:, buddy:)
-      prompt_config = Ai::PromptRepository.for(type)
-      prompt_config[:system]
+      prompt = Ai::PromptRepository.for(type, user_nickname: user.nickname)
+      prompt[:system]
     end
 
     # ② social_type / buddy.code からタイプを決定
@@ -151,8 +151,12 @@ module Ai
     end
 
     # ③ user_prompt(post) は今まで通りで OK
-    def user_prompt(post)
+    def user_prompt(post, user:)
       <<~PROMPT
+        ユーザーのニックネームは「#{user.nickname.presence || "あなた"}」です。
+        このニックネームを必ず最初の2文以内に1回使って呼びかけてください。
+        投稿本文に出てくる他人の名前を、ユーザー名として呼ぶのは禁止です。
+
         ユーザーの今日のつぶやきです。
         この内容にやさしく共感し、ねぎらいのメッセージを送ってください。
 

@@ -1,8 +1,17 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :set_default_nav_type
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   helper_method :current_buddy, :bottom_nav_key
+
+  protected
+
+  # Devise で nickname を受け取れるようにする
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up,        keys: [ :nickname ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :nickname ])
+  end
 
   private
 
