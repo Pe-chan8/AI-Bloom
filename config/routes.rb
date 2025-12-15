@@ -1,10 +1,17 @@
 Rails.application.routes.draw do
+  get "onboardings/welcome"
+  get "onboardings/about"
   # 認証
   devise_for :users
 
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # オンボーディング
+  get  "/onboarding", to: "onboardings#welcome", as: :onboarding
+  get  "/about",      to: "onboardings#about",   as: :about
+  post "/onboarding/complete", to: "onboardings#complete", as: :complete_onboarding
+  
   # アプリのトップ
   get "top/index"
   root "top#index"

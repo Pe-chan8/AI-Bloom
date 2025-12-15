@@ -1,0 +1,150 @@
+<div class="min-h-screen bg-[#F6F1E3]">
+  <div class="mx-auto max-w-6xl px-6 md:px-10 py-10 md:py-14">
+    <!-- 診断TOPと同じ「余白のある縦積み」 -->
+    <div class="space-y-8">
+
+      <!-- 見出し（診断TOP寄せ） -->
+      <header class="text-center space-y-3">
+        <p class="text-sm text-slate-600">
+          日々の小さな頑張りを、やさしく抱きしめる自己理解アプリ
+        </p>
+        <h1 class="text-2xl md:text-3xl font-bold text-slate-800">
+          🌻 AI-bloom  ― 自分をやさしく抱きしめ、自信を育てる ― 
+        </h1>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          AIとのやさしい対話で、自己理解と自信の土台を育てます。
+        </p>
+      </header>
+
+      <!-- 画像＋導入メッセージ（常に横並び） -->
+      <section class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 max-w-5xl mx-auto">
+        <div class="flex items-center gap-6">
+
+          <!-- 左：画像（大きく） -->
+          <div class="shrink-0 ml-8 md:ml-12">
+            <div class="w-48 h-48 md:w-56 md:h-56
+                        flex items-center justify-center overflow-hidden">
+              <%= image_tag "ai-bloom-logo.png",
+                    alt: "AI-bloom",
+                    class: "rounded-full h-40 md:h-50 w-auto" %>
+            </div>
+          </div>
+
+          <!-- 右：導入文（横並びの相方） -->
+          <div class="flex-1 text-center space-y-3">
+            <p class="text-lg font-semibold text-slate-800">
+              「今日できたこと」を、ひとつだけ書いてみませんか？
+            </p>
+            <p class="text-lg text-slate-700 leading-relaxed">
+              やさしく話を聞くバディが、あなたを待っています 🌱
+            </p>
+            <p class="text-lg text-slate-600 leading-relaxed">
+              自分らしいペースで、始めてみましょう。
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- カード①：概要 -->
+      <section class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 max-w-5xl mx-auto space-y-4">
+        <h2 class="text-lg font-semibold text-slate-800 text-center">
+          アプリ概要
+        </h2>
+
+        <p class="text-sm leading-relaxed text-slate-700">
+          <span class="font-semibold">AI-bloom</span> は、日々の小さな頑張りを“やさしく抱きしめ”、
+          AIの問いかけで自己理解と自信形成を支える
+          <span class="font-semibold">セルフコンパッション × 自己分析ツール</span>です。
+        </p>
+
+        <p class="text-sm leading-relaxed text-slate-700">
+          「今日起きられた」「話しかけてみた」「詰まったけど諦めなかった」――
+          そんな<span class="font-semibold">誰にも言わないけれど、たしかに乗り越えた一歩</span>を短文で残すだけで、
+          AIがあなたの<span class="font-semibold">“いちばんの味方”</span>になります。
+        </p>
+      </section>
+
+      <!-- カード②：こんな人におすすめ -->
+      <section class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 max-w-5xl mx-auto space-y-4">
+        <h2 class="text-lg font-semibold text-slate-800 text-center">
+          こんな人におすすめ
+        </h2>
+
+        <div class="grid gap-3 md:grid-cols-2">
+          <div class="border border-slate-200 rounded-2xl px-4 py-3 space-y-1">
+            <p class="text-sm font-semibold text-slate-800">アウトプットが苦手</p>
+            <p class="text-xs text-slate-600">言葉にするのがしんどい / 自己PRが苦手</p>
+          </div>
+          <div class="border border-slate-200 rounded-2xl px-4 py-3 space-y-1">
+            <p class="text-sm font-semibold text-slate-800">他者比較で落ち込みやすい</p>
+            <p class="text-xs text-slate-600">自分の良さが見えなくなることがある</p>
+          </div>
+          <div class="border border-slate-200 rounded-2xl px-4 py-3 space-y-1">
+            <p class="text-sm font-semibold text-slate-800">評価される場の前に整えたい</p>
+            <p class="text-xs text-slate-600">就活 / 転職 / 婚活の前に自信を育てたい</p>
+          </div>
+          <div class="border border-slate-200 rounded-2xl px-4 py-3 space-y-1">
+            <p class="text-sm font-semibold text-slate-800">本音を話せる相手がほしい</p>
+            <p class="text-xs text-slate-600">まずはAIからでも、安心して話したい</p>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-center text-slate-400">
+          ※うまく書けなくても大丈夫。1行からでOKです。
+        </p>
+      </section>
+
+      <!-- カード③：できること -->
+      <section class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 max-w-5xl mx-auto space-y-4">
+        <h2 class="text-lg font-semibold text-slate-800 text-center">
+          このアプリでできること
+        </h2>
+
+        <div class="grid gap-3 md:grid-cols-2">
+          <div class="border border-slate-200 rounded-2xl px-4 py-4 space-y-2">
+            <p class="text-sm font-semibold text-slate-800">MVP（いま体験できる）</p>
+            <ul class="text-sm text-slate-700 leading-relaxed space-y-1">
+              <li>・行動や感情のミニ日記投稿</li>
+              <li>・AIバディからのやさしい返答</li>
+              <li>・ソーシャルタイプの簡単診断</li>
+              <li>・自分に合うAIバディを選択</li>
+            </ul>
+          </div>
+
+          <div class="border border-slate-200 rounded-2xl px-4 py-4 space-y-2">
+            <p class="text-sm font-semibold text-slate-800">本リリース（今後）</p>
+            <ul class="text-sm text-slate-700 leading-relaxed space-y-1">
+              <li>・「なぜ？どうやって？どんな結果？」で深掘り対話</li>
+              <li>・強み／ストレス傾向の可視化</li>
+              <li>・自己PR文の自動生成（STAR / CAR）</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-slate-400">
+          ※小さな出来事の積み重ねが、“評価される場”での強さになります。
+        </p>
+      </section>
+
+      <!-- CTA（診断TOPのボタン感に統一） -->
+      <section class="max-w-md mx-auto text-center space-y-3 pb-4">
+        <%= link_to new_user_registration_path,
+            class: "w-full inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" do %>
+          新規登録してはじめる
+        <% end %>
+
+        <%= link_to new_user_session_path,
+            class: "w-full inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition" do %>
+          ログイン
+        <% end %>
+
+        <%= link_to diagnosis_top_path,
+            class: "text-sm text-sky-600 underline hover:text-slate-800 transition" do %>
+          登録せずにソーシャル診断を試す
+        <% end %>
+      </section>
+
+    </div>
+  </div>
+</div>

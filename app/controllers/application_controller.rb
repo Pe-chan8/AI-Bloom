@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :set_default_nav_type
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :redirect_to_onboarding_if_needed
 
   helper_method :current_buddy, :bottom_nav_key
 
@@ -14,6 +15,16 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def redirect_to_onboarding_if_needed
+    return unless user_signed_in?
+
+    # devise の画面や onboarding 自体は除外
+    return if devise_controller?
+    return if controller_name == "onboardings"
+
+    redirect_to onboarding_path if current_user.onboarded_at.blank?
+  end
 
   # ▼ デフォルトのナビ種別をセット
   def set_default_nav_type
