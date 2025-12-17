@@ -1,8 +1,12 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!, unless: :public_controller?
   before_action :set_default_nav_type
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :redirect_to_onboarding_if_needed
+
+  # ログイン必須（public は除外）
+  before_action :authenticate_user!, unless: :public_controller?
+
+  # オンボーディング強制リダイレクト（Devise と public は除外）
+  before_action :redirect_to_onboarding_if_needed, unless: :public_controller?
 
   helper_method :current_buddy, :bottom_nav_key
 
@@ -15,36 +19,30 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # ログイン不要で見せる画面
+  # ログイン不要で見せる画面（+ Devise）
   def public_controller?
     return true if devise_controller?
-
     %w[top onboardings diagnoses].include?(controller_name)
   end
 
-  # オンボーディング制御
   def redirect_to_onboarding_if_needed
-    # Deviseの処理中は介入しない
+    # 超重要：Devise（ログイン/ログアウト/登録）では絶対に動かさない
     return if devise_controller?
 
     return unless user_signed_in?
     return if current_user.onboarded?
-
-    # オンボ画面は除外（無限ループ防止）
     return if controller_name == "onboardings"
 
-    # 初回アクションとして許可する画面
+    # オンボ完了のきっかけになる画面は通す
     return if controller_name.in?(%w[diagnoses buddies posts])
 
     redirect_to onboarding_path
   end
 
-  # ▼ デフォルトのナビ種別
   def set_default_nav_type
     @nav_type = :main
   end
 
-  # ▼ 現在のバディ
   def current_buddy
     return @current_buddy if defined?(@current_buddy)
 
@@ -56,7 +54,6 @@ class ApplicationController < ActionController::Base
       end
   end
 
-  # ▼ ボトムナビ切り替え
   def bottom_nav_key
     case controller_name
     when "diagnoses" then "diagnosis"
@@ -64,7 +61,8 @@ class ApplicationController < ActionController::Base
     when "posts"     then "posts"
     when "others"    then "others"
     when "top"       then "main"
-    else "main"
+    else
+      "main"
     end
   end
 end

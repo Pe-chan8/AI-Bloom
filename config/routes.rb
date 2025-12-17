@@ -5,12 +5,22 @@ Rails.application.routes.draw do
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # オンボーディング（ここを整理）
-  get  "/onboarding",        to: "onboardings#welcome",  as: :onboarding
-  get  "/onboarding/about",  to: "onboardings#about",    as: :onboarding_about
+  # -------------------------------------------------------
+  # オンボーディング
+  # -------------------------------------------------------
+
+  # CI/テスト互換（onboardings_welcome_url / onboardings_about_url を復活）
+  get "onboardings/welcome", to: "onboardings#welcome", as: :onboardings_welcome
+  get "onboardings/about",   to: "onboardings#about",   as: :onboardings_about
+
+  # アプリ内で使うルート（あなたの現状維持）
+  get  "/onboarding",          to: "onboardings#welcome",  as: :onboarding
+  get  "/onboarding/about",    to: "onboardings#about",    as: :onboarding_about
   post "/onboarding/complete", to: "onboardings#complete", as: :complete_onboarding
 
+  # -------------------------------------------------------
   # アプリのトップ
+  # -------------------------------------------------------
   get "top/index"
   root "top#index"
 

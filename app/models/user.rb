@@ -43,7 +43,7 @@ class User < ApplicationRecord
   def current_buddy
     buddy || Buddy.find_by(code: "normal")
   end
-  
+
   # -------------------------------------------------------
   # オンボーディング完了判定
   # -------------------------------------------------------

@@ -1,5 +1,5 @@
 class Users::SessionsController < Devise::SessionsController
-  skip_before_action :redirect_to_onboarding_if_needed, only: [:destroy]
+  skip_before_action :redirect_to_onboarding_if_needed, only: [ :destroy ]
 
   protected
 

@@ -1,6 +1,6 @@
 class OnboardingsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:welcome, :about]
-  skip_before_action :redirect_to_onboarding_if_needed, only: [:welcome, :about, :complete]
+  skip_before_action :authenticate_user!, only: [ :welcome, :about ]
+  skip_before_action :redirect_to_onboarding_if_needed, only: [ :welcome, :about, :complete ]
 
   def welcome; end
   def about; end
