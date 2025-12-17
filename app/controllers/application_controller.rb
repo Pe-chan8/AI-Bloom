@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!
+  before_action :authenticate_user!, unless: :public_controller?
   before_action :set_default_nav_type
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :redirect_to_onboarding_if_needed
@@ -8,30 +8,43 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  # Devise で nickname を受け取れるようにする
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up,        keys: [ :nickname ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :nickname ])
+    devise_parameter_sanitizer.permit(:sign_up,        keys: [:nickname])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:nickname])
   end
 
   private
 
-  def redirect_to_onboarding_if_needed
-    return unless user_signed_in?
+  # ログイン不要で見せる画面
+  def public_controller?
+    return true if devise_controller?
 
-    # devise の画面や onboarding 自体は除外
-    return if devise_controller?
-    return if controller_name == "onboardings"
-
-    redirect_to onboarding_path if current_user.onboarded_at.blank?
+    %w[top onboardings diagnoses].include?(controller_name)
   end
 
-  # ▼ デフォルトのナビ種別をセット
+  # オンボーディング制御
+  def redirect_to_onboarding_if_needed
+    # Deviseの処理中は介入しない
+    return if devise_controller?
+
+    return unless user_signed_in?
+    return if current_user.onboarded?
+
+    # オンボ画面は除外（無限ループ防止）
+    return if controller_name == "onboardings"
+
+    # 初回アクションとして許可する画面
+    return if controller_name.in?(%w[diagnoses buddies posts])
+
+    redirect_to onboarding_path
+  end
+
+  # ▼ デフォルトのナビ種別
   def set_default_nav_type
     @nav_type = :main
   end
 
-  # ▼ 現在のバディを取得
+  # ▼ 現在のバディ
   def current_buddy
     return @current_buddy if defined?(@current_buddy)
 
@@ -43,27 +56,15 @@ class ApplicationController < ActionController::Base
       end
   end
 
-  # ▼ 画面ごとに読み込むボトムナビを切り替えるキー
+  # ▼ ボトムナビ切り替え
   def bottom_nav_key
     case controller_name
-    when "diagnoses"
-      # 診断フロー中は「ホーム＋診断」の2ボタン
-      "diagnosis"
-    when "buddies"
-      # バディ選択画面：ホーム＋診断＋バディ
-      "buddies"
-    when "posts"
-      # 投稿一覧：ホーム＋投稿＋深掘り＋自己分析
-      "posts"
-    when "others"
-      # その他画面：ホーム＋その他 の2ボタン
-      "others"
-    when "top"
-      # マイルーム（トップ画面）はメインの5ボタンナビ
-      "main"
-    else
-      # それ以外の画面もひとまずメインナビに寄せる
-      "main"
+    when "diagnoses" then "diagnosis"
+    when "buddies"   then "buddies"
+    when "posts"     then "posts"
+    when "others"    then "others"
+    when "top"       then "main"
+    else "main"
     end
   end
 end

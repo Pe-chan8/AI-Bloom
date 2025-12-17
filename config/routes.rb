@@ -1,17 +1,15 @@
 Rails.application.routes.draw do
-  get "onboardings/welcome"
-  get "onboardings/about"
   # 認証
-  devise_for :users
+  devise_for :users, controllers: { sessions: "users/sessions" }
 
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # オンボーディング
-  get  "/onboarding", to: "onboardings#welcome", as: :onboarding
-  get  "/about",      to: "onboardings#about",   as: :about
+  # オンボーディング（ここを整理）
+  get  "/onboarding",        to: "onboardings#welcome",  as: :onboarding
+  get  "/onboarding/about",  to: "onboardings#about",    as: :onboarding_about
   post "/onboarding/complete", to: "onboardings#complete", as: :complete_onboarding
-  
+
   # アプリのトップ
   get "top/index"
   root "top#index"
@@ -26,21 +24,16 @@ Rails.application.routes.draw do
 
   # 応対評価
   post "ai_messages/:ai_message_id/feedback",
-     to: "ai_message_feedbacks#create",
-     as: :ai_message_feedback
-
-  # PWA 関連（使うときにコメントアウトを外す）
-  # get "manifest"       => "rails/pwa#manifest",        as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
+       to: "ai_message_feedbacks#create",
+       as: :ai_message_feedback
 
   # 投稿関連
-  resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
-    # この投稿に対する AI 共感メッセージをプレビューする
+  resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
     post :preview_ai, on: :member
   end
 
   # バディ関連
-  resources :buddies, only: [ :index ] do
+  resources :buddies, only: [:index] do
     post :select, on: :member
   end
 end

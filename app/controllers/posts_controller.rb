@@ -59,27 +59,20 @@ class PostsController < ApplicationController
     @post.posted_at = Time.current
 
     if @post.save
-      # ▼ ここでAIバディからのメッセージを同期生成・保存
       begin
         buddy   = current_user.buddy
         service = Ai::EmpathyMessageService.new
-
-        text = service.generate_for(
-          post:  @post,
-          user:  current_user,
-          buddy: buddy
-        )
+        text = service.generate_for(post: @post, user: current_user, buddy: buddy)
 
         @post.ai_messages.create!(
-          user:    current_user,
-          buddy:   buddy,
-          kind:    :reply,
-          content: text
+          user: current_user, buddy: buddy, kind: :reply, content: text
         )
       rescue => e
         Rails.logger.error "[AI] create時のメッセージ生成に失敗: #{e.class} #{e.message}"
-        # 失敗しても投稿自体は成功扱いにする
       end
+
+      # ▼ 初回の「何かした」扱いにする（オンボーディング完了）
+      current_user.update!(onboarded_at: Time.current) unless current_user.onboarded?
 
       redirect_to post_path(@post), notice: "投稿しました"
     else

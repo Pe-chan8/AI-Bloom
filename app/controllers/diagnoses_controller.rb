@@ -242,6 +242,11 @@ class DiagnosesController < ApplicationController
       "https://twitter.com/intent/tweet" \
       "?text=#{ERB::Util.url_encode(raw_share_text.strip)}" \
       "&url=#{ERB::Util.url_encode(@share_url)}"
+
+  # ▼ 診断を最後まで終えたら「オンボーディング完了」扱い
+    if user_signed_in? && !current_user.onboarded?
+      current_user.update(onboarded_at: Time.current)
+    end
   end
 
   private
