@@ -63,7 +63,7 @@ class DiagnosesController < ApplicationController
       flash.now[:notice] = "あなたのタイプを保存しました。"
     end
 
-    # ★結果ページにも一応 meta は付ける（ただしXはPOSTは見に来ない）
+    # 結果ページにも一応 meta は付ける（ただしXはPOSTは見に来ない）
     set_share_meta_tags!(@dominant_type)
 
     # --- シェア機能用（Twitter/X）
@@ -74,7 +74,7 @@ class DiagnosesController < ApplicationController
       #AI_Bloom #ソーシャルタイプ診断
     TEXT
 
-    # ★ここが重要：診断トップではなく share 用の GET URL をツイートに含める
+    # XがクロールするのはGETなので、share用URLをツイートに入れる
     @share_url = diagnosis_share_url(@dominant_type)
 
     @twitter_intent_url =
@@ -98,11 +98,10 @@ class DiagnosesController < ApplicationController
     @dominant_type = type
     setup_type_data!(@dominant_type)
 
-    # ★ここでOGP/Twitterカードを確実に設定
+    # ここでOGP/Twitterカードを確実に設定
     set_share_meta_tags!(@dominant_type)
 
-    # 既存の result ビューを流用（最短）
-    render :result
+    render :share, layout: "application"
   end
 
   private
@@ -205,14 +204,11 @@ class DiagnosesController < ApplicationController
       "analytical" => "diagnosis_types/analytical.png"
     }
 
-    # ★重要：og:image は絶対URL(https)にする
-    @share_image_url =
-      helpers.asset_url(@type_images[dominant_type], host: request.base_url)
+    # og:image は必ず https の絶対URLにする
+    @share_image_url = absolute_asset_url(@type_images[dominant_type])
   end
 
   def set_share_meta_tags!(dominant_type)
-    setup_type_data!(dominant_type) if @current_type_info.nil?
-
     set_meta_tags(
       title: "あなたは #{@current_type_info[:name]}",
       description: @current_type_info[:summary],
@@ -230,5 +226,14 @@ class DiagnosesController < ApplicationController
         image: @share_image_url
       }
     )
+  end
+
+  # assets の絶対URLを確実に作る（http→httpsも矯正）
+  def absolute_asset_url(logical_path)
+    host = ENV["APP_HOST"].presence || request.base_url
+    host = host.sub(/\Ahttp:/, "https:")
+
+    path = helpers.asset_path(logical_path)
+    "#{host}#{path}"
   end
 end
