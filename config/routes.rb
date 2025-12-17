@@ -37,6 +37,9 @@ Rails.application.routes.draw do
        to: "ai_message_feedbacks#create",
        as: :ai_message_feedback
 
+  # 共有用（XがクロールするURL）
+  get  "/diagnosis/share/:type", to: "diagnoses#share", as: :diagnosis_share
+
   # 投稿関連
   resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
     post :preview_ai, on: :member

@@ -2,7 +2,7 @@ class DiagnosesController < ApplicationController
   before_action :set_bottom_nav
 
   # 診断の表示系はログイン不要
-  skip_before_action :authenticate_user!, only: [:top, :questions, :result]
+  skip_before_action :authenticate_user!, only: [:top, :questions, :result, :share]
 
   def top
   end
@@ -11,6 +11,7 @@ class DiagnosesController < ApplicationController
     @questions = DiagnosisQuestion.order(:position)
   end
 
+  # POST /diagnosis/result
   def result
     raw_answers = params[:answers] || {}
 
@@ -51,6 +52,67 @@ class DiagnosesController < ApplicationController
       }
     end
 
+    setup_type_data!(@dominant_type)
+
+    # ログインユーザーなら保存
+    if user_signed_in?
+      current_user.update(
+        social_type: @dominant_type,
+        recommended_buddy_type: @dominant_type
+      )
+      flash.now[:notice] = "あなたのタイプを保存しました。"
+    end
+
+    # ★結果ページにも一応 meta は付ける（ただしXはPOSTは見に来ない）
+    set_share_meta_tags!(@dominant_type)
+
+    # --- シェア機能用（Twitter/X）
+    raw_share_text = <<~TEXT
+      AI-Bloomでソーシャルタイプ診断をしました！
+      結果は「#{@current_type_info[:name]}」でした。
+      タイプ概要：#{@current_type_info[:summary]}
+      #AI_Bloom #ソーシャルタイプ診断
+    TEXT
+
+    # ★ここが重要：診断トップではなく share 用の GET URL をツイートに含める
+    @share_url = diagnosis_share_url(@dominant_type)
+
+    @twitter_intent_url =
+      "https://twitter.com/intent/tweet" \
+      "?text=#{ERB::Util.url_encode(raw_share_text.strip)}" \
+      "&url=#{ERB::Util.url_encode(@share_url)}"
+
+    # オンボ完了
+    if user_signed_in? && !current_user.onboarded?
+      current_user.update(onboarded_at: Time.current)
+    end
+  end
+
+  # GET /diagnosis/share/:type
+  # X がクロールするのはこっち（GET）なので、ここで meta を確実に出す
+  def share
+    type = params[:type].to_s
+    valid_types = %w[expressive driving amiable analytical]
+    type = "amiable" unless valid_types.include?(type)
+
+    @dominant_type = type
+    setup_type_data!(@dominant_type)
+
+    # ★ここでOGP/Twitterカードを確実に設定
+    set_share_meta_tags!(@dominant_type)
+
+    # 既存の result ビューを流用（最短）
+    render :result
+  end
+
+  private
+
+  def set_bottom_nav
+    @bottom_nav_key = "diagnosis"
+  end
+
+  # タイプ説明・相性・画像をまとめてセット
+  def setup_type_data!(dominant_type)
     @type_definitions = {
       "expressive" => {
         name: "Expressive（表現型）",
@@ -133,20 +195,8 @@ class DiagnosesController < ApplicationController
       }
     }
 
-    @current_type_info      = @type_definitions[@dominant_type]
-    @current_buddy_relation = @buddy_relations[@dominant_type]
-
-    # NOTE: best_code を使っていないならこの2行は一旦コメントアウト推奨
-    # @best_buddy = Buddy.find_by(code: @current_buddy_relation[:best_code])
-    # @best_buddy_name = @best_buddy&.name || "バディ"
-
-    if user_signed_in?
-      current_user.update(
-        social_type: @dominant_type,
-        recommended_buddy_type: @dominant_type
-      )
-      flash.now[:notice] = "あなたのタイプを保存しました。"
-    end
+    @current_type_info      = @type_definitions[dominant_type]
+    @current_buddy_relation = @buddy_relations[dominant_type]
 
     @type_images = {
       "expressive" => "diagnosis_types/expressive.png",
@@ -155,41 +205,30 @@ class DiagnosesController < ApplicationController
       "analytical" => "diagnosis_types/analytical.png"
     }
 
-    @share_image_url = view_context.asset_url(@type_images[@dominant_type])
+    # ★重要：og:image は絶対URL(https)にする
+    @share_image_url =
+      helpers.asset_url(@type_images[dominant_type], host: request.base_url)
+  end
+
+  def set_share_meta_tags!(dominant_type)
+    setup_type_data!(dominant_type) if @current_type_info.nil?
 
     set_meta_tags(
       title: "あなたは #{@current_type_info[:name]}",
       description: @current_type_info[:summary],
-      og: { image: @share_image_url },
+      og: {
+        title: "あなたは #{@current_type_info[:name]}",
+        description: @current_type_info[:summary],
+        type: "website",
+        url: request.original_url,
+        image: @share_image_url
+      },
       twitter: {
         card: "summary_large_image",
+        title: "あなたは #{@current_type_info[:name]}",
+        description: @current_type_info[:summary],
         image: @share_image_url
       }
     )
-
-    # --- シェア機能用（Twitter/X）
-    raw_share_text = <<~TEXT
-      AI-Bloomでソーシャルタイプ診断をしました！
-      結果は「#{@current_type_info[:name]}」でした。
-      タイプ概要：#{@current_type_info[:summary]}
-      #AI_Bloom #ソーシャルタイプ診断
-    TEXT
-
-    @share_url = diagnosis_top_url
-
-    @twitter_intent_url =
-      "https://twitter.com/intent/tweet" \
-      "?text=#{ERB::Util.url_encode(raw_share_text.strip)}" \
-      "&url=#{ERB::Util.url_encode(@share_url)}"
-
-    if user_signed_in? && !current_user.onboarded?
-      current_user.update(onboarded_at: Time.current)
-    end
-  end
-
-  private
-
-  def set_bottom_nav
-    @bottom_nav_key = "diagnosis"
   end
 end
