@@ -76,3 +76,5 @@ gem "kaminari", "~> 1.2"
 gem "ransack"
 
 gem "ruby-openai", "~> 8.3"
+
+gem "meta-tags"

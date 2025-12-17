@@ -2,32 +2,26 @@ class DiagnosesController < ApplicationController
   before_action :set_bottom_nav
 
   # 診断の表示系はログイン不要
-  skip_before_action :authenticate_user!, only: [ :top, :questions, :result ]
+  skip_before_action :authenticate_user!, only: [:top, :questions, :result]
 
-  # 説明ページ
   def top
   end
 
-  # 質問10問表示
   def questions
     @questions = DiagnosisQuestion.order(:position)
   end
 
-  # 結果ページ
   def result
     raw_answers = params[:answers] || {}
 
-    # 何も送られてこなかった場合
     if raw_answers.empty?
       redirect_to diagnosis_questions_path,
                   alert: "結果を集計できませんでした。もう一度診断を行ってください。"
       return
     end
 
-    # タイプごとのスコア初期値
     scores = Hash.new(0)
 
-    # 各質問のスコアを加算
     raw_answers.each do |question_id, value|
       question = DiagnosisQuestion.find_by(id: question_id)
       next if question.nil?
@@ -36,32 +30,27 @@ class DiagnosesController < ApplicationController
       scores[question.category] += score
     end
 
-    # すべてスコア 0 なら失敗扱い
     if scores.values.all?(&:zero?)
       redirect_to diagnosis_questions_path,
                   alert: "結果を集計できませんでした。もう一度診断を行ってください。"
       return
     end
 
-    # 一番スコアが高いタイプ
     @dominant_type, @dominant_score = scores.max_by { |_, v| v }
 
-    # 万が一 nil や未知のキーだったときのフォールバック
     valid_types = %w[expressive driving amiable analytical]
     @dominant_type = @dominant_type.to_s
     @dominant_type = "amiable" unless valid_types.include?(@dominant_type)
 
     @scores = scores
 
-    # ゲストの場合は session に結果を一時保存
     unless user_signed_in?
       session[:guest_diagnosis_result] = {
         social_type: @dominant_type,
-        scores:      @scores
+        scores: @scores
       }
     end
 
-    # タイプごとの説明データ
     @type_definitions = {
       "expressive" => {
         name: "Expressive（表現型）",
@@ -103,147 +92,96 @@ class DiagnosesController < ApplicationController
 
     @buddy_relations = {
       "analytical" => {
-        best_name:  "キエル",
+        best_name: "キエル",
         reason: "物事の捉え方やペースが近く、落ち着いて相談できる“安心感の大きい相棒”だからです。",
         ranking: [
-          [
-            "キエル",
-            "ロジカルに整理しながら話せる最高の相棒。就活・婚活の作戦会議や情報整理にぴったりです。"
-          ],
-          [
-            "ルナ",
-            "気持ちをやさしく受け止めてくれる聞き役バディ。考えすぎて疲れたときのクールダウンにも向いています。"
-          ],
-          [
-            "ヴァル",
-            "「いつ動く？」「まず一歩やってみよう！」と背中を押してくれる存在。慎重さとのバランスが取れると◎。"
-          ],
-          [
-            "エルフィ",
-            "感情表現が賑やかで刺激的な一方、情報量が多く疲れてしまうことも。テーマを絞って話すと相性アップ。"
-          ]
+          ["キエル", "ロジカルに整理しながら話せる最高の相棒。就活・婚活の作戦会議や情報整理にぴったりです。"],
+          ["ルナ", "気持ちをやさしく受け止めてくれる聞き役バディ。考えすぎて疲れたときのクールダウンにも向いています。"],
+          ["ヴァル", "「いつ動く？」「まず一歩やってみよう！」と背中を押してくれる存在。慎重さとのバランスが取れると◎。"],
+          ["エルフィ", "感情表現が賑やかで刺激的な一方、情報量が多く疲れてしまうことも。テーマを絞って話すと相性アップ。"]
         ]
       },
-
       "amiable" => {
-        best_name:  "ルナ",
+        best_name: "ルナ",
         reason: "お互いの気持ちを大切にし合える、“安心して弱音も本音も話せる関係”をつくりやすいからです。",
         ranking: [
-          [
-            "ルナ",
-            "安心して相談し合える相互支援関係。就活や人間関係のモヤモヤをじっくり吐き出す場として最適です。"
-          ],
-          [
-            "キエル",
-            "冷静な視点で状況を整理してくれるサポート役。感情と事実をバランスよく見直したいときに心強い存在です。"
-          ],
-          [
-            "エルフィ",
-            "明るいテンションに引っ張られて元気をもらえる相手。落ち込んだときに気分転換したいときに相性◎。"
-          ],
-          [
-            "ヴァル",
-            "行動のスピード感が合わないと、少し強引に感じることも。自分のペースを言葉にして共有できると◎。"
-          ]
+          ["ルナ", "安心して相談し合える相互支援関係。就活や人間関係のモヤモヤをじっくり吐き出す場として最適です。"],
+          ["キエル", "冷静な視点で状況を整理してくれるサポート役。感情と事実をバランスよく見直したいときに心強い存在です。"],
+          ["エルフィ", "明るいテンションに引っ張られて元気をもらえる相手。落ち込んだときに気分転換したいときに相性◎。"],
+          ["ヴァル", "行動のスピード感が合わないと、少し強引に感じることも。自分のペースを言葉にして共有できると◎。"]
         ]
       },
-
       "driving" => {
-        best_name:  "ヴァル",
+        best_name: "ヴァル",
         reason: "目標志向やテンポ感が近く、“一緒に前へ進んでくれる相棒”として最もストレスなく動けるからです。",
         ranking: [
-          [
-            "ヴァル",
-            "目標設定や行動計画をどんどん前に進めてくれる同志。就活・転職・婚活の「やること整理」に最強の相棒です。"
-          ],
-          [
-            "エルフィ",
-            "あなたのひらめきを行動プランに落とし込んでくれる実行担当。新しいチャレンジをするときの発想・モチベーション源になってくれます。"
-          ],
-          [
-            "ルナ",
-            "頑張りすぎて疲れたときに、やさしく受け止めてくれる癒やし枠。オン／オフの切り替えに役立つ存在です。"
-          ],
-          [
-            "キエル",
-            "リスクや懸念を丁寧に指摘してくれる一方、スピード感の違いから“ブレーキ役”に感じることもあります。"
-          ]
+          ["ヴァル", "目標設定や行動計画をどんどん前に進めてくれる同志。就活・転職・婚活の「やること整理」に最強の相棒です。"],
+          ["エルフィ", "あなたのひらめきを行動プランに落とし込んでくれる実行担当。新しいチャレンジをするときの発想・モチベーション源になってくれます。"],
+          ["ルナ", "頑張りすぎて疲れたときに、やさしく受け止めてくれる癒やし枠。オン／オフの切り替えに役立つ存在です。"],
+          ["キエル", "リスクや懸念を丁寧に指摘してくれる一方、スピード感の違いから“ブレーキ役”に感じることもあります。"]
         ]
       },
-
       "expressive" => {
-        best_name:  "エルフィ",
+        best_name: "エルフィ",
         reason: "気持ちやアイデアをのびのび表現できて、“ノリと感情で共鳴し合える心強い味方”だからです。",
         ranking: [
-          [
-            "エルフィ",
-            "感情もアイデアも遠慮なく共有できる、共鳴タイプのバディ。日々の出来事を楽しく振り返りたい人にぴったり。"
-          ],
-          [
-            "ヴァル",
-            "あなたのひらめきを行動プランに落とし込んでくれる実行担当。就活や新しい挑戦を加速させたいときに◎。"
-          ],
-          [
-            "ルナ",
-            "気持ちをやさしく受け止めてくれるクッション役。落ち込んだときに「話を聞いてもらう」相手として相性が良いです。"
-          ],
-          [
-            "キエル",
-            "ロジカルな問いかけで冷静さをくれる一方、勢いを止められたように感じることも。テーマを決めて相談すると◎。"
-          ]
+          ["エルフィ", "感情もアイデアも遠慮なく共有できる、共鳴タイプのバディ。日々の出来事を楽しく振り返りたい人にぴったり。"],
+          ["ヴァル", "あなたのひらめきを行動プランに落とし込んでくれる実行担当。就活や新しい挑戦を加速させたいときに◎。"],
+          ["ルナ", "気持ちをやさしく受け止めてくれるクッション役。落ち込んだときに「話を聞いてもらう」相手として相性が良いです。"],
+          ["キエル", "ロジカルな問いかけで冷静さをくれる一方、勢いを止められたように感じることも。テーマを決めて相談すると◎。"]
         ]
       }
     }
 
-    # メインタイプと説明／バディ相性をビューで使うための変数
     @current_type_info      = @type_definitions[@dominant_type]
     @current_buddy_relation = @buddy_relations[@dominant_type]
 
-    @best_buddy = Buddy.find_by(code: @current_buddy_relation[:best_code])
-    @best_buddy_name = @best_buddy&.name || "バディ"
+    # NOTE: best_code を使っていないならこの2行は一旦コメントアウト推奨
+    # @best_buddy = Buddy.find_by(code: @current_buddy_relation[:best_code])
+    # @best_buddy_name = @best_buddy&.name || "バディ"
 
-    # 診断結果をログインユーザーに保存
     if user_signed_in?
       current_user.update(
         social_type: @dominant_type,
-        recommended_buddy_type: case @dominant_type
-                                when "analytical" then "analytical"
-                                when "amiable"    then "amiable"
-                                when "driving"    then "driving"
-                                when "expressive" then "expressive"
-                                end
+        recommended_buddy_type: @dominant_type
       )
       flash.now[:notice] = "あなたのタイプを保存しました。"
     end
 
     @type_images = {
-      "expressive"  => "diagnosis_types/expressive.png",
-      "driving"     => "diagnosis_types/driving.png",
-      "amiable"     => "diagnosis_types/amiable.png",
-      "analytical"  => "diagnosis_types/analytical.png"
+      "expressive" => "diagnosis_types/expressive.png",
+      "driving"    => "diagnosis_types/driving.png",
+      "amiable"    => "diagnosis_types/amiable.png",
+      "analytical" => "diagnosis_types/analytical.png"
     }
-
-    # --- シェア機能用の生成（Twitter/X）
-    type_name    = @current_type_info[:name]
-    type_summary = @current_type_info[:summary]
 
     @share_image_url = view_context.asset_url(@type_images[@dominant_type])
 
+    set_meta_tags(
+      title: "あなたは #{@current_type_info[:name]}",
+      description: @current_type_info[:summary],
+      og: { image: @share_image_url },
+      twitter: {
+        card: "summary_large_image",
+        image: @share_image_url
+      }
+    )
+
+    # --- シェア機能用（Twitter/X）
     raw_share_text = <<~TEXT
       AI-Bloomでソーシャルタイプ診断をしました！
-      結果は「#{type_name}」でした。
-      タイプ概要：#{type_summary}
+      結果は「#{@current_type_info[:name]}」でした。
+      タイプ概要：#{@current_type_info[:summary]}
       #AI_Bloom #ソーシャルタイプ診断
     TEXT
 
-    @share_url  = diagnosis_top_url
+    @share_url = diagnosis_top_url
 
     @twitter_intent_url =
       "https://twitter.com/intent/tweet" \
       "?text=#{ERB::Util.url_encode(raw_share_text.strip)}" \
       "&url=#{ERB::Util.url_encode(@share_url)}"
 
-    # ▼ 診断を最後まで終えたら「オンボーディング完了」扱い
     if user_signed_in? && !current_user.onboarded?
       current_user.update(onboarded_at: Time.current)
     end

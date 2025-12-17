@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
+  include MetaTags::ControllerHelper
+  
   before_action :set_default_nav_type
   before_action :configure_permitted_parameters, if: :devise_controller?
+
+  # meta-tags（全ページ共通の初期値）
+  before_action :set_default_meta_tags
 
   # ログイン必須（public は除外）
   before_action :authenticate_user!, unless: :public_controller?
@@ -13,8 +18,27 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up,        keys: [ :nickname ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :nickname ])
+    devise_parameter_sanitizer.permit(:sign_up,        keys: [:nickname])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:nickname])
+  end
+
+  # -------------------------
+  # meta-tags（共通）
+  # -------------------------
+  def set_default_meta_tags
+    set_meta_tags(
+      site: "AI-Bloom",
+      title: "AI-Bloom",
+      description: "日々の小さな頑張りを、AIバディと一緒にやさしく振り返るアプリ",
+      viewport: "width=device-width, initial-scale=1",
+      og: {
+        type: "website",
+        site_name: "AI-Bloom"
+      },
+      twitter: {
+        card: "summary_large_image"
+      }
+    )
   end
 
   private
@@ -26,7 +50,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_onboarding_if_needed
-    # 超重要：Devise（ログイン/ログアウト/登録）では絶対に動かさない
+    # Devise では絶対に動かさない
     return if devise_controller?
 
     return unless user_signed_in?
