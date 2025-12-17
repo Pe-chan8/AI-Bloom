@@ -38,12 +38,12 @@ Rails.application.routes.draw do
        as: :ai_message_feedback
 
   # 投稿関連
-  resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+  resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
     post :preview_ai, on: :member
   end
 
   # バディ関連
-  resources :buddies, only: [:index] do
+  resources :buddies, only: [ :index ] do
     post :select, on: :member
   end
 end
