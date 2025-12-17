@@ -1,13 +1,17 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!
   before_action :set_default_nav_type
   before_action :configure_permitted_parameters, if: :devise_controller?
+
+  # ログイン必須（public は除外）
+  before_action :authenticate_user!, unless: :public_controller?
+
+  # オンボーディング強制リダイレクト（Devise と public は除外）
+  before_action :redirect_to_onboarding_if_needed, unless: :public_controller?
 
   helper_method :current_buddy, :bottom_nav_key
 
   protected
 
-  # Devise で nickname を受け取れるようにする
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up,        keys: [ :nickname ])
     devise_parameter_sanitizer.permit(:account_update, keys: [ :nickname ])
@@ -15,12 +19,30 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # ▼ デフォルトのナビ種別をセット
+  # ログイン不要で見せる画面（+ Devise）
+  def public_controller?
+    return true if devise_controller?
+    %w[top onboardings diagnoses].include?(controller_name)
+  end
+
+  def redirect_to_onboarding_if_needed
+    # 超重要：Devise（ログイン/ログアウト/登録）では絶対に動かさない
+    return if devise_controller?
+
+    return unless user_signed_in?
+    return if current_user.onboarded?
+    return if controller_name == "onboardings"
+
+    # オンボ完了のきっかけになる画面は通す
+    return if controller_name.in?(%w[diagnoses buddies posts])
+
+    redirect_to onboarding_path
+  end
+
   def set_default_nav_type
     @nav_type = :main
   end
 
-  # ▼ 現在のバディを取得
   def current_buddy
     return @current_buddy if defined?(@current_buddy)
 
@@ -32,26 +54,14 @@ class ApplicationController < ActionController::Base
       end
   end
 
-  # ▼ 画面ごとに読み込むボトムナビを切り替えるキー
   def bottom_nav_key
     case controller_name
-    when "diagnoses"
-      # 診断フロー中は「ホーム＋診断」の2ボタン
-      "diagnosis"
-    when "buddies"
-      # バディ選択画面：ホーム＋診断＋バディ
-      "buddies"
-    when "posts"
-      # 投稿一覧：ホーム＋投稿＋深掘り＋自己分析
-      "posts"
-    when "others"
-      # その他画面：ホーム＋その他 の2ボタン
-      "others"
-    when "top"
-      # マイルーム（トップ画面）はメインの5ボタンナビ
-      "main"
+    when "diagnoses" then "diagnosis"
+    when "buddies"   then "buddies"
+    when "posts"     then "posts"
+    when "others"    then "others"
+    when "top"       then "main"
     else
-      # それ以外の画面もひとまずメインナビに寄せる
       "main"
     end
   end

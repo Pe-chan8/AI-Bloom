@@ -1,11 +1,26 @@
 Rails.application.routes.draw do
   # 認証
-  devise_for :users
+  devise_for :users, controllers: { sessions: "users/sessions" }
 
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # -------------------------------------------------------
+  # オンボーディング
+  # -------------------------------------------------------
+
+  # CI/テスト互換（onboardings_welcome_url / onboardings_about_url を復活）
+  get "onboardings/welcome", to: "onboardings#welcome", as: :onboardings_welcome
+  get "onboardings/about",   to: "onboardings#about",   as: :onboardings_about
+
+  # アプリ内で使うルート（あなたの現状維持）
+  get  "/onboarding",          to: "onboardings#welcome",  as: :onboarding
+  get  "/onboarding/about",    to: "onboardings#about",    as: :onboarding_about
+  post "/onboarding/complete", to: "onboardings#complete", as: :complete_onboarding
+
+  # -------------------------------------------------------
   # アプリのトップ
+  # -------------------------------------------------------
   get "top/index"
   root "top#index"
 
@@ -19,16 +34,11 @@ Rails.application.routes.draw do
 
   # 応対評価
   post "ai_messages/:ai_message_id/feedback",
-     to: "ai_message_feedbacks#create",
-     as: :ai_message_feedback
-
-  # PWA 関連（使うときにコメントアウトを外す）
-  # get "manifest"       => "rails/pwa#manifest",        as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker",  as: :pwa_service_worker
+       to: "ai_message_feedbacks#create",
+       as: :ai_message_feedback
 
   # 投稿関連
   resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
-    # この投稿に対する AI 共感メッセージをプレビューする
     post :preview_ai, on: :member
   end
 

@@ -50,18 +50,22 @@
         <div class="flex items-center gap-3 text-xs text-slate-600">
           <% if user_signed_in? %>
             <span><%= current_user.nickname %></span>
-            <%= button_to "ログアウト",
-                          destroy_user_session_path,
-                          method: :delete,
-                          class: "hover:underline",
-                          form: { class: "inline" } %>
+
+          <%= button_to "ログアウト",
+                destroy_user_session_path,
+                method: :delete,
+                form: {
+                  data: { turbo: false }
+                },
+                class: "hover:underline" %>
           <% else %>
             <%= link_to "ログイン", new_user_session_path, class: "hover:underline" %>
             <%= link_to "新規登録",
-                        new_user_registration_path,
-                        class: "px-3 py-1 rounded-full bg-sky-500 text-white text-xs" %>
+                  new_user_registration_path,
+                  class: "px-3 py-1 rounded-full bg-sky-500 text-white text-xs" %>
           <% end %>
         </div>
+
       </div>
     </header>
 
