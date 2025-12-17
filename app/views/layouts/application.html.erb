@@ -13,8 +13,6 @@
 
     <%= yield :head %>
 
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <!-- 丸みのある日本語フォント -->
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -22,18 +20,14 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <!-- application も読み込む -->
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+
     <%= javascript_importmap_tags %>
 
     <style>
-      /* iOS/Android タップ時の黒い枠・青ハイライトを完全に消す */
-      * {
-        -webkit-tap-highlight-color: transparent !important;
-        outline: none !important;
-      }
-      a, div, img, button {
-        outline: none !important;
-      }
+      * { -webkit-tap-highlight-color: transparent !important; outline: none !important; }
+      a, div, img, button { outline: none !important; }
     </style>
   </head>
 

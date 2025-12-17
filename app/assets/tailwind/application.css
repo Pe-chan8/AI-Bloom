@@ -1,17 +1,23 @@
 @import "tailwindcss";
 
-/* ▼ Tailwind v4: クラス探索対象を明示（本番で効かない対策の本体） */
-@source "./app/views/**/*.{erb,html}";
-@source "./app/helpers/**/*.rb";
-@source "./app/javascript/**/*.{js,ts,jsx,tsx}";
-@source "./app/components/**/*.{erb,html,rb}";
+/* ✅ Tailwind v4: app/assets/tailwind/application.css からの相対パス */
+@source "../../views/**/*.erb";
+@source "../../views/**/*.html.erb";
+@source "../../helpers/**/*.rb";
+@source "../../javascript/**/*.js";
+@source "../../javascript/**/*.ts";
+@source "../../javascript/**/*.jsx";
+@source "../../javascript/**/*.tsx";
+
+/* （もし ViewComponent / app/components を使ってるなら） */
+@source "../../components/**/*.rb";
+@source "../../components/**/*.erb";
+@source "../../components/**/*.html.erb";
 
 /* ------- base layer ------- */
 @layer base {
   body {
     @apply text-slate-800;
-
-    /* 背景色 */
     background-color: #FAF5E6 !important;
     font-family: 'Zen Maru Gothic', system-ui, -apple-system,
                  BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -20,51 +26,17 @@
 
 /* ------- component layer ------- */
 @layer components {
-  .main-container {
-    @apply max-w-5xl mx-auto px-4 py-8;
-  }
-
-  .card {
-    @apply bg-white rounded-2xl shadow-md p-6;
-  }
-
+  .main-container { @apply max-w-5xl mx-auto px-4 py-8; }
+  .card { @apply bg-white rounded-2xl shadow-md p-6; }
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-full px-4 py-2
            text-sm font-semibold bg-sky-500 text-white
            hover:bg-sky-600 transition;
   }
+  .bottom-nav-fixed { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; }
+  .diagnosis-type-image { width: 140px; height: auto; }
 
-  .bottom-nav-fixed {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-  }
-
-  /* 診断結果画像専用スタイル */
-  .diagnosis-type-image {
-    width: 140px;
-    height: auto;
-  }
-
-  /* すべての要素のフォーカスリングを完全に消す */
-  *:focus,
-  *:focus-visible,
-  *:focus-within {
-    outline: none !important;
-    box-shadow: none !important;
-  }
-
-  /* aタグのフォーカスを完全に無効化 */
-  a:focus,
-  a:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-  }
-
-  /* Safari/Chromeモバイルのタップ枠も完全除去 */
-  * {
-    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
-  }
+  *:focus, *:focus-visible, *:focus-within { outline: none !important; box-shadow: none !important; }
+  a:focus, a:focus-visible { outline: none !important; box-shadow: none !important; }
+  * { -webkit-tap-highlight-color: rgba(0,0,0,0) !important; }
 }

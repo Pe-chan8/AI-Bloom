@@ -16,12 +16,12 @@
         </p>
       </header>
 
-      <!-- 画像＋導入メッセージ（スマホ=縦 / md以上=横並びで崩れない） -->
+      <!-- 画像＋導入メッセージ（常に中央寄せ） -->
       <section class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 max-w-5xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-[260px,1fr] items-center gap-6 md:gap-10">
+        <div class="flex flex-col items-center gap-6 md:gap-8">
 
-          <!-- 左：画像（md以上で少し右寄せ） -->
-          <div class="justify-self-center md:justify-self-end">
+          <!-- 画像：中央 -->
+          <div class="flex justify-center">
             <div class="w-44 h-44 md:w-56 md:h-56 flex items-center justify-center overflow-hidden">
               <%= image_tag "ai-bloom-logo.png",
                     alt: "AI-bloom",
@@ -29,8 +29,8 @@
             </div>
           </div>
 
-          <!-- 右：導入文（PCで幅が潰れないよう min-w-0） -->
-          <div class="min-w-0 text-center md:text-left space-y-3">
+          <!-- テキスト：中央 -->
+          <div class="text-center space-y-3">
             <p class="text-base md:text-lg font-semibold text-slate-800 leading-relaxed">
               「今日できたこと」を、ひとつだけ書いてみませんか？
             </p>
