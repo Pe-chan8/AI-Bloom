@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* ▼ Tailwind v4: クラス探索対象を明示（本番で効かない対策の本体） */
+@source "./app/views/**/*.{erb,html}";
+@source "./app/helpers/**/*.rb";
+@source "./app/javascript/**/*.{js,ts,jsx,tsx}";
+@source "./app/components/**/*.{erb,html,rb}";
+
 /* ------- base layer ------- */
 @layer base {
   body {
@@ -35,6 +41,7 @@
     bottom: 0;
     z-index: 50;
   }
+
   /* 診断結果画像専用スタイル */
   .diagnosis-type-image {
     width: 140px;
