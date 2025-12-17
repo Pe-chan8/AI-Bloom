@@ -1,0 +1,16 @@
+<div class="min-h-[calc(100vh-80px)] bg-[#FFF3D6] flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-xl bg-white rounded-[32px] shadow-md border border-amber-100 p-8 text-center space-y-3">
+    <h1 class="text-xl font-bold text-slate-800">
+      <%= @current_type_info[:name] %>
+    </h1>
+    <p class="text-sm text-slate-600">
+      <%= @current_type_info[:summary] %>
+    </p>
+
+    <p class="text-xs text-slate-400">
+      ※ このページはシェア用です（Xのカード表示に使用されます）
+    </p>
+
+    <%= link_to "AI-Bloomへ戻る", diagnosis_top_path, class: "text-sky-600 hover:underline text-sm" %>
+  </div>
+</div>
