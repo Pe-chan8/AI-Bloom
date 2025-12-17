@@ -188,6 +188,8 @@ GEM
       net-smtp
     marcel (1.1.0)
     matrix (0.4.3)
+    meta-tags (2.22.2)
+      actionpack (>= 6.0.0, < 8.2)
     mini_mime (1.1.5)
     minitest (5.27.0)
     msgpack (1.8.0)
@@ -452,6 +454,7 @@ DEPENDENCIES
   jbuilder
   kamal
   kaminari (~> 1.2)
+  meta-tags
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
