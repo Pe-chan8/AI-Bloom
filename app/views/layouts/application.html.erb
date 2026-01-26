@@ -11,6 +11,16 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? %>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
+      </script>
+    <% end %>
+
     <%= yield :head %>
 
     <!-- 丸みのある日本語フォント -->
