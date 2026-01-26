@@ -206,4 +206,12 @@
                   class: "inline-flex justify-center items-center rounded-full border border-amber-300 bg-white px-6 py-2 text-sm font-semibold text-amber-600 hover:bg-amber-50 transition" %>
     <% end %>
   </section>
+  <%# 診断結果を表示できた時だけ送る %>
+  <% if @current_type_info.present? %>
+    <script>
+      if (typeof gtag === "function") {
+        gtag("event", "diagnosis_completed", { dominant_type: "<%= @dominant_type %>" });
+      }
+    </script>
+  <% end %>
 </div>

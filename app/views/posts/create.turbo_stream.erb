@@ -6,6 +6,12 @@
   </template>
 </turbo-stream>
 
+<turbo-stream action="invoke" target="ga-tracker">
+  <template>
+    post_created
+  </template>
+</turbo-stream>
+
 <turbo-stream action="invoke" target="post-modal">
   <template>
     close
