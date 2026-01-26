@@ -11,6 +11,8 @@ module AiBloom
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
+    config.assets.paths << Rails.root.join("app/javascript")
+
     config.i18n.default_locale = :ja
     config.i18n.available_locales = %i[ja en]
 
