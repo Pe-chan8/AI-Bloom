@@ -1,7 +1,7 @@
-import { application } from "./application.js"
+import { application } from "controllers/application"
 
-import PostModalController from "./post_modal_controller.js"
+import PostModalController from "controllers/post_modal_controller"
 application.register("post-modal", PostModalController)
 
-import GaController from "./ga_controller.js"
+import GaController from "controllers/ga_controller"
 application.register("ga", GaController)
