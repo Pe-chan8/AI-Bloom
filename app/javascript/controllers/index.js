@@ -2,10 +2,10 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "./application"
+import { application } from "./application.js"
 
-import PostModalController from "./post_modal_controller"
+import PostModalController from "./post_modal_controller.js"
 application.register("post-modal", PostModalController)
 
-import GaController from "./ga_controller"
+import GaController from "./ga_controller.js"
 application.register("ga", GaController)
