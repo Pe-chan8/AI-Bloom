@@ -229,12 +229,11 @@
   function closePostModal() {
     const modal  = document.getElementById("post-modal");
     const frame  = document.getElementById("post_form_frame");
-
     if (modal) modal.style.display = "none";
     if (frame) frame.innerHTML = "";
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("turbo:load", () => {
     const openBtn  = document.getElementById("open-post-modal");
     const closeBtn = document.getElementById("close-post-modal");
     const modal    = document.getElementById("post-modal");
@@ -242,23 +241,25 @@
 
     if (!openBtn || !modal || !frame) return;
 
-    openBtn.addEventListener("click", () => {
+    openBtn.onclick = () => {
       fetch("/posts/new")
         .then(res => res.text())
         .then(html => {
           frame.innerHTML = html;
           modal.style.display = "flex";
         });
-    });
+    };
 
-    closeBtn.addEventListener("click", e => {
-      e.preventDefault();
-      closePostModal();
-    });
+    if (closeBtn) {
+      closeBtn.onclick = (e) => {
+        e.preventDefault();
+        closePostModal();
+      };
+    }
 
-    modal.addEventListener("click", e => {
+    modal.onclick = (e) => {
       if (e.target === modal) closePostModal();
-    });
+    };
   });
 
   const closeSignal = document.getElementById("post-modal-close-signal");
