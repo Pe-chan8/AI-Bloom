@@ -6,14 +6,14 @@
   </template>
 </turbo-stream>
 
-<turbo-stream action="invoke" target="ga-tracker">
+<turbo-stream action="append" target="ga-tracker">
   <template>
-    post_created
+    <div data-controller="ga-event" data-ga-event-name-value="post_created"></div>
   </template>
 </turbo-stream>
 
-<turbo-stream action="invoke" target="post-modal">
+<turbo-stream action="append" target="post-modal-close-signal">
   <template>
-    close
+    <span data-close-post-modal="1"></span>
   </template>
 </turbo-stream>

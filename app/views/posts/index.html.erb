@@ -62,6 +62,7 @@
       </button>
 
       <div id="post_form_frame"></div>
+      <div id="post-modal-close-signal"></div>
     </div>
   </div>
 <% end %>
@@ -259,4 +260,16 @@
       if (e.target === modal) closePostModal();
     });
   });
+
+  const closeSignal = document.getElementById("post-modal-close-signal");
+  if (closeSignal) {
+    const observer = new MutationObserver(() => {
+      // appendされたら閉じる
+      closePostModal();
+      // 合図要素は消しておく（次回のため）
+      closeSignal.innerHTML = "";
+    });
+
+    observer.observe(closeSignal, { childList: true });
+  }
 </script>
