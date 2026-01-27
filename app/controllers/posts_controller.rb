@@ -6,43 +6,38 @@ class PostsController < ApplicationController
 
   # 一覧表示（検索 + ページネーション）
   def index
-    base_scope = current_user.posts
-                            .order(posted_at: :desc)
+    base_scope = current_user.posts.order(posted_at: :desc)
 
     @q = base_scope.ransack(params[:q])
     @posts = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
-  # 投稿詳細：ここで自動的にAIメッセージを生成する
+  # 投稿詳細：AIメッセージ表示
   def show
     @buddy        = current_user.buddy
     @rate_limited = false
 
-    # ① この投稿に紐づく最新の AiMessage を探す
+    # ① 最新の reply を取得
     @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
 
-    # ② なければ生成して保存（service 内で create! 済み）
-    if @ai_message.nil?
+    # ② 「混み合っています…」表示だったら再生成したい（ダミー判定）
+    placeholder =
+      @ai_message&.content.to_s.include?("混み合っています") ||
+      @ai_message&.content.to_s.include?("少し時間をおいて")
+
+    # ③ reply がない or ダミーなら生成
+    if @ai_message.nil? || placeholder
       begin
         service = Ai::EmpathyMessageService.new
+        text = service.generate_for(post: @post, user: current_user, buddy: @buddy)
 
-        text = service.generate_for(
-          post:  @post,
-          user:  current_user,
-          buddy: @buddy
-        )
+        # generate_for 内で AiMessage.create! 済みなので取り直す
+        @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
 
-        # 念のため取り直し（何かあっても最低限 new だけは用意）
-        @ai_message = @post.ai_messages.reply.order(created_at: :desc).first ||
-                      AiMessage.new(
-                        content: text,
-                        user:    current_user,
-                        buddy:   @buddy,
-                        post:    @post,
-                        kind:    :reply
-                      )
-      rescue Ai::RateLimiter::LimitExceeded
-        # レート制限に引っかかったときはフラグだけON
+      rescue Faraday::TooManyRequestsError, Ai::RateLimiter::LimitExceeded
+        @rate_limited = true
+      rescue => e
+        Rails.logger.error "[AI] showでの生成失敗: #{e.class} #{e.message}"
         @rate_limited = true
       end
     end
@@ -77,9 +72,9 @@ class PostsController < ApplicationController
       redirect_to post_path(@post), notice: "投稿しました"
     else
       render partial: "form",
-            locals: { post: @post, mode: :modal },
-            layout: false,
-            status: :unprocessable_entity
+             locals: { post: @post, mode: :modal },
+             layout: false,
+             status: :unprocessable_entity
     end
   end
 

@@ -130,17 +130,13 @@
     const openBtn  = document.getElementById("open-post-modal");
     const closeBtn = document.getElementById("close-post-modal");
     const modal    = document.getElementById("post-modal");
-    const frame    = document.getElementById("post_form_frame");
+    const frame    = document.getElementById("post_form_frame"); // turbo-frame
 
     if (!openBtn || !modal || !frame) return;
 
     openBtn.addEventListener("click", () => {
-      fetch("/posts/new")
-        .then(res => res.text())
-        .then(html => {
-          frame.innerHTML = html;
-          modal.style.display = "flex";
-        });
+      frame.src = "/posts/new";
+      modal.style.display = "flex";
     });
 
     closeBtn.addEventListener("click", e => {
