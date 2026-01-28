@@ -1,0 +1,20 @@
+<%# モーダル本体（data-controller は body に設定済み） %>
+<div
+  id="post-modal"
+  class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/40"
+  data-post-modal-target="modal"
+  data-action="click->post-modal#backdrop"
+>
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-[640px] max-h-[80vh] overflow-y-auto p-6 relative mx-4">
+    <button
+      type="button"
+      class="absolute top-3 right-3 text-2xl text-slate-400 hover:text-slate-600"
+      aria-label="閉じる"
+      data-action="click->post-modal#close"
+    >×</button>
+
+    <turbo-frame id="post_form_frame" data-post-modal-target="frame"></turbo-frame>
+
+    <div id="post-modal-close-signal" data-post-modal-target="closeSignal"></div>
+  </div>
+</div>

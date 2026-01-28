@@ -1,4 +1,4 @@
-<%= form_with model: post do |f| %>
+<%= form_with model: post, data: { turbo_frame: (mode == :modal ? "post_form_frame" : "_top") } do |f| %>
   <div class="mb-4">
     <%= f.label :body, "今日のメモ" %><br>
     <%= f.text_area :body,
@@ -15,7 +15,7 @@
       <button
         type="button"
         class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600"
-        onclick="closePostModal()"
+        data-action="click->post-modal#close"
       >
         やめる
       </button>

@@ -46,7 +46,11 @@ class PostsController < ApplicationController
   # モーダル用：新規投稿
   def new
     @post = Post.new
-    render partial: "form", locals: { post: @post, mode: :modal }, layout: false
+
+    if turbo_frame_request?
+      render :new, layout: false
+      Rails.logger.debug "[posts#new] turbo_frame_request?=#{turbo_frame_request?}"
+    end
   end
 
   def create

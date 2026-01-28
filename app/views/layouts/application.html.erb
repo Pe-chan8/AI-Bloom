@@ -41,7 +41,7 @@
     </style>
   </head>
 
-  <body class="min-h-screen flex flex-col bg-[#FFF6E5]">
+  <body class="min-h-screen flex flex-col bg-[#FFF6E5]" data-controller="post-modal">
     <!-- ヘッダー -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -114,7 +114,9 @@
         <%= render "shared/nav/#{partial}" %>
       </nav>
     <% end %>
+
     <div id="ga-tracker" data-controller="ga"></div>
-    <div id="post-modal-close-signal"></div>
+
+    <%= render "shared/post_modal" %>
   </body>
 </html>
