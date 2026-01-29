@@ -5,9 +5,13 @@ export default class extends Controller {
 
   connect() {
     console.log("[PostModalController] connected")
-    // turbo-stream append を監視して閉じる
     this.observer = new MutationObserver(() => {
-      if (this.closeSignalTarget.childNodes.length > 0) this.close()
+      const node = this.closeSignalTarget.firstElementChild
+      if (!node) return
+
+      const redirectTo = node.dataset.redirectTo
+      this.close()
+      if (redirectTo) Turbo.visit(redirectTo)
     })
     this.observer.observe(this.closeSignalTarget, { childList: true })
   }
@@ -17,14 +21,13 @@ export default class extends Controller {
   }
 
   open() {
+    console.log("OPEN CALLED")
     this.frameTarget.src = "/posts/new"
     this.modalTarget.classList.remove("hidden")
-    this.modalTarget.classList.add("flex")
   }
 
   close() {
     this.modalTarget.classList.add("hidden")
-    this.modalTarget.classList.remove("flex")
     this.frameTarget.removeAttribute("src")
     this.frameTarget.innerHTML = ""
     this.closeSignalTarget.innerHTML = ""

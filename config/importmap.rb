@@ -13,3 +13,5 @@ pin "controllers/ga_event_controller", to: "controllers/ga_event_controller.js"
 
 # controllers エイリアス
 pin "controllers", to: "controllers/index.js"
+
+pin_all_from "app/javascript/controllers", under: "controllers"
