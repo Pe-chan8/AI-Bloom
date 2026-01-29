@@ -1,30 +1,39 @@
 module Ai
   class EmpathyMessageService
+    # 429/一時エラー時のリトライ回数
+    RETRY_MAX = 2
+    # リトライ間隔（秒）※指数バックオフのベース
+    RETRY_BASE_SLEEP = 1.0
+
     def initialize(client: OpenAI::Client.new)
       @client = client
     end
 
     # 投稿 + ユーザー(+任意でバディ) を渡すと共感メッセージ(文字列)を返す
+    # 成功: AiMessage を作って content を返す
+    # 失敗(429等): 例外は投げず、フォールバック文を保存して返す（画面が崩れない）
     def generate_for(post:, user:, buddy: nil)
       buddy ||= user.buddy
 
-      # ここでレート制限
+      # ここでレート制限（自前）
       Ai::RateLimiter.new(user).check_and_count!(kind: :reply)
 
       requested_at = Time.current
       response     = nil
 
       begin
-        response = @client.chat(
-          parameters: {
-            model: "gpt-4o-mini",
-            messages: [
-              { role: "system", content: system_prompt_for(user:, buddy:) },
-              { role: "user", content: user_prompt(post, user: user) }
-            ],
-            temperature: 0.85
-          }
-        )
+        response = with_retry_on_429 do
+          @client.chat(
+            parameters: {
+              model: "gpt-4o-mini",
+              messages: [
+                { role: "system", content: system_prompt_for(user:, buddy:) },
+                { role: "user", content: user_prompt(post, user: user) }
+              ],
+              temperature: 0.85
+            }
+          )
+        end
 
         raw     = response.dig("choices", 0, "message", "content").to_s
         cleaned = raw.sub(/\A[　[:space:]]+/, "")
@@ -38,55 +47,106 @@ module Ai
         )
 
         log_success(
-          user:        user,
-          post:        post,
-          ai_message:  ai_message,
+          user:         user,
+          post:         post,
+          ai_message:   ai_message,
           requested_at: requested_at,
           responded_at: Time.current,
-          response:    response
+          response:     response
         )
 
         cleaned
-      rescue => e
-        # APIから何か返っていれば usage も拾いたいので response はそのまま渡す
+      rescue Ai::RateLimiter::LimitExceeded
+        # 自前レート制限はそのまま上に投げる（show側で表示分岐してるため）
+        raise
+      rescue Faraday::TooManyRequestsError => e
+        # OpenAI 429 は「画面が壊れない」方が大事なのでフォールバック保存して返す
+        fallback = fallback_message
+        ai_message = AiMessage.create!(
+          user:    user,
+          buddy:   buddy,
+          post:    post,
+          kind:    :reply,
+          content: fallback
+        )
+
         log_error(
-          user:        user,
-          post:        post,
+          user:         user,
+          post:         post,
           requested_at: requested_at,
           responded_at: Time.current,
-          response:    response,
-          error:       e
+          response:     response,
+          error:        e
         )
-        raise e
+
+        fallback
+      rescue => e
+        # その他のエラーもフォールバック保存して返す（必要なら raise に変えてもOK）
+        fallback = fallback_message
+        ai_message = AiMessage.create!(
+          user:    user,
+          buddy:   buddy,
+          post:    post,
+          kind:    :reply,
+          content: fallback
+        )
+
+        log_error(
+          user:         user,
+          post:         post,
+          requested_at: requested_at,
+          responded_at: Time.current,
+          response:     response,
+          error:        e
+        )
+
+        fallback
       end
     end
 
     private
 
-    # ===== ここからログ関連 =====
+    # 429 のときだけ短くリトライ（指数バックオフ）
+    def with_retry_on_429
+      attempts = 0
+
+      begin
+        yield
+      rescue Faraday::TooManyRequestsError
+        attempts += 1
+        raise if attempts > RETRY_MAX
+
+        sleep_time = RETRY_BASE_SLEEP * (2 ** (attempts - 1))
+        sleep(sleep_time)
+        retry
+      end
+    end
+
+    def fallback_message
+      "いまAIバディの返信が混み合っています…！少し時間をおいてから、もう一度開いてみてください🙏"
+    end
+
+    # ===== ログ関連 =====
 
     def log_success(user:, post:, ai_message:, requested_at:, responded_at:, response:)
       usage = extract_usage(response)
 
       AiLog.create!(
-        user:       user,
-        post:       post,
-        ai_message: ai_message,
-        provider:   "openai",
-        model:      "gpt-4o-mini",
-        variant:    nil, # 後で A/B 導入したら "A"/"B" を入れる
-
+        user:        user,
+        post:        post,
+        ai_message:  ai_message,
+        provider:    "openai",
+        model:       "gpt-4o-mini",
+        variant:     nil,
         prompt_tokens:     usage[:prompt_tokens],
         completion_tokens: usage[:completion_tokens],
         total_tokens:      usage[:total_tokens],
-
-        latency_ms: ((responded_at - requested_at) * 1000).round,
-        status:     :success,
+        latency_ms:  ((responded_at - requested_at) * 1000).round,
+        status:      :success,
         requested_at: requested_at,
         responded_at: responded_at
       )
     rescue => log_error
-      # ログ記録自体のエラーで本処理を落とさないようにする
       Rails.logger.error("[AiLog] failed to log success: #{log_error.class} #{log_error.message}")
     end
 
@@ -94,19 +154,17 @@ module Ai
       usage = extract_usage(response)
 
       AiLog.create!(
-        user:       user,
-        post:       post,
-        provider:   "openai",
-        model:      "gpt-4o-mini",
-        variant:    nil,
-
+        user:        user,
+        post:        post,
+        provider:    "openai",
+        model:       "gpt-4o-mini",
+        variant:     nil,
         prompt_tokens:     usage[:prompt_tokens],
         completion_tokens: usage[:completion_tokens],
         total_tokens:      usage[:total_tokens],
-
-        latency_ms: ((responded_at - requested_at) * 1000).round,
+        latency_ms:  ((responded_at - requested_at) * 1000).round,
         status:      :error,
-        error_class: error.class.name,
+        error_class:   error.class.name,
         error_message: error.message,
         requested_at:  requested_at,
         responded_at:  responded_at
@@ -115,7 +173,6 @@ module Ai
       Rails.logger.error("[AiLog] failed to log error: #{log_error.class} #{log_error.message}")
     end
 
-    # OpenAI の usage 情報を安全に取り出す
     def extract_usage(response)
       usage = response.is_a?(Hash) ? (response["usage"] || response[:usage]) : nil
       return { prompt_tokens: nil, completion_tokens: nil, total_tokens: nil } unless usage
@@ -127,30 +184,24 @@ module Ai
       }
     end
 
-    # ===== ここから元のメソッド =====
+    # ===== プロンプト =====
 
-    # ① ここで「どのタイプのプロンプトを使うか」を決める
     def system_prompt_for(user:, buddy:)
       type = prompt_type_for(user:, buddy:)
       prompt = Ai::PromptRepository.for(type, user_nickname: user.nickname)
       prompt[:system]
     end
 
-    # ② social_type / buddy.code からタイプを決定
     def prompt_type_for(user:, buddy:)
-      # 1. バディに code があればそれを優先（'analytical','amiable' など）
       return buddy.code if buddy&.respond_to?(:code) && buddy.code.present?
 
-      # 2. プロフィールに social_type があればそれを
       if user.respond_to?(:profile) && user.profile&.social_type.present?
         return user.profile.social_type
       end
 
-      # 3. どうしても無ければ :default
       :default
     end
 
-    # ③ user_prompt(post) は今まで通りで OK
     def user_prompt(post, user:)
       <<~PROMPT
         ユーザーのニックネームは「#{user.nickname.presence || "あなた"}」です。

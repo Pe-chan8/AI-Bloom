@@ -1,2 +1,5 @@
-//= link_tree ../images
-//= link_tree ../builds
+//= link_tree ../../images
+//= link_tree ../../builds
+//= link_tree ../../../javascript/controllers .js
+//= link ../../../javascript/application.js
+//= link tailwind.css

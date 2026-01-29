@@ -8,19 +8,24 @@
   <!-- 投稿本文 -->
   <div class="bg-[#FFF7EA] rounded-2xl px-4 py-3 space-y-2 shadow-sm border border-amber-100">
     <p class="text-sm text-slate-700 whitespace-pre-wrap"><%= @post.body %></p>
-
     <p class="text-xs text-slate-400 text-right"><%= @post.created_at.strftime("%Y-%m-%d %H:%M") %></p>
   </div>
 
   <!-- AIバディからのメッセージ -->
   <% if @rate_limited %>
     <section class="mt-4 text-xs text-slate-500 text-center">
-      <p>今日はAIバディへの新しいお願いが上限に達しました。</p>
+      <p>今日はAIバディへのお願いが上限に達しました。</p>
       <p>またあした、ゆっくり一緒にふりかえりましょうね。</p>
     </section>
+
+  <% elsif @ai_error == :too_many_requests %>
+    <section class="mt-4 text-xs text-slate-500 text-center space-y-2">
+      <p>AIの応答が混み合っているか、利用上限に達している可能性があります。</p>
+      <p>少し時間をおいて、ページを開き直してみてください🙏</p>
+    </section>
+
   <% elsif @ai_message.present? %>
-    <%= render "shared/ai_buddy_message",
-          ai_message: @ai_message %>
+    <%= render "shared/ai_buddy_message", ai_message: @ai_message %>
   <% end %>
 
   <!-- 戻る・編集リンク -->

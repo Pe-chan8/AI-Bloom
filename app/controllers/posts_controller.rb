@@ -4,54 +4,39 @@ class PostsController < ApplicationController
   before_action :authorize_post!, only: %i[edit update destroy]
   before_action :set_bottom_nav
 
-  # 一覧表示（検索 + ページネーション）
   def index
-    base_scope = current_user.posts
-                            .order(posted_at: :desc)
-
+    base_scope = current_user.posts.order(posted_at: :desc)
     @q = base_scope.ransack(params[:q])
     @posts = @q.result(distinct: true).page(params[:page]).per(10)
   end
 
-  # 投稿詳細：ここで自動的にAIメッセージを生成する
   def show
     @buddy        = current_user.buddy
     @rate_limited = false
 
-    # ① この投稿に紐づく最新の AiMessage を探す
     @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
 
-    # ② なければ生成して保存（service 内で create! 済み）
-    if @ai_message.nil?
+    placeholder =
+      @ai_message&.content.to_s.include?("混み合っています") ||
+      @ai_message&.content.to_s.include?("少し時間をおいて")
+
+    if @ai_message.nil? || placeholder
       begin
         service = Ai::EmpathyMessageService.new
-
-        text = service.generate_for(
-          post:  @post,
-          user:  current_user,
-          buddy: @buddy
-        )
-
-        # 念のため取り直し（何かあっても最低限 new だけは用意）
-        @ai_message = @post.ai_messages.reply.order(created_at: :desc).first ||
-                      AiMessage.new(
-                        content: text,
-                        user:    current_user,
-                        buddy:   @buddy,
-                        post:    @post,
-                        kind:    :reply
-                      )
-      rescue Ai::RateLimiter::LimitExceeded
-        # レート制限に引っかかったときはフラグだけON
+        service.generate_for(post: @post, user: current_user, buddy: @buddy)
+        @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
+      rescue Faraday::TooManyRequestsError, Ai::RateLimiter::LimitExceeded
+        @rate_limited = true
+      rescue => e
+        Rails.logger.error "[AI] showでの生成失敗: #{e.class} #{e.message}"
         @rate_limited = true
       end
     end
   end
 
-  # モーダル用：新規投稿
   def new
     @post = Post.new
-    render partial: "form", locals: { post: @post, mode: :modal }, layout: false
+    render :new, layout: false if turbo_frame_request?
   end
 
   def create
@@ -62,29 +47,35 @@ class PostsController < ApplicationController
       begin
         buddy   = current_user.buddy
         service = Ai::EmpathyMessageService.new
-        text = service.generate_for(post: @post, user: current_user, buddy: buddy)
-
-        @post.ai_messages.create!(
-          user: current_user, buddy: buddy, kind: :reply, content: text
-        )
+        service.generate_for(post: @post, user: current_user, buddy: buddy)
       rescue => e
         Rails.logger.error "[AI] create時のメッセージ生成に失敗: #{e.class} #{e.message}"
       end
 
-      # ▼ 初回の「何かした」扱いにする（オンボーディング完了）
       current_user.update!(onboarded_at: Time.current) unless current_user.onboarded?
 
-      redirect_to post_path(@post), notice: "投稿しました"
+      # ★ここが大事：フラッシュは「次の遷移」で出すために積む
+      flash[:notice] = "投稿が完了しました！"
+
+      respond_to do |format|
+        # モーダル(Turbo)用：create.turbo_stream.erb を返す
+        format.turbo_stream
+        # 通常画面用：従来通りリダイレクト
+        format.html { redirect_to post_path(@post) }
+      end
     else
-      render partial: "form",
-            locals: { post: @post, mode: :modal },
-            layout: false,
-            status: :unprocessable_entity
+      if turbo_frame_request?
+        render partial: "posts/form",
+              locals: { post: @post, mode: :modal },
+              layout: false,
+              status: :unprocessable_entity
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @post.update(post_params)

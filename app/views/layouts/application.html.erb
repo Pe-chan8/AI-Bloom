@@ -23,16 +23,13 @@
 
     <%= yield :head %>
 
-    <!-- 丸みのある日本語フォント -->
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <!-- application も読み込む -->
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
     <%= javascript_importmap_tags %>
 
     <style>
@@ -41,16 +38,13 @@
     </style>
   </head>
 
-  <body class="min-h-screen flex flex-col bg-[#FFF6E5]">
-    <!-- ヘッダー -->
+  <body class="min-h-screen flex flex-col bg-[#FFF6E5]"
+      data-controller="post-modal">
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-        <!-- ロゴ -->
         <div class="flex items-center gap-2">
           <%= link_to root_path, class: "inline-flex items-center" do %>
-            <%= image_tag "ai_bloom_header.png",
-                  alt: "AI-bloom",
-                  class: "h-10 w-auto" %>
+            <%= image_tag "ai_bloom_header.png", alt: "AI-bloom", class: "h-10 w-auto" %>
           <% end %>
         </div>
 
@@ -58,13 +52,11 @@
           <% if user_signed_in? %>
             <span><%= current_user.nickname %></span>
 
-          <%= button_to "ログアウト",
-                destroy_user_session_path,
-                method: :delete,
-                form: {
-                  data: { turbo: false }
-                },
-                class: "hover:underline" %>
+            <%= button_to "ログアウト",
+                  destroy_user_session_path,
+                  method: :delete,
+                  form: { data: { turbo: false } },
+                  class: "hover:underline" %>
           <% else %>
             <%= link_to "ログイン", new_user_session_path, class: "hover:underline" %>
             <%= link_to "新規登録",
@@ -72,12 +64,11 @@
                   class: "px-3 py-1 rounded-full bg-sky-500 text-white text-xs" %>
           <% end %>
         </div>
-
       </div>
     </header>
 
-    <!-- フラッシュメッセージ -->
-    <div class="max-w-5xl mx-auto px-4 mt-3 space-y-2">
+    <!-- flash（ここに turbo-stream append する） -->
+    <div id="flash" class="fixed top-16 left-1/2 -translate-x-1/2 z-[60] space-y-2 w-[min(520px,92vw)]">
       <% flash.each do |type, message| %>
         <% color =
           if type.to_s == "notice"
@@ -86,26 +77,18 @@
             "bg-rose-100 border-rose-300 text-rose-800"
           end
         %>
-        <div class="border rounded-xl px-4 py-3 text-sm <%= color %>">
+        <div class="border rounded-2xl px-4 py-3 text-sm <%= color %> shadow-sm">
           <%= message %>
         </div>
       <% end %>
     </div>
 
-    <% if flash[:notice].present? && (flash[:notice].to_s.include?("アカウント登録") || flash[:notice].to_s.include?("signed up")) %>
-      <script>
-        if (typeof gtag === "function") gtag("event", "sign_up_completed");
-      </script>
-    <% end %>
-
-    <!-- メインコンテンツ（下ナビぶん余白を確保） -->
     <main class="flex-1 pt-2 pb-24">
       <div class="max-w-5xl mx-auto px-4 py-8">
         <%= yield %>
       </div>
     </main>
 
-    <!-- ボトムナビ：partial を切り替え -->
     <% if (partial = current_bottom_nav_partial).present? %>
       <nav
         style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;"
@@ -114,7 +97,9 @@
         <%= render "shared/nav/#{partial}" %>
       </nav>
     <% end %>
+
     <div id="ga-tracker" data-controller="ga"></div>
-    <div id="post-modal-close-signal"></div>
+
+    <%= render "shared/post_modal" %>
   </body>
 </html>
