@@ -45,6 +45,8 @@ Rails.application.routes.draw do
     post :preview_ai, on: :member
   end
 
+  resource :buddy_talk, only: [:show], controller: :buddy_talks
+
   # バディ関連
   resources :buddies, only: [ :index ] do
     post :select, on: :member
