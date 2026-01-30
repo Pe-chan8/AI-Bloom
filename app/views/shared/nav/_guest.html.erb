@@ -1,0 +1,25 @@
+<nav
+  class="border-t bg-white/95 backdrop-blur"
+  style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;"
+>
+  <div class="mx-auto w-full max-w-screen-sm px-3 pt-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+    <ul
+      class="grid gap-6 justify-items-center text-[11px] w-full"
+      style="grid-template-columns: repeat(2, minmax(0, 1fr));"
+    >
+      <li>
+        <%= link_to root_path, class: "flex flex-col items-center gap-1" do %>
+          <%= image_tag "/bottom_nav/home.png", class: "w-8 h-8", alt: "ホーム" %>
+          <span class="font-semibold">ホーム</span>
+        <% end %>
+      </li>
+
+      <li>
+        <%= link_to diagnosis_top_path, class: "flex flex-col items-center gap-1" do %>
+          <%= image_tag "/bottom_nav/diagnosis.png", class: "w-8 h-8", alt: "診断" %>
+          <span class="font-semibold">診断</span>
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</nav>
