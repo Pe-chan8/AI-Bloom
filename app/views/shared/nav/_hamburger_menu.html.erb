@@ -1,0 +1,68 @@
+<div data-controller="hamburger-menu">
+  <!-- backdrop -->
+  <div
+    data-hamburger-menu-target="backdrop"
+    data-action="click->hamburger-menu#closeOnBackdrop"
+    class="hidden fixed inset-0 z-50 bg-black/40"
+  >
+    <!-- panel -->
+    <div
+      data-hamburger-menu-target="panel"
+      class="absolute right-0 top-0 h-full w-[min(86vw,320px)] bg-white shadow-xl p-4
+             translate-x-full transition-transform duration-200"
+    >
+      <div class="flex items-center justify-between pb-3 border-b">
+        <p class="text-sm font-semibold text-slate-700">メニュー</p>
+        <button
+          type="button"
+          class="text-slate-500 hover:text-slate-700"
+          data-action="click->hamburger-menu#close"
+          aria-label="close"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-3">
+        <%= link_to "#{others_path}#proof", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+            data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
+          あなたの頑張りの証
+        <% end %>
+
+        <%= link_to "#{others_path}#account", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+            data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
+          アカウント設定
+        <% end %>
+
+        <%= link_to "#{others_path}#contact", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+            data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
+          お問い合わせ
+        <% end %>
+
+        <%= link_to "#{others_path}#terms", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+            data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
+          利用規約
+        <% end %>
+
+        <%= link_to "#{others_path}#privacy", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+            data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
+          プライバシーポリシー
+        <% end %>
+      </div>
+
+      <p class="mt-5 text-xs text-slate-500">
+        ※各メニューの詳細ページは今後のバージョンで段階的に追加予定です
+      </p>
+    </div>
+  </div>
+
+  <!-- trigger button（ヘッダー側から呼べるように public メソッドだけ） -->
+  <button
+    type="button"
+    class="inline-flex items-center justify-center rounded-xl px-3 py-2 text-slate-700 hover:bg-slate-100"
+    data-action="click->hamburger-menu#toggle"
+    aria-label="menu"
+  >
+    <span class="text-xl leading-none">≡</span>
+  </button>
+</div>

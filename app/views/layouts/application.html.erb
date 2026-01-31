@@ -57,6 +57,7 @@
                   method: :delete,
                   form: { data: { turbo: false } },
                   class: "hover:underline" %>
+            <%= render "shared/nav/hamburger_menu" %>
           <% else %>
             <%= link_to "ログイン", new_user_session_path, class: "hover:underline" %>
             <%= link_to "新規登録",
