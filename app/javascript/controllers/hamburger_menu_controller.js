@@ -4,10 +4,12 @@ export default class extends Controller {
   static targets = ["backdrop", "panel"]
 
   connect() {
+    console.log("[HamburgerMenuController] connected")
     this._onKeydown = this.onKeydown.bind(this)
   }
 
   open() {
+    console.log("[HamburgerMenuController] open")
     this.backdropTarget.classList.remove("hidden")
     // クリック透過防止
     this.backdropTarget.classList.add("block")
@@ -17,6 +19,7 @@ export default class extends Controller {
   }
 
   close() {
+    console.log("[HamburgerMenuController] close")
     this.panelTarget.classList.add("translate-x-full")
 
     // transition後に backdrop を消す
@@ -29,6 +32,7 @@ export default class extends Controller {
   }
 
   toggle() {
+    console.log("[HamburgerMenuController] toggle")
     if (this.backdropTarget.classList.contains("hidden")) {
       this.open()
     } else {
