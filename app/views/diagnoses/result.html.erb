@@ -1,3 +1,5 @@
+<% content_for :title, "ソーシャルタイプ診断 結果 - AI-Bloom" %>
+
 <div class="max-w-3xl mx-auto px-4 sm:px-6 py-4 space-y-8">
 
   <!-- 見出し -->
@@ -9,18 +11,18 @@
       今回の回答から見た「今のあなたらしさ」に近いタイプをお伝えします。
     </p>
     <p class="text-sm text-slate-600">
-      ぴったり1つに決めつけるものではなく、あくまで“参考の目安”として読んでみてください。
+      ぴったり1つに決めつけるものではなく、あくまで参考の目安としてご覧ください。
     </p>
   </header>
 
   <% if @current_type_info.present? %>
     <!-- メイン結果カード -->
-    <section class="bg-white border border-amber-100 rounded-3xl shadow-sm px-6 py-6 space-y-4">
+    <section class="bg-white border border-amber-100 rounded-3xl shadow-sm px-6 py-6 space-y-6">
 
       <!-- タイプ画像 -->
-      <% if @type_image_path.present? %>
-        <div class="flex justify-center mb-4">
-          <%= image_tag @type_image_path,
+      <% if @type_images[@dominant_type].present? %>
+        <div class="flex justify-center">
+          <%= image_tag @type_images[@dominant_type],
                         alt: @current_type_info[:name],
                         class: "max-h-40 w-auto drop-shadow-sm" %>
         </div>
@@ -36,28 +38,19 @@
         </p>
       </div>
 
-      <% if @type_images[@dominant_type].present? %>
-        <div class="flex justify-center my-6">
-            <%= image_tag @type_images[@dominant_type],
-            alt: @current_type_info[:name],
-            class: "diagnosis-type-image mx-auto" %>
-        </div>
-      <% end %>
-
-      <!-- ① 概要（summary + detail） -->
+      <!-- 概要 -->
       <div class="space-y-3">
         <p class="text-sm font-semibold text-slate-700">
           <%= @current_type_info[:summary] %>
         </p>
-
         <p class="text-sm leading-relaxed text-slate-700">
           <%= @current_type_info[:detail] %>
         </p>
       </div>
 
-      <hr class="my-4 border-slate-200">
+      <hr class="border-slate-200">
 
-      <!-- ② 性格タイプ -->
+      <!-- 性格 -->
       <div class="space-y-1">
         <p class="font-semibold text-slate-800 text-sm">性格タイプ</p>
         <p class="text-sm text-slate-700">
@@ -65,44 +58,37 @@
         </p>
       </div>
 
-      <!-- ③ 強みとすること -->
-      <div class="space-y-1 mt-3">
+      <!-- 強み -->
+      <div class="space-y-1">
         <p class="font-semibold text-slate-800 text-sm">強みとすること</p>
         <p class="text-sm text-slate-700">
           <%= @current_type_info[:strengths] %>
         </p>
       </div>
 
-      <!-- ④ その他 -->
-      <div class="space-y-1 mt-3">
+      <!-- その他 -->
+      <div class="space-y-1">
         <p class="font-semibold text-slate-800 text-sm">その他</p>
         <p class="text-sm text-slate-700">
           <%= @current_type_info[:other] %>
         </p>
       </div>
 
-      <hr class="my-4 border-slate-200">
+      <% if @current_buddy_relation.present? %>
+        <hr class="border-slate-200">
 
-        <% if @current_buddy_relation.present? %>
-        <!-- 相性バディまとめカード（白枠の中におさめる） -->
-        <div class="mt-8 p-4 sm:p-5 bg-amber-50 rounded-2xl border border-amber-100 space-y-6">
+        <!-- 相性バディ -->
+        <div class="bg-amber-50 rounded-2xl border border-amber-100 p-5 space-y-6">
 
-          <!-- ⑤ あなたと相性の良いバディ -->
           <div class="text-center space-y-3">
-            <p class="font-semibold">
-              あなたと相性の良いバディは
+            <p class="font-semibold text-slate-800">
+              あなたと相性の良いバディ
             </p>
 
-            <div class="mt-1 flex items-center justify-center gap-3">
-              <!-- バディのタイプ画像 -->
-              <%= diagnosis_type_image(@current_buddy_relation[:best_name],
-                    class: "w-14 h-14 rounded-full object-cover") if @current_buddy_relation[:best_name].present? %>
-
-              <!-- バディ名のバッジ -->
+            <div class="flex items-center justify-center gap-3">
               <span class="px-4 py-1 rounded-full bg-sky-100 text-sky-700 font-semibold">
                 <%= @current_buddy_relation[:best_name] %>
               </span>
-              <span>！</span>
             </div>
 
             <p class="text-sm text-slate-700">
@@ -110,25 +96,17 @@
             </p>
           </div>
 
-          <!-- ⑥ その他バディとの相性 -->
           <div>
-            <h3 class="font-semibold text-base mb-3 text-left sm:text-start">
+            <h3 class="font-semibold text-base mb-3">
               その他バディとの相性
             </h3>
 
             <div class="space-y-3">
               <% @current_buddy_relation[:ranking].each_with_index do |(name, desc), idx| %>
                 <div class="flex items-start gap-3">
-                  <!-- 1位／2位… -->
                   <div class="w-10 text-sm font-semibold">
                     <%= "#{idx + 1}位：" %>
                   </div>
-
-                  <!-- タイプ画像（診断結果用ペンギン） -->
-                  <%= diagnosis_type_image(name,
-                        class: "w-10 h-10 rounded-full mt-0.5 object-cover") %>
-
-                  <!-- バディ名＋説明 -->
                   <div class="flex-1">
                     <div class="text-sm font-semibold"><%= name %></div>
                     <p class="text-xs text-slate-600"><%= desc %></p>
@@ -140,77 +118,68 @@
         </div>
       <% end %>
 
-      <p class="text-[11px] text-slate-400 mt-4">
-        ※その日のコンディションや状況によって結果は変わることがあります。<br>
-        「なんとなくこんな傾向があるかも？」という感覚で受け取ってみてください。
+      <p class="text-[11px] text-slate-400">
+        ※ 状況や気分によって結果は変わることがあります。
       </p>
 
       <% unless user_signed_in? %>
-        <p class="text-xs text-slate-600 mt-2">
-          ※ バディ選択や診断結果の保存など、他の画面へ進んで活用するには
-          <span class="font-semibold">ログイン（または新規登録）が必要</span>です。
+        <p class="text-xs text-slate-600">
+          ※ 診断結果の保存やバディ機能を使うにはログインが必要です。
         </p>
       <% end %>
 
-      <!-- ツイート用メタ情報（JS から使いたいとき用） -->
+      <!-- メタ情報 -->
       <div
         id="diagnosis-type-meta"
         data-type="<%= @dominant_type %>"
-        data-image-url="<%= asset_path(@type_image_path) if @type_image_path.present? %>">
+        data-image-url="<%= asset_path(@type_images[@dominant_type]) if @type_images[@dominant_type].present? %>">
       </div>
-
     </section>
 
   <% else %>
     <!-- フォールバック -->
     <section class="bg-white border border-rose-100 rounded-3xl shadow-sm px-6 py-6 space-y-3">
       <h2 class="text-lg font-semibold text-slate-800">
-        結果をうまく読み取れませんでした
+        結果を表示できませんでした
       </h2>
       <p class="text-sm text-slate-700">
-        回答内容の集計に失敗したようです。お手数ですが、もう一度診断を行っていただけますか？
+        回答の集計に失敗しました。もう一度診断を行ってください。
       </p>
     </section>
   <% end %>
 
-  <!-- ボタン -->
-  <section class="flex flex-col sm:flex-row flex-wrap gap-3 justify-center pt-2">
+  <!-- アクション -->
+  <section class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
 
-    <!-- もう一度診断する：ゲストでもOK -->
     <%= link_to "もう一度診断する",
                 diagnosis_questions_path,
-                class: "inline-flex justify-center items-center rounded-full border border-slate-200 bg-white px-6 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition" %>
+                class: "rounded-full border border-slate-200 bg-white px-6 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition" %>
 
-    <!-- 結果シェア：ゲストでもOK -->
     <% if @twitter_intent_url.present? %>
       <%= link_to "結果をシェアする",
                   @twitter_intent_url,
                   target: "_blank",
                   rel: "noopener",
-                  class: "inline-flex justify-center items-center rounded-full bg-sky-500 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" %>
+                  class: "rounded-full bg-sky-100 px-6 py-2 text-sm font-semibold text-sky-700 border border-sky-200 hover:bg-sky-200 transition" %>
     <% end %>
 
     <% if user_signed_in? %>
-      <!-- ログイン済み：普通にホームへ戻る -->
       <%= link_to "ホームに戻る",
                   root_path,
-                  class: "inline-flex justify-center items-center rounded-full bg-amber-400 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 transition" %>
+                  class: "rounded-full bg-amber-100 px-6 py-2 text-sm font-semibold text-slate-800 border border-amber-200 hover:bg-amber-200 transition" %>
     <% else %>
-      <!-- ゲスト：ホームなど他画面に進む前にログインを促す -->
       <%= link_to "ログインして続きへ",
                   new_user_session_path,
-                  class: "inline-flex justify-center items-center rounded-full bg-amber-400 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 transition" %>
-
-      <%= link_to "新規登録して続きへ",
-                  new_user_registration_path,
-                  class: "inline-flex justify-center items-center rounded-full border border-amber-300 bg-white px-6 py-2 text-sm font-semibold text-amber-600 hover:bg-amber-50 transition" %>
+                  class: "rounded-full bg-amber-400 px-6 py-2 text-sm font-semibold text-white hover:bg-amber-500 transition" %>
     <% end %>
   </section>
-  <%# 診断結果を表示できた時だけ送る %>
+
   <% if @current_type_info.present? %>
     <script>
       if (typeof gtag === "function") {
-        gtag("event", "diagnosis_completed", { dominant_type: "<%= @dominant_type %>" });
+        gtag("event", "diagnosis_completed", {
+          dominant_type: "<%= @dominant_type %>"
+        });
       }
     </script>
   <% end %>

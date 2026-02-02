@@ -31,8 +31,9 @@
         <!-- 検索ボタン -->
         <div class="sm:w-auto">
           <%= f.submit "検索",
-                class: "w-full sm:w-auto px-6 py-2 bg-sky-500 text-white rounded-xl text-sm
-                        font-semibold hover:bg-sky-600 transition text-center" %>
+            class: "w-full sm:w-auto px-6 py-2 rounded-xl text-sm font-semibold
+                    bg-sky-100 text-sky-700 border border-sky-200
+                    hover:bg-sky-200 transition text-center" %>
         </div>
       </div>
     <% end %>
@@ -76,6 +77,24 @@
             </div>
           </div>
 
+          <!-- タイトル（あれば） -->
+          <% if post.title.present? %>
+            <div class="text-sm font-semibold text-slate-800 mb-2">
+              <%= post.title %>
+            </div>
+          <% end %>
+
+          <!-- タグ（あれば） -->
+          <% if post.tags_text.present? %>
+            <div class="mb-2 flex flex-wrap gap-2 text-xs">
+              <% post.tags_text.split(",").map(&:strip).reject(&:blank?).each do |tag| %>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-slate-50 text-slate-700 border border-slate-200">
+                  #<%= tag %>
+                </span>
+              <% end %>
+            </div>
+          <% end %>
+
           <!-- 本文 -->
           <div class="text-sm text-slate-800 whitespace-pre-wrap break-words">
             <%= simple_format(post.body) %>
@@ -92,13 +111,17 @@
             <div class="flex gap-2">
               <%= link_to "編集",
                           edit_post_path(post),
-                          class: "text-xs px-3 py-1.5 rounded-full border border-slate-300 text-slate-700 hover:bg-slate-50" %>
+                          class: "text-xs px-3 py-1.5 rounded-full
+                                  border border-slate-200 text-slate-700
+                                  hover:bg-slate-50" %>
 
               <%= button_to "削除",
                     post_path(post),
                     method: :delete,
                     data: { turbo_confirm: "本当にこの投稿を削除しますか？" },
-                    class: "text-xs px-3 py-1.5 rounded-full border border-rose-300 text-rose-600 hover:bg-rose-50" %>
+                    class: "text-xs px-3 py-1.5 rounded-full
+                            border border-rose-300 text-rose-600
+                            hover:bg-rose-50" %>
             </div>
           </div>
         </div>
@@ -113,7 +136,9 @@
           <!-- 前へ -->
           <% if @posts.prev_page %>
             <%= link_to "◀", url_for(page: @posts.prev_page),
-                  class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+                  class: "px-3 py-1.5 rounded-full
+                          bg-white border border-slate-200 text-slate-700
+                          hover:bg-slate-50 text-sm" %>
           <% else %>
             <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">◀</span>
           <% end %>
@@ -123,20 +148,26 @@
             <% page_num = i + 1 %>
 
             <% if page_num == @posts.current_page %>
-              <span class="px-3 py-1.5 rounded-full bg-sky-500 text-white text-sm font-semibold">
+              <span class="px-3 py-1.5 rounded-full
+                           bg-amber-100 text-slate-800 border border-amber-200
+                           text-sm font-semibold">
                 <%= page_num %>
               </span>
             <% else %>
               <%= link_to page_num,
                     url_for(page: page_num),
-                    class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+                    class: "px-3 py-1.5 rounded-full
+                            bg-white border border-slate-200 text-slate-700
+                            hover:bg-slate-50 text-sm" %>
             <% end %>
           <% end %>
 
           <!-- 次へ -->
           <% if @posts.next_page %>
             <%= link_to "▶", url_for(page: @posts.next_page),
-                  class: "px-3 py-1.5 rounded-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm" %>
+                  class: "px-3 py-1.5 rounded-full
+                          bg-white border border-slate-200 text-slate-700
+                          hover:bg-slate-50 text-sm" %>
           <% else %>
             <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">▶</span>
           <% end %>
@@ -149,8 +180,8 @@
     <!-- 投稿がないとき -->
     <div class="bg-white rounded-2xl shadow-sm px-4 py-6 text-center text-sm text-slate-500">
       まだ投稿がありません。<br>
-      右下の<strong>「新規投稿」</strong>ボタンから、今日の気持ちを残してみましょう 🌻
+      <strong>「バディと話す」</strong>から、今日の気持ちを残してみましょう 🌻
     </div>
   <% end %>
 
-</div> 
+</div>

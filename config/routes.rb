@@ -28,17 +28,20 @@ Rails.application.routes.draw do
   get "/others", to: "others#index", as: :others
 
   # ソーシャルタイプ診断
-  get  "/diagnosis",            to: "diagnoses#top",       as: :diagnosis_top
-  get  "/diagnosis/questions",  to: "diagnoses#questions", as: :diagnosis_questions
-  post "/diagnosis/result",     to: "diagnoses#result",    as: :diagnosis_result
+  get  "/diagnosis",               to: "diagnoses#top",         as: :diagnosis_top
+  get  "/diagnosis/questions",     to: "diagnoses#questions",   as: :diagnosis_questions
+  post "/diagnosis/result",        to: "diagnoses#result",      as: :diagnosis_result
+
+  # ★追加：結果表示用（GET）
+  get  "/diagnosis/result/:type",  to: "diagnoses#result_page", as: :diagnosis_result_page
+
+  # 共有用（XがクロールするURL）
+  get  "/diagnosis/share/:type",   to: "diagnoses#share",       as: :diagnosis_share
 
   # 応対評価
   post "ai_messages/:ai_message_id/feedback",
        to: "ai_message_feedbacks#create",
        as: :ai_message_feedback
-
-  # 共有用（XがクロールするURL）
-  get  "/diagnosis/share/:type", to: "diagnoses#share", as: :diagnosis_share
 
   # 投稿関連
   resources :posts, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do

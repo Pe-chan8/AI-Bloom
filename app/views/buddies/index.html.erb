@@ -2,20 +2,15 @@
 
 <div class="max-w-4xl mx-auto px-6 py-8 space-y-6">
 
-  <!-- タイトル -->
   <header class="space-y-1">
     <p class="text-xs text-sky-700">あなたにぴったりのバディを選ぼう</p>
     <h1 class="text-2xl font-bold text-slate-800">バディ選択</h1>
   </header>
 
-  <!-- サブタイトル -->
   <p class="text-xs text-slate-500">
     ※ バディの性格によって、AIからのメッセージの雰囲気が少し変わります。あとから変更もできます。
   </p>
 
-  <%# ======================================================= %>
-  <%#  画像パスの対応表                                         %>
-  <%# ======================================================= %>
   <% buddy_image_paths = {
        "normal"        => "buddies/normal_buddy.png",
        "kansai_friend" => "buddies/kansai_friend_buddy.png",
@@ -25,52 +20,37 @@
        "expressive"    => "buddies/expressive_buddy.png"
      } %>
 
-  <%# ノーマル / 関西の友達 / タイプ別 に分割 %>
   <% special_buddies, type_buddies = @buddies.partition { |b| ["normal", "kansai_friend"].include?(b.code) } %>
   <% normal_buddy  = special_buddies.find { |b| b.code == "normal" } %>
   <% kansai_buddy  = special_buddies.find { |b| b.code == "kansai_friend" } %>
 
-  <!-- 区切りラベル -->
   <div class="pt-4">
-    <p class="text-xs font-semibold text-slate-500 tracking-wide">
-      ノーマルバディ
-    </p>
+    <p class="text-xs font-semibold text-slate-500 tracking-wide">ノーマルバディ</p>
   </div>
 
-  <%# ----------------------------------------------------- %>
-  <%#  ノーマルバディ：上段の横長カード                     %>
-  <%# ----------------------------------------------------- %>
   <% if normal_buddy.present? %>
     <% is_current_normal = (current_buddy&.id == normal_buddy.id) %>
 
-    <section class="bg-[#FFF7EA] rounded-3xl shadow-sm border
-                    <%= is_current_normal ? 'border-amber-400 ring-2 ring-amber-200' : 'border-amber-100' %>
+    <section class="bg-white rounded-3xl shadow-sm border
+                    <%= is_current_normal ? 'border-amber-300 ring-2 ring-amber-100' : 'border-amber-100' %>
                     px-6 py-6">
 
-      <!-- テキスト左 ＋ 画像＆ボタン右 -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-        <!-- 左：テキスト -->
         <div class="flex-1 space-y-2">
           <p class="text-lg font-semibold text-slate-800"><%= normal_buddy.display_name %></p>
-
-          <p class="text-sm text-slate-700 leading-relaxed">
-            <%= normal_buddy.description %>
-          </p>
+          <p class="text-sm text-slate-700 leading-relaxed"><%= normal_buddy.description %></p>
 
           <% if normal_buddy.tone_hint.present? %>
-            <p class="text-[11px] text-slate-500 bg-white/60 rounded-2xl px-3 py-2 inline-block">
+            <p class="text-[11px] text-slate-500 bg-amber-50 rounded-2xl px-3 py-2 inline-block border border-amber-100">
               <span class="font-semibold">話し方のイメージ：</span>
               <%= normal_buddy.tone_hint %>
             </p>
           <% end %>
         </div>
 
-        <!-- 右：アイコン＋ボタン（関西バディと同じレイアウト） -->
         <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end gap-3 md:w-56 md:self-stretch">
-
-          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
-                      flex items-center justify-center overflow-hidden border border-amber-100">
+          <div class="w-24 h-24 rounded-full bg-amber-50 flex items-center justify-center overflow-hidden border border-amber-100">
             <%= image_tag buddy_image_for(normal_buddy),
                   alt: normal_buddy.display_name,
                   class: "w-full h-full object-contain" %>
@@ -78,7 +58,7 @@
 
           <% if is_current_normal %>
             <span class="inline-flex items-center px-4 py-2 rounded-full text-xs
-                          bg-emerald-100 text-emerald-700 border border-emerald-200">
+                        bg-emerald-100 text-emerald-700 border border-emerald-200">
               ✓ このバディを使用中
             </span>
           <% else %>
@@ -95,35 +75,21 @@
     </section>
   <% end %>
 
-  <!-- 区切りラベル -->
   <div class="pt-4">
-    <p class="text-xs font-semibold text-slate-500 tracking-wide">
-      タイプ別バディ
-    </p>
+    <p class="text-xs font-semibold text-slate-500 tracking-wide">タイプ別バディ</p>
   </div>
 
-  <%# ------------------------------------------------------- %>
-  <%#  タイプ別バディ：診断と同じ 2×2 グリッド                 %>
-  <%# ------------------------------------------------------- %>
   <section class="grid gap-6 md:grid-cols-2">
     <% type_buddies.each do |buddy| %>
       <% is_current = (current_buddy&.id == buddy.id) %>
 
-      <article
-        class="bg-[#FFF7EA] rounded-3xl shadow-sm border px-6 py-5 flex flex-col gap-3
-               <%= is_current ? 'border-amber-400 ring-2 ring-amber-200' : 'border-amber-100' %>">
+      <article class="bg-white rounded-3xl shadow-sm border px-6 py-5 flex flex-col gap-3
+                      <%= is_current ? 'border-amber-300 ring-2 ring-amber-100' : 'border-amber-100' %>">
 
-        <!-- 上段：タイトル + アイコン -->
         <div class="flex items-center justify-between">
-          <div>
-            <p class="text-lg font-semibold text-slate-800">
-              <%= buddy.display_name %>
-            </p>
-          </div>
+          <p class="text-lg font-semibold text-slate-800"><%= buddy.display_name %></p>
 
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
-                      flex items-center justify-center overflow-hidden
-                      border border-amber-100">
+          <div class="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center overflow-hidden border border-amber-100">
             <% if buddy_image_paths[buddy.code].present? %>
               <%= image_tag buddy_image_paths[buddy.code],
                     alt: "#{buddy.display_name}のアイコン",
@@ -134,24 +100,19 @@
           </div>
         </div>
 
-        <!-- 説明 -->
-        <p class="text-sm text-slate-700 leading-relaxed">
-          <%= buddy.description %>
-        </p>
+        <p class="text-sm text-slate-700 leading-relaxed"><%= buddy.description %></p>
 
-        <!-- 口調のヒント -->
         <% if buddy.tone_hint.present? %>
-          <p class="text-[11px] text-slate-500 bg-white/70 rounded-2xl px-3 py-2">
+          <p class="text-[11px] text-slate-500 bg-amber-50 rounded-2xl px-3 py-2 border border-amber-100">
             <span class="font-semibold">話し方のイメージ：</span>
             <%= buddy.tone_hint %>
           </p>
         <% end %>
 
-        <!-- ボタン -->
         <div class="mt-1 flex justify-end">
           <% if is_current %>
             <span class="inline-flex items-center px-4 py-2 rounded-full text-xs
-                          bg-emerald-100 text-emerald-700 border border-emerald-200">
+                        bg-emerald-100 text-emerald-700 border border-emerald-200">
               ✓ このバディを使用中
             </span>
           <% else %>
@@ -167,46 +128,32 @@
     <% end %>
   </section>
 
-  <!-- 区切りラベル -->
   <div class="pt-4">
-    <p class="text-xs font-semibold text-slate-500 tracking-wide">
-      特別バディ
-    </p>
+    <p class="text-xs font-semibold text-slate-500 tracking-wide">特別バディ</p>
   </div>
 
-  <%# ----------------------------------------------------- %>
-  <%#  関西の友達バディ：ノーマルと同じ横長カード          %>
-  <%# ----------------------------------------------------- %>
   <% if kansai_buddy.present? %>
     <% is_current_kansai = (current_buddy&.id == kansai_buddy.id) %>
 
-    <section class="bg-[#FFF7EA] rounded-3xl shadow-sm border
-                    <%= is_current_kansai ? 'border-amber-400 ring-2 ring-amber-200' : 'border-amber-100' %>
+    <section class="bg-white rounded-3xl shadow-sm border
+                    <%= is_current_kansai ? 'border-amber-300 ring-2 ring-amber-100' : 'border-amber-100' %>
                     px-6 py-6">
 
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-
-        <!-- 左：テキスト -->
         <div class="flex-1 space-y-2">
           <p class="text-lg font-semibold text-slate-800"><%= kansai_buddy.display_name %></p>
-
-          <p class="text-sm text-slate-700 leading-relaxed">
-            <%= kansai_buddy.description %>
-          </p>
+          <p class="text-sm text-slate-700 leading-relaxed"><%= kansai_buddy.description %></p>
 
           <% if kansai_buddy.tone_hint.present? %>
-            <p class="text-[11px] text-slate-500 bg-white/60 rounded-2xl px-3 py-2 inline-block">
+            <p class="text-[11px] text-slate-500 bg-amber-50 rounded-2xl px-3 py-2 inline-block border border-amber-100">
               <span class="font-semibold">話し方のイメージ：</span>
               <%= kansai_buddy.tone_hint %>
             </p>
           <% end %>
         </div>
 
-        <!-- 右：アイコン＋ボタン -->
         <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end gap-3 md:w-56 md:self-stretch">
-
-          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-sky-50 to-amber-100
-                      flex items-center justify-center overflow-hidden border border-amber-100">
+          <div class="w-24 h-24 rounded-full bg-amber-50 flex items-center justify-center overflow-hidden border border-amber-100">
             <% if buddy_image_paths[kansai_buddy.code].present? %>
               <%= image_tag buddy_image_paths[kansai_buddy.code],
                     alt: "#{kansai_buddy.display_name}のアイコン",
@@ -218,7 +165,7 @@
 
           <% if is_current_kansai %>
             <span class="inline-flex items-center px-4 py-2 rounded-full text-xs
-                          bg-emerald-100 text-emerald-700 border border-emerald-200">
+                        bg-emerald-100 text-emerald-700 border border-emerald-200">
               ✓ このバディを使用中
             </span>
           <% else %>
@@ -234,7 +181,6 @@
     </section>
   <% end %>
 
-  <!-- フッターの説明 -->
   <p class="text-[11px] text-slate-500">
     ※ バディを選択していない場合は、自動的に「ノーマルバディ」が設定された状態として扱います。
   </p>
