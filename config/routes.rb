@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
-  # 認証
   devise_for :users, controllers: { sessions: "users/sessions" }
 
-  # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
   # -------------------------------------------------------
@@ -21,17 +19,16 @@ Rails.application.routes.draw do
   get "top/index"
   root "top#index"
 
-  # その他
   get "/others", to: "others#index", as: :others
 
   # -------------------------------------------------------
   # ソーシャルタイプ診断
   # -------------------------------------------------------
-  get  "/diagnosis",              to: "diagnoses#top",       as: :diagnosis_top
-  get  "/diagnosis/questions",    to: "diagnoses#questions", as: :diagnosis_questions
-  post "/diagnosis/result",       to: "diagnoses#result",    as: :diagnosis_result
+  get  "/diagnosis",              to: "diagnoses#top",         as: :diagnosis_top
+  get  "/diagnosis/questions",    to: "diagnoses#questions",   as: :diagnosis_questions
+  post "/diagnosis/result",       to: "diagnoses#result",      as: :diagnosis_result
   get  "/diagnosis/result/:type", to: "diagnoses#result_page", as: :diagnosis_result_page
-  get  "/diagnosis/share/:type",  to: "diagnoses#share", as: :diagnosis_share
+  get  "/diagnosis/share/:type",  to: "diagnoses#share",       as: :diagnosis_share
 
   # -------------------------------------------------------
   # 応対評価
@@ -41,29 +38,34 @@ Rails.application.routes.draw do
        as: :ai_message_feedback
 
   # -------------------------------------------------------
-  # 投稿関連
+  # 投稿
   # -------------------------------------------------------
   resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
     post :preview_ai, on: :member
   end
 
   # -------------------------------------------------------
-  # バディと話す（Post=トピック単位で開く）
+  # バディと話す（新規 & トピック別）
   # -------------------------------------------------------
-  # 入口（メタ入力→投稿作成→自動でトピックへ遷移）
-  get  "/buddy_talk",       to: "buddy_talks#new",    as: :buddy_talk
-  post "/buddy_talk/start", to: "buddy_talks#start",  as: :start_buddy_talk
 
-  # トピック（=Post）ごとのチャット画面
-  resources :buddy_talks, only: [:show], param: :id do
-    post :reply,     on: :member
-    post :deep_dive, on: :member
-    post :summary,   on: :member
-    post :close,     on: :member
-  end
+  # 新規会話（メタ入力＋最初の投稿）
+  get  "/buddy_talk",       to: "buddy_talks#show",  as: :buddy_talk
+  post "/buddy_talk/start", to: "buddy_talks#start", as: :start_buddy_talk
+
+  # 旧リンク救済（/buddy_talks/new を show に寄せる）
+  get "/buddy_talks/new", to: "buddy_talks#show", as: :new_buddy_talk
+
+  # 既存トピック（Post）ごとの会話画面
+  get  "/buddy_talks/:id",           to: "buddy_talks#topic",     as: :buddy_talk_topic
+  post "/buddy_talks/:id/reply",     to: "buddy_talks#reply",     as: :reply_buddy_talk
+  post "/buddy_talks/:id/deep_dive", to: "buddy_talks#deep_dive", as: :deep_dive_buddy_talk
+  post "/buddy_talks/:id/summary",   to: "buddy_talks#summary",   as: :summary_buddy_talk
+
+  # 閉じる（sessionを切って投稿一覧へ）
+  post "/buddy_talks/:id/close",     to: "buddy_talks#close",     as: :close_buddy_talk
 
   # -------------------------------------------------------
-  # バディ関連
+  # バディ
   # -------------------------------------------------------
   resources :buddies, only: [:index] do
     post :select, on: :member

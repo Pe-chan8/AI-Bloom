@@ -48,7 +48,6 @@
           </label>
         <% end %>
       </div>
-      <p class="mt-2 text-xs text-slate-500">※今は仮（将来はタグマスタ化も可能）</p>
     </div>
 
     <div>
@@ -60,10 +59,10 @@
     </div>
 
     <div class="pt-2">
-      <%= f.submit "会話をはじめる",
-        class: "w-full rounded-2xl px-6 py-4 font-semibold
-                bg-amber-100 text-slate-800 border border-amber-200
-                shadow-sm hover:bg-amber-200 active:bg-amber-200 transition" %>
+      <%= f.submit "会話を始める",
+            data: { disable_with: "開始中…" },
+            class: "w-full rounded-2xl px-4 py-3 text-sm font-semibold
+                    bg-amber-100 border border-amber-200 text-slate-800 hover:bg-amber-200 transition" %>
     </div>
 
     <% if post.errors.any? %>

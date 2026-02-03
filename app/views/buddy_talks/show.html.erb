@@ -2,10 +2,10 @@
 
 <div class="max-w-3xl mx-auto px-4 sm:px-6 pb-56 space-y-6">
   <div class="pt-3 relative">
-    <%# 左上に「閉じる」を配置（メタカード内ではなく上に） %>
     <% if @buddy_talk.present? && @buddy_talk.persisted? %>
       <div class="absolute left-0 top-2">
-        <%= button_to "閉じる", close_buddy_talk_path,
+        <%= button_to "閉じる",
+              close_buddy_talk_path(@buddy_talk),
               method: :post,
               form: { data: { turbo: false } },
               class: "text-xs px-3 py-1.5 rounded-full border border-slate-200 bg-white/80 hover:bg-white shadow-sm" %>
@@ -14,30 +14,18 @@
 
     <h1 class="text-2xl font-bold text-slate-800 text-center">バディと話す</h1>
     <p class="text-xs text-slate-500 text-center mt-2">
-      まずは出来事を入力 → バディとの会話を緩く楽しんでくださいね。
+      まずは出来事を入力して、バディとの会話をはじめよう 🌻
     </p>
   </div>
 
-  <%# メタカード：ヘッダー直下に固定 %>
-  <div class="sticky top-[56px] z-30">
-    <div class="bg-[#FFF6E5]/80 backdrop-blur pb-3">
-      <%= turbo_frame_tag "buddy_meta" do %>
-        <% if @buddy_talk.present? && @buddy_talk.persisted? %>
-          <%= render "meta_readonly", buddy_talk: @buddy_talk %>
-        <% else %>
-          <%= render "meta_form", post: @post %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-
-  <% if @buddy_talk.present? && @buddy_talk.persisted? %>
-    <div class="pt-6">
-      <div class="flex items-center gap-3">
-        <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-100 mt-2">
-          会話ログ
-        </span>
-        <div class="h-px flex-1 bg-amber-100"></div>
+  <%# 未開始：フォームだけ（新規投稿できる状態） %>
+  <% if @buddy_talk.blank? || !@buddy_talk.persisted? %>
+    <%= render "meta_form", post: @post %>
+  <% else %>
+    <%# 開始後：メタ固定 + 会話 + composer %>
+    <div class="sticky top-[56px] z-30">
+      <div class="bg-[#FFF6E5]/80 backdrop-blur pb-3">
+        <%= render "meta_readonly", buddy_talk: @buddy_talk %>
       </div>
     </div>
 
@@ -47,7 +35,6 @@
   <% end %>
 </div>
 
-<%# 下部固定：入力コンポーザー（返信開始後だけ） %>
 <%= turbo_frame_tag "buddy_composer" do %>
   <% if @buddy_talk.present? && @buddy_talk.persisted? %>
     <%= render "composer", buddy_talk: @buddy_talk %>

@@ -1,26 +1,19 @@
 <% content_for :title, "投稿一覧 - AI-bloom" %>
 
-<!-- タイトル：画面全体で左端揃え -->
 <div class="pt-3">
   <h1 class="text-2xl font-bold text-slate-800">投稿一覧</h1>
 </div>
 
-<!-- ここから中央寄せのコンテンツ（検索フォーム + 投稿カード + ページネーション） -->
 <div class="max-w-3xl mx-auto pt-6 space-y-6 px-6 pb-10">
-
   <!-- 検索フォームカード -->
   <div class="bg-white rounded-2xl shadow-sm border border-amber-100 px-6 py-6 space-y-4">
-
-    <!-- タイトル行（アイコン＋説明） -->
     <div class="flex items-center gap-2 text-slate-600 text-sm">
       <span class="text-lg">🔍</span>
       <span>メモの内容からキーワードでさがす</span>
     </div>
 
-    <!-- ▼▼▼ Ransack 用フォーム ▼▼▼ -->
     <%= search_form_for @q, url: posts_path, method: :get, local: true do |f| %>
       <div class="flex flex-col gap-3 sm:flex-row w-full">
-        <!-- 入力フィールド -->
         <div class="flex-1">
           <%= f.search_field :body_cont,
                 placeholder: "例）仕事 / 勉強 / うれしかったこと…",
@@ -28,7 +21,6 @@
                         focus:ring-2 focus:ring-sky-300 focus:outline-none" %>
         </div>
 
-        <!-- 検索ボタン -->
         <div class="sm:w-auto">
           <%= f.submit "検索",
             class: "w-full sm:w-auto px-6 py-2 rounded-xl text-sm font-semibold
@@ -37,7 +29,6 @@
         </div>
       </div>
     <% end %>
-    <!-- ▲▲▲ Ransack 用フォームここまで ▲▲▲ -->
 
     <% if params[:q].present? %>
       <p class="text-xs text-slate-500">
@@ -46,146 +37,91 @@
       </p>
     <% end %>
   </div>
-  <!-- /検索フォームカード -->
 
   <% if @posts.any? %>
-    <!-- 投稿カード一覧 -->
     <div class="space-y-4">
       <% @posts.each do |post| %>
-        <div class="bg-white rounded-2xl shadow-sm px-4 py-3">
-          <!-- 日付＋バッジ行 -->
+        <div class="bg-white rounded-2xl shadow-sm border border-amber-100 px-5 py-4">
+          <!-- 日時 -->
           <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
             <span>
               <% datetime = post.posted_at || post.created_at %>
               <%= l datetime, format: :short %>
             </span>
-
-            <div class="flex items-center gap-2">
-              <%# mood バッジ %>
-              <% if post.mood.present? %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-sky-50 text-sky-700 border border-sky-100">
-                  気分: <%= post.mood_i18n rescue post.mood %>
-                </span>
-              <% end %>
-
-              <%# visibility バッジ %>
-              <% if post.visibility.present? %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-amber-50 text-amber-700 border border-amber-100">
-                  <%= post.visibility_private? ? "非公開" : "公開" %>
-                </span>
-              <% end %>
-            </div>
           </div>
 
-          <!-- タイトル（あれば） -->
-          <% if post.title.present? %>
-            <div class="text-sm font-semibold text-slate-800 mb-2">
-              <%= post.title %>
-            </div>
-          <% end %>
+          <!-- タイトル -->
+          <div class="text-base font-semibold text-slate-800">
+            <%= post.title.presence || "（無題）" %>
+          </div>
 
-          <!-- タグ（あれば） -->
-          <% if post.tags_text.present? %>
-            <div class="mb-2 flex flex-wrap gap-2 text-xs">
-              <% post.tags_text.split(",").map(&:strip).reject(&:blank?).each do |tag| %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-slate-50 text-slate-700 border border-slate-200">
+          <!-- タグ -->
+          <% tags = post.tags_text.to_s.split(",").map(&:strip).reject(&:blank?) %>
+          <% if tags.any? %>
+            <div class="mt-2 flex flex-wrap gap-2 text-xs">
+              <% tags.each do |tag| %>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-50 text-slate-700 border border-slate-200">
                   #<%= tag %>
                 </span>
               <% end %>
             </div>
           <% end %>
 
-          <!-- 本文 -->
-          <div class="text-sm text-slate-800 whitespace-pre-wrap break-words">
-            <%= simple_format(post.body) %>
-          </div>
+          <!-- アクション -->
+          <div class="mt-4 flex items-center justify-between">
+            <%= link_to "このトピックの会話を開く",
+                        buddy_talk_topic_path(post),
+                        data: { turbo: false },
+                        class: "text-sm font-semibold text-amber-800 hover:underline" %>
 
-          <!-- 詳細リンク + 編集/削除ボタン -->
-          <div class="mt-3 flex justify-between items-center">
-            <div class="flex flex-col gap-1">
-              <%= link_to "バディからのお返事を見る",
-                          post_path(post),
-                          class: "text-xs text-sky-600 hover:underline" %>
-
-              <%= link_to "このトピックの会話を開く",
-                          buddy_talk_topic_path(post),
-                          class: "text-xs text-amber-700 hover:underline" %>
-            </div>
-
-            <div class="flex gap-2">
-              <%= link_to "編集",
-                          edit_post_path(post),
-                          class: "text-xs px-3 py-1.5 rounded-full
-                                  border border-slate-200 text-slate-700
-                                  hover:bg-slate-50" %>
-
-              <%= button_to "削除",
-                    post_path(post),
-                    method: :delete,
-                    data: { turbo_confirm: "本当にこの投稿を削除しますか？" },
-                    class: "text-xs px-3 py-1.5 rounded-full
-                            border border-rose-300 text-rose-600
-                            hover:bg-rose-50" %>
-            </div>
+            <%= button_to "削除",
+                  post_path(post),
+                  method: :delete,
+                  data: { turbo_confirm: "本当にこの投稿を削除しますか？" },
+                  class: "text-xs px-4 py-2 rounded-full
+                          border border-rose-300 text-rose-600
+                          hover:bg-rose-50" %>
           </div>
         </div>
       <% end %>
     </div>
 
-    <!-- ページネーション -->
     <% if @posts.total_pages > 1 %>
       <div class="mt-6 flex justify-center">
         <div class="flex items-center gap-2">
-
-          <!-- 前へ -->
           <% if @posts.prev_page %>
             <%= link_to "◀", url_for(page: @posts.prev_page),
-                  class: "px-3 py-1.5 rounded-full
-                          bg-white border border-slate-200 text-slate-700
-                          hover:bg-slate-50 text-sm" %>
+                  class: "px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm" %>
           <% else %>
             <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">◀</span>
           <% end %>
 
-          <!-- ページ番号 -->
           <% @posts.total_pages.times do |i| %>
             <% page_num = i + 1 %>
-
             <% if page_num == @posts.current_page %>
-              <span class="px-3 py-1.5 rounded-full
-                           bg-amber-100 text-slate-800 border border-amber-200
-                           text-sm font-semibold">
+              <span class="px-3 py-1.5 rounded-full bg-amber-100 text-slate-800 border border-amber-200 text-sm font-semibold">
                 <%= page_num %>
               </span>
             <% else %>
-              <%= link_to page_num,
-                    url_for(page: page_num),
-                    class: "px-3 py-1.5 rounded-full
-                            bg-white border border-slate-200 text-slate-700
-                            hover:bg-slate-50 text-sm" %>
+              <%= link_to page_num, url_for(page: page_num),
+                    class: "px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm" %>
             <% end %>
           <% end %>
 
-          <!-- 次へ -->
           <% if @posts.next_page %>
             <%= link_to "▶", url_for(page: @posts.next_page),
-                  class: "px-3 py-1.5 rounded-full
-                          bg-white border border-slate-200 text-slate-700
-                          hover:bg-slate-50 text-sm" %>
+                  class: "px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm" %>
           <% else %>
             <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-400 text-sm cursor-default">▶</span>
           <% end %>
-
         </div>
       </div>
     <% end %>
 
   <% else %>
-    <!-- 投稿がないとき -->
-    <div class="bg-white rounded-2xl shadow-sm px-4 py-6 text-center text-sm text-slate-500">
+    <div class="bg-white rounded-2xl shadow-sm border border-amber-100 px-4 py-6 text-center text-sm text-slate-500">
       まだ投稿がありません。<br>
       <strong>「バディと話す」</strong>から、今日の気持ちを残してみましょう 🌻
     </div>
   <% end %>
-
 </div>

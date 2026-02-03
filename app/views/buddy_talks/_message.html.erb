@@ -1,7 +1,7 @@
 <% if message.is_a?(BuddyMessage) %>
   <div class="flex justify-end">
     <div class="max-w-[84%] rounded-2xl bg-sky-50 border border-sky-100 px-4 py-3 shadow-sm">
-      <p class="text-sm text-slate-800 whitespace-pre-wrap"><%= message.content %></p>
+      <p class="text-sm text-slate-800 whitespace-pre-wrap break-words"><%= message.content %></p>
       <p class="text-[11px] text-slate-400 text-right mt-1">
         <%= message.created_at.strftime("%m/%d %H:%M") %>
       </p>
@@ -12,19 +12,18 @@
   <% is_tip = message.kind.to_s == "tip" %>
 
   <div class="flex items-start gap-3">
-    <div class="w-10 h-10 rounded-full <%= is_tip ? "bg-amber-200" : "bg-amber-100" %> flex items-center justify-center text-sm font-bold text-slate-700 border border-amber-200">
+    <div class="w-10 h-10 rounded-full <%= is_tip ? "bg-amber-200" : "bg-amber-100" %>
+                flex items-center justify-center text-sm font-bold text-slate-700 border border-amber-200">
       バ
     </div>
 
     <div class="max-w-[84%] rounded-2xl border px-4 py-3 shadow-sm
                 <%= is_tip ? "bg-amber-50 border-amber-100" : "bg-white border-slate-200" %>">
-      <% if is_tip %>
-        <p class="text-xs font-semibold text-amber-700 mb-1">深掘り/まとめ</p>
-      <% else %>
-        <p class="text-xs font-semibold text-slate-500 mb-1">バディからの返信</p>
-      <% end %>
+      <p class="text-xs font-semibold <%= is_tip ? "text-amber-700" : "text-slate-500" %> mb-1">
+        <%= is_tip ? "深掘り/まとめ" : "バディからの返信" %>
+      </p>
 
-      <p class="text-sm text-slate-800 whitespace-pre-wrap"><%= message.content %></p>
+      <p class="text-sm text-slate-800 whitespace-pre-wrap break-words"><%= message.content %></p>
       <p class="text-[11px] text-slate-400 mt-1">
         <%= message.created_at.strftime("%m/%d %H:%M") %>
       </p>

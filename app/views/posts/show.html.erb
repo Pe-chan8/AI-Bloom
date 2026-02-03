@@ -30,7 +30,9 @@
 
   <!-- 戻る・編集リンク -->
   <div class="flex justify-between text-sm mt-6">
-    <%= link_to "← 投稿一覧に戻る", posts_path, class: "text-sky-600 hover:underline" %>
+    <%= link_to "← 閉じる",
+            posts_path,
+            class: "text-xs font-semibold text-slate-600 hover:text-slate-800" %>
     <%= link_to "編集する", edit_post_path(@post), class: "text-amber-600 hover:underline" %>
   </div>
 
