@@ -11,13 +11,13 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? %>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>"></script>
+    <% if Rails.env.production? && ENV["GA_MEASUREMENT_ID"].present? %>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA_MEASUREMENT_ID"] %>"></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
+        gtag("js", new Date());
+        gtag("config", "<%= ENV["GA_MEASUREMENT_ID"] %>");
       </script>
     <% end %>
 
@@ -38,8 +38,15 @@
     </style>
   </head>
 
-  <body class="min-h-screen flex flex-col bg-[#FFF6E5]"
-      data-controller="post-modal">
+  <%# ここが重要：
+      --bottom-nav-h : ボトムナビの高さ（既定 80px）
+      --composer-h   : buddy_talk composer の高さ（既定 0px / 表示時に上書き）
+  %>
+  <body
+    class="min-h-screen flex flex-col bg-[#FFF6E5]"
+    style="--bottom-nav-h: 80px; --composer-h: 0px;"
+    data-controller="post-modal"
+  >
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -57,6 +64,7 @@
                   method: :delete,
                   form: { data: { turbo: false } },
                   class: "hover:underline" %>
+
             <%= render "shared/nav/hamburger_menu" %>
           <% else %>
             <%= link_to "ログイン", new_user_session_path, class: "hover:underline" %>
@@ -84,7 +92,11 @@
       <% end %>
     </div>
 
-    <main class="flex-1 pt-2 pb-24">
+    <%# main の padding-bottom を「ボトムナビ + composer」ぶん確保（被り防止） %>
+    <main
+      class="flex-1 pt-2"
+      style="padding-bottom: calc(var(--bottom-nav-h) + var(--composer-h) + 24px);"
+    >
       <div class="max-w-5xl mx-auto px-4 py-8">
         <%= yield %>
       </div>
@@ -92,7 +104,7 @@
 
     <% if (partial = current_bottom_nav_partial).present? %>
       <nav
-        style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;"
+        style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; height: var(--bottom-nav-h);"
         class="bg-white/95 border-t border-slate-200"
       >
         <%= render "shared/nav/#{partial}" %>

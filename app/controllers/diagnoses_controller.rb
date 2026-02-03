@@ -1,25 +1,27 @@
 class DiagnosesController < ApplicationController
   before_action :set_bottom_nav
 
-  # 診断の表示系はログイン不要
   skip_before_action :authenticate_user!, only: [:top, :questions, :result, :result_page, :share]
+
+  VALID_TYPES = %w[expressive driving amiable analytical].freeze
 
   def top
   end
 
   def questions
     @questions = DiagnosisQuestion.order(:position)
+    render :diagnosis_questions
   end
 
   # POST /diagnosis/result
+  # Turbo対策：成功時は必ず 303 で GET に飛ばす
   def result
-    raw_answers = params[:answers] || {}
+    raw_answers = params[:answers].presence || {}
 
-    if raw_answers.empty?
-      redirect_to diagnosis_questions_path,
-                  alert: "結果を集計できませんでした。もう一度診断を行ってください。",
-                  status: :see_other
-      return
+    if raw_answers.blank?
+      return redirect_to diagnosis_questions_path,
+                         alert: "結果を集計できませんでした。もう一度診断を行ってください。",
+                         status: :see_other
     end
 
     scores = Hash.new(0)
@@ -28,22 +30,18 @@ class DiagnosesController < ApplicationController
       question = DiagnosisQuestion.find_by(id: question_id)
       next if question.nil?
 
-      score = value.to_i
-      scores[question.category] += score
+      scores[question.category] += value.to_i
     end
 
-    if scores.values.all?(&:zero?)
-      redirect_to diagnosis_questions_path,
-                  alert: "結果を集計できませんでした。もう一度診断を行ってください。",
-                  status: :see_other
-      return
+    if scores.empty? || scores.values.all?(&:zero?)
+      return redirect_to diagnosis_questions_path,
+                         alert: "結果を集計できませんでした。もう一度診断を行ってください。",
+                         status: :see_other
     end
 
-    dominant_type, = scores.max_by { |_, v| v }
+    dominant_type, _ = scores.max_by { |_, v| v }
     dominant_type = dominant_type.to_s
-
-    valid_types = %w[expressive driving amiable analytical]
-    dominant_type = "amiable" unless valid_types.include?(dominant_type)
+    dominant_type = "amiable" unless VALID_TYPES.include?(dominant_type)
 
     session[:diagnosis_result] = {
       social_type: dominant_type,
@@ -57,26 +55,20 @@ class DiagnosesController < ApplicationController
       )
     end
 
-    # Turbo安全：303でGETへ
     redirect_to diagnosis_result_page_path(type: dominant_type), status: :see_other
   end
 
   # GET /diagnosis/result/:type
-  # 結果表示（TurboでもOK）
   def result_page
     type = params[:type].to_s
-    valid_types = %w[expressive driving amiable analytical]
-    type = "amiable" unless valid_types.include?(type)
+    type = "amiable" unless VALID_TYPES.include?(type)
 
     @dominant_type = type
     @scores = session.dig(:diagnosis_result, :scores) || {}
 
     setup_type_data!(@dominant_type)
-
-    # meta（通常表示用）
     set_share_meta_tags!(@dominant_type)
 
-    # --- シェア機能用（Twitter/X）
     raw_share_text = <<~TEXT
       AI-Bloomでソーシャルタイプ診断をしました！
       結果は「#{@current_type_info[:name]}」でした。
@@ -85,30 +77,23 @@ class DiagnosesController < ApplicationController
     TEXT
 
     @share_url = diagnosis_share_url(@dominant_type)
-
     @twitter_intent_url =
       "https://twitter.com/intent/tweet" \
       "?text=#{ERB::Util.url_encode(raw_share_text.strip)}" \
       "&url=#{ERB::Util.url_encode(@share_url)}"
 
-    # オンボ完了
     if user_signed_in? && !current_user.onboarded?
       current_user.update(onboarded_at: Time.current)
     end
-
-    render :result
   end
 
   # GET /diagnosis/share/:type
-  # X がクロールするのはこっち（GET）なので、ここで meta を確実に出す
   def share
     type = params[:type].to_s
-    valid_types = %w[expressive driving amiable analytical]
-    type = "amiable" unless valid_types.include?(type)
+    type = "amiable" unless VALID_TYPES.include?(type)
 
     @dominant_type = type
     setup_type_data!(@dominant_type)
-
     set_share_meta_tags!(@dominant_type)
 
     render :share, layout: "application"
@@ -236,7 +221,6 @@ class DiagnosesController < ApplicationController
     )
   end
 
-  # assets の絶対URLを確実に作る（http→httpsも矯正）
   def absolute_asset_url(logical_path)
     host = ENV["APP_HOST"].presence || request.base_url
     host = host.sub(/\Ahttp:/, "https:")

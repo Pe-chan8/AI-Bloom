@@ -1,0 +1,4 @@
+<%= turbo_stream.append "messages",
+  partial: "message",
+  collection: @buddy_talk.messages.order(:id).last(2),
+  as: :message %>
