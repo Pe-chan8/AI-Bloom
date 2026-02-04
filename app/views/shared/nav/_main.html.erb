@@ -15,16 +15,9 @@
       </li>
 
       <li>
-        <%= link_to buddy_talk_path, class: "flex flex-col items-center gap-1" do %>
-          <%= image_tag "/bottom_nav/buddy_talk.png", class: "w-8 h-8", alt: "バディと話す" %>
-          <span class="font-semibold">バディと話す</span>
-        <% end %>
-      </li>
-
-      <li>
-        <%= link_to posts_path, class: "flex flex-col items-center gap-1" do %>
-          <%= image_tag "/bottom_nav/post.png", class: "w-8 h-8", alt: "投稿一覧" %>
-          <span class="font-semibold">投稿一覧</span>
+        <%= link_to diagnosis_top_path, class: "flex flex-col items-center gap-1" do %>
+          <%= image_tag "/bottom_nav/diagnosis.png", class: "w-8 h-8", alt: "診断" %>
+          <span class="font-semibold">診断</span>
         <% end %>
       </li>
 
@@ -36,9 +29,16 @@
       </li>
 
       <li>
-        <%= link_to diagnosis_top_path, class: "flex flex-col items-center gap-1" do %>
-          <%= image_tag "/bottom_nav/diagnosis.png", class: "w-8 h-8", alt: "診断" %>
-          <span class="font-semibold">診断</span>
+        <%= link_to buddy_talk_path, class: "flex flex-col items-center gap-1" do %>
+          <%= image_tag "/bottom_nav/buddy_talk.png", class: "w-8 h-8", alt: "バディと話す" %>
+          <span class="font-semibold">バディと話す</span>
+        <% end %>
+      </li>
+
+      <li>
+        <%= link_to posts_path, class: "flex flex-col items-center gap-1" do %>
+          <%= image_tag "/bottom_nav/post.png", class: "w-8 h-8", alt: "投稿一覧" %>
+          <span class="font-semibold">投稿一覧</span>
         <% end %>
       </li>
 

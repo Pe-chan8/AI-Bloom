@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "buddy_meta",
+  partial: "meta_readonly",
+  locals: { buddy_talk: @buddy_talk } %>
+
+<%= turbo_stream.replace "buddy_chat",
+  partial: "chat",
+  locals: { buddy_talk: @buddy_talk } %>

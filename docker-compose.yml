@@ -27,6 +27,7 @@ services:
       DB_HOST: db
       DB_USERNAME: postgres
       DB_PASSWORD: password
+      TZ: Asia/Tokyo
 
   web:
     build:
@@ -45,6 +46,7 @@ services:
       DB_HOST: db
       DB_USERNAME: postgres
       DB_PASSWORD: password
+      TZ: Asia/Tokyo
 
 volumes:
   db-data:

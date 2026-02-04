@@ -1,0 +1,189 @@
+<% content_for :title, "ソーシャルタイプ診断 結果 - AI-Bloom" %>
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-4 space-y-8">
+
+  <!-- 見出し -->
+  <header class="space-y-3 text-center">
+    <h1 class="text-2xl font-bold text-slate-800">
+      ソーシャルタイプ診断 結果
+    </h1>
+    <p class="text-sm text-slate-600">
+      今回の回答から見た「今のあなたらしさ」に近いタイプをお伝えします。
+    </p>
+    <p class="text-sm text-slate-600">
+      ぴったり1つに決めつけるものではなく、あくまで参考の目安としてご覧ください。
+    </p>
+  </header>
+
+  <% if @current_type_info.present? %>
+    <% image_path = @type_images&.[](@dominant_type) %>
+
+    <!-- メイン結果カード -->
+    <section class="bg-white border border-amber-100 rounded-3xl shadow-sm px-6 py-6 space-y-6">
+
+      <!-- タイプ画像 -->
+      <% if image_path.present? %>
+        <div class="flex justify-center">
+          <%= image_tag image_path,
+                        alt: @current_type_info[:name],
+                        class: "max-h-40 w-auto drop-shadow-sm" %>
+        </div>
+      <% end %>
+
+      <!-- タイプ名称 -->
+      <div class="flex flex-wrap items-center gap-3 justify-center">
+        <span class="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
+          あなたのタイプ
+        </span>
+        <p class="text-lg sm:text-xl font-bold text-slate-800">
+          <%= @current_type_info[:name] %>
+        </p>
+      </div>
+
+      <!-- 概要 -->
+      <div class="space-y-3">
+        <p class="text-sm font-semibold text-slate-700">
+          <%= @current_type_info[:summary] %>
+        </p>
+        <p class="text-sm leading-relaxed text-slate-700">
+          <%= @current_type_info[:detail] %>
+        </p>
+      </div>
+
+      <hr class="border-slate-200">
+
+      <!-- 性格 -->
+      <div class="space-y-1">
+        <p class="font-semibold text-slate-800 text-sm">性格タイプ</p>
+        <p class="text-sm text-slate-700">
+          <%= @current_type_info[:personality] %>
+        </p>
+      </div>
+
+      <!-- 強み -->
+      <div class="space-y-1">
+        <p class="font-semibold text-slate-800 text-sm">強みとすること</p>
+        <p class="text-sm text-slate-700">
+          <%= @current_type_info[:strengths] %>
+        </p>
+      </div>
+
+      <!-- その他 -->
+      <div class="space-y-1">
+        <p class="font-semibold text-slate-800 text-sm">その他</p>
+        <p class="text-sm text-slate-700">
+          <%= @current_type_info[:other] %>
+        </p>
+      </div>
+
+      <% if @current_buddy_relation.present? %>
+        <hr class="border-slate-200">
+
+        <!-- 相性バディ -->
+        <div class="bg-amber-50 rounded-2xl border border-amber-100 p-5 space-y-6">
+
+          <div class="text-center space-y-3">
+            <p class="font-semibold text-slate-800">
+              あなたと相性の良いバディ
+            </p>
+
+            <div class="flex items-center justify-center gap-3">
+              <span class="px-4 py-1 rounded-full bg-sky-100 text-sky-700 font-semibold">
+                <%= @current_buddy_relation[:best_name] %>
+              </span>
+            </div>
+
+            <p class="text-sm text-slate-700">
+              <%= @current_buddy_relation[:reason] %>
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-base mb-3">
+              その他バディとの相性
+            </h3>
+
+            <div class="space-y-3">
+              <% Array(@current_buddy_relation[:ranking]).each_with_index do |(name, desc), idx| %>
+                <div class="flex items-start gap-3">
+                  <div class="w-10 text-sm font-semibold">
+                    <%= "#{idx + 1}位：" %>
+                  </div>
+                  <div class="flex-1">
+                    <div class="text-sm font-semibold"><%= name %></div>
+                    <p class="text-xs text-slate-600"><%= desc %></p>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+        </div>
+      <% end %>
+
+      <p class="text-[11px] text-slate-400">
+        ※ 状況や気分によって結果は変わることがあります。
+      </p>
+
+      <% unless user_signed_in? %>
+        <p class="text-xs text-slate-600">
+          ※ 診断結果の保存やバディ機能を使うにはログインが必要です。
+        </p>
+      <% end %>
+
+      <!-- メタ情報（必要ならJSで利用） -->
+      <div
+        id="diagnosis-type-meta"
+        data-type="<%= @dominant_type %>"
+        data-image-url="<%= image_path.present? ? asset_path(image_path) : "" %>">
+      </div>
+    </section>
+
+  <% else %>
+    <!-- フォールバック -->
+    <section class="bg-white border border-rose-100 rounded-3xl shadow-sm px-6 py-6 space-y-3">
+      <h2 class="text-lg font-semibold text-slate-800">
+        結果を表示できませんでした
+      </h2>
+      <p class="text-sm text-slate-700">
+        回答の集計に失敗しました。もう一度診断を行ってください。
+      </p>
+    </section>
+  <% end %>
+
+  <!-- アクション -->
+  <section class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+
+    <%= link_to "もう一度診断する",
+                diagnosis_questions_path,
+                class: "rounded-full border border-slate-200 bg-white px-6 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition" %>
+
+    <% if @twitter_intent_url.present? %>
+      <%= link_to "結果をシェアする",
+                  @twitter_intent_url,
+                  target: "_blank",
+                  rel: "noopener",
+                  class: "rounded-full bg-sky-100 px-6 py-2 text-sm font-semibold text-sky-700 border border-sky-200 hover:bg-sky-200 transition" %>
+    <% end %>
+
+    <% if user_signed_in? %>
+      <%= link_to "ホームに戻る",
+                  root_path,
+                  class: "rounded-full bg-amber-100 px-6 py-2 text-sm font-semibold text-slate-800 border border-amber-200 hover:bg-amber-200 transition" %>
+    <% else %>
+      <%= link_to "ログインして続きへ",
+                  new_user_session_path,
+                  class: "rounded-full bg-amber-400 px-6 py-2 text-sm font-semibold text-white hover:bg-amber-500 transition" %>
+    <% end %>
+  </section>
+
+  <%# 診断結果を表示できた時だけ送る %>
+  <% if @current_type_info.present? %>
+    <script>
+      if (typeof gtag === "function") {
+        gtag("event", "diagnosis_completed", { dominant_type: "<%= @dominant_type %>" });
+      }
+    </script>
+  <% end %>
+
+</div>

@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "messages" do %>
+  <div class="space-y-4 px-2 sm:px-4">
+    <%= render "messages", messages: messages, buddy: buddy %>
+  </div>
+<% end %>

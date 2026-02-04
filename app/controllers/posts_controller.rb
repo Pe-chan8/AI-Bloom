@@ -36,12 +36,16 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
-    render :new, layout: false if turbo_frame_request?
   end
 
   def create
     @post = current_user.posts.build(post_params)
-    @post.posted_at = Time.current
+
+    # posted_at 未入力対策（念のため）
+    @post.posted_at ||= Time.zone.now
+
+    # tag_list(チェックボックス) → tags_text(保存) に詰める
+    @post.tags_text = Array(params.dig(:post, :tag_list)).join(", ")
 
     if @post.save
       begin
@@ -54,32 +58,20 @@ class PostsController < ApplicationController
 
       current_user.update!(onboarded_at: Time.current) unless current_user.onboarded?
 
-      # ★ここが大事：フラッシュは「次の遷移」で出すために積む
-      flash[:notice] = "投稿が完了しました！"
-
-      respond_to do |format|
-        # モーダル(Turbo)用：create.turbo_stream.erb を返す
-        format.turbo_stream
-        # 通常画面用：従来通りリダイレクト
-        format.html { redirect_to post_path(@post) }
-      end
+      redirect_to post_path(@post), notice: "投稿が完了しました！"
     else
-      if turbo_frame_request?
-        render partial: "posts/form",
-              locals: { post: @post, mode: :modal },
-              layout: false,
-              status: :unprocessable_entity
-      else
-        render :new, status: :unprocessable_entity
-      end
+      # BuddyTalk の入力画面に戻す
+      redirect_to buddy_talk_path, alert: @post.errors.full_messages.to_sentence
     end
   end
 
   def edit; end
 
   def update
+    @post.tags_text = Array(params.dig(:post, :tag_list)).join(", ")
+
     if @post.update(post_params)
-      redirect_to root_path, notice: "投稿を更新しました"
+      redirect_to post_path(@post), notice: "投稿を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -101,7 +93,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:body, :mood, :visibility)
+    params.require(:post).permit(:body, :mood, :visibility, :posted_at, :title, :tags_text)
   end
 
   def set_bottom_nav

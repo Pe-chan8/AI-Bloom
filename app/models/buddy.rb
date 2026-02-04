@@ -20,4 +20,18 @@ class Buddy < ApplicationRecord
   def display_name
     BUDDY_CODE_TO_NICKNAME[code] || name
   end
+
+  # code → 画像 の対応表
+  BUDDY_CODE_TO_IMAGE = {
+    "amiable"       => "buddies/amiable_buddy.png",
+    "analytical"    => "buddies/analytical_buddy.png",
+    "expressive"    => "buddies/expressive_buddy.png",
+    "driving"       => "buddies/driving_buddy.png",
+    "normal"        => "buddies/normal_buddy.png",
+    "kansai_friend" => "buddies/kansai_friend_buddy.png"
+  }.freeze
+
+  def avatar_image_path
+    BUDDY_CODE_TO_IMAGE[code] || "buddies/normal_buddy.png"
+  end
 end

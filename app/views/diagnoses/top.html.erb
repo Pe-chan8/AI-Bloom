@@ -73,12 +73,15 @@
   <!-- スタートボタン -->
   <section class="max-w-md mx-auto text-center space-y-3 pb-4">
     <%= link_to diagnosis_questions_path,
-        class: "w-full inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 transition" do %>
+        class: "w-full inline-flex items-center justify-center rounded-full
+        bg-amber-100 px-6 py-3 text-sm font-semibold
+        text-slate-800 border border-amber-200
+        hover:bg-amber-200 transition" do %>
       診断をスタートする
     <% end %>
 
     <p class="text-[11px] text-slate-500">
-      ※全10問・所要時間の目安：3〜5分
+      ※全12問・所要時間の目安：3〜5分
     </p>
   </section>
 </div>

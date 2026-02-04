@@ -1,0 +1,37 @@
+<div class="space-y-3">
+  <div class="bg-white rounded-3xl border border-amber-100 shadow-sm p-4 space-y-4">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <p class="text-xs text-slate-500">日付</p>
+        <p class="font-semibold text-slate-800">
+          <%= buddy_talk.posted_at&.strftime("%Y/%m/%d %H:%M") %>
+        </p>
+      </div>
+
+      <div class="flex-1">
+        <p class="text-xs text-slate-500">タイトル</p>
+        <p class="font-semibold text-slate-800">
+          <%= buddy_talk.title.presence || "（未入力）" %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <% tags = buddy_talk.tags_text.to_s.split(",").map(&:strip).reject(&:blank?) %>
+
+  <div class="flex flex-wrap items-center gap-2 px-2">
+    <span class="text-xs text-slate-500 mr-1">気分：</span>
+    <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-semibold border border-amber-100">
+      <%= buddy_talk.mood_i18n rescue buddy_talk.mood %>
+    </span>
+
+    <% if tags.any? %>
+      <span class="text-xs text-slate-500 ml-2 mr-1">タグ：</span>
+      <% tags.each do |t| %>
+        <span class="px-3 py-1 rounded-full border border-slate-200 bg-white text-slate-700 text-xs font-semibold">
+          <%= t %>
+        </span>
+      <% end %>
+    <% end %>
+  </div>
+</div>
