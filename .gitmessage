@@ -1,0 +1,22 @@
+<type>(日本語用途): <summary>
+
+# type:
+# feature(新機能)
+# fix(バグ修正)
+# style(UI変更)
+# refactor(リファクタ)
+# chore(環境整備)
+# docs(ドキュメント)
+# test(テスト)
+# perf(パフォーマンス)
+# security(セキュリティ)
+# ci(CI/CD)
+# data(DB)
+# a11y(アクセシビリティ)
+# spike(調査)
+# ai(AI連携)
+#
+# rules:
+# - use present tense
+# - one commit, one purpose
+# - keep summary under 50 chars
