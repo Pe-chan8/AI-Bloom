@@ -2,12 +2,12 @@ module Ai
   class SelfPrSummaryService
     RETRY_MAX = 2
     RETRY_BASE_SLEEP = 1.0
+    MAX_LOG_CHARS = 12_000
 
     def initialize(client: OpenAI::Client.new)
       @client = client
     end
 
-    # 会話ログをもとに自己PRを生成して AiMessage(kind: :weekly) で保存して返す
     def generate_for(post:, user:, buddy: nil)
       buddy ||= user.buddy
 
@@ -21,13 +21,14 @@ module Ai
 
       begin
         timeline = build_timeline_text(post)
+        timeline = timeline[-MAX_LOG_CHARS..] if timeline.length > MAX_LOG_CHARS
 
         response = with_retry_on_429 do
           @client.chat(
             parameters: {
               model: "gpt-4o-mini",
               messages: [
-                { role: "system", content: system_prompt(user: user, buddy: buddy) },
+                { role: "system", content: system_prompt_for(user: user, buddy: buddy) },
                 { role: "user", content: user_prompt(post: post, user: user, timeline: timeline) }
               ],
               temperature: 0.6
@@ -79,11 +80,17 @@ module Ai
       "いま強みまとめの生成が混み合っています…！少し時間をおいてから、もう一度押してみてね🙏"
     end
 
-    def system_prompt(user:, buddy:)
-      name = buddy&.name.presence || "AIバディ"
-      <<~SYS
-        あなたは「#{name}」として、ユーザーの会話ログから「強みまとめ（自己PRの芯）」を作成するキャリア支援者です。
-        出力は日本語。
+    # 性格(system) + 自己PRまとめ用途の追加指示
+    def system_prompt_for(user:, buddy:)
+      type = prompt_type_for(user: user, buddy: buddy)
+      base = Ai::PromptRepository.for(type, user_nickname: user.nickname)[:system]
+
+      base + "\n\n" + <<~SYS
+        ▼追加指示（強みまとめ / 自己PRの芯）
+        - あなたはユーザーの会話ログから「強みまとめ（自己PRの芯）」を作成する支援者
+        - 盛りすぎない（ログに無いことを断定しない）
+        - ユーザーの言葉/感情を尊重する
+        - 読みやすく、やさしい口調
 
         形式：
         1) 深掘り/まとめ（200〜350字）
@@ -91,12 +98,15 @@ module Ai
            - 根拠エピソード要約：
            - 再現性（行動特性）：
            - 次の一言（面接の締め）：
-
-        制約：
-        - 盛りすぎない（ログに無いことを断定しない）
-        - ユーザーの言葉/感情を尊重する
-        - 読みやすく、やさしい口調
       SYS
+    end
+
+    def prompt_type_for(user:, buddy:)
+      return buddy.code if buddy&.respond_to?(:code) && buddy.code.present?
+      if user.respond_to?(:profile) && user.profile&.social_type.present?
+        return user.profile.social_type
+      end
+      :default
     end
 
     def user_prompt(post:, user:, timeline:)
@@ -128,8 +138,8 @@ module Ai
         label =
           case kind
           when "reply"  then "【AI(受容)】"
-          when "tip"    then "【AI(深掘り)】"
-          when "weekly" then "【AI(まとめ)】"
+          when "tip"    then "【AI(深掘り/まとめ)】"
+          when "weekly" then "【AI(強みまとめ)】"
           else "【AI】"
           end
         parts << "#{label}#{m.content}"

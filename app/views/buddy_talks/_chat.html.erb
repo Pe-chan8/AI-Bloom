@@ -1,7 +1,5 @@
-<section class="rounded-3xl border border-amber-100 shadow-sm overflow-hidden bg-amber-50/40">
-  <div class="bg-white/90 px-6 py-6">
-    <%= turbo_frame_tag "messages" do %>
-      <%= render "messages", messages: messages %>
-    <% end %>
+<%= turbo_frame_tag "messages" do %>
+  <div class="space-y-4 px-2 sm:px-4">
+    <%= render "messages", messages: messages, buddy: buddy %>
   </div>
-</section>
+<% end %>

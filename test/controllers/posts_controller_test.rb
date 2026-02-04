@@ -18,7 +18,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       visibility: :private
     )
 
-    # ★ Devise のログインフォーム経由でログインする
+    # Devise のログインフォーム経由でログインする
     post user_session_path, params: {
       user: {
         email:    @user.email,

@@ -3,21 +3,19 @@ module Ai
     RETRY_MAX = 2
     RETRY_BASE_SLEEP = 1.0
 
-    # 直近ログを何往復ぶん見るか（ユーザー/AI合計で最大12件くらい）
     RECENT_TURNS = 6
+    MAX_LOG_CHARS = 6_000
 
     def initialize(client: OpenAI::Client.new)
       @client = client
     end
 
-    # 深掘り質問（1〜2問）を生成して AiMessage(kind: :tip) に保存して返す
     def generate_for(post:, user:, buddy: nil)
       buddy ||= user.buddy
 
       begin
         Ai::RateLimiter.new(user).check_and_count!(kind: :tip)
       rescue NameError, NoMethodError
-        # RateLimiterが無い/未実装でも落とさない
       end
 
       requested_at = Time.current
@@ -31,7 +29,7 @@ module Ai
             parameters: {
               model: "gpt-4o-mini",
               messages: [
-                { role: "system", content: system_prompt(user: user, buddy: buddy) },
+                { role: "system", content: system_prompt_for(user: user, buddy: buddy) },
                 { role: "user", content: user_prompt(post: post, user: user, recent_log: recent_log) }
               ],
               temperature: 0.6
@@ -67,20 +65,14 @@ module Ai
 
     private
 
-    # ---- 直近ログ：BuddyMessage(ユーザー) + AiMessage(reply/tip/weekly) を時系列に混ぜる ----
     def build_recent_log(post)
       list = []
-
-      if defined?(BuddyMessage)
-        list += BuddyMessage.where(post: post).order(:created_at).to_a
-      end
-
+      list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)
       list += AiMessage.where(post: post, kind: [:reply, :tip, :weekly]).order(:created_at).to_a
       list = list.sort_by(&:created_at)
+      list = list.last(RECENT_TURNS * 2)
 
-      sliced = list.last(RECENT_TURNS * 2)
-
-      sliced.map do |m|
+      text = list.map do |m|
         if defined?(BuddyMessage) && m.is_a?(BuddyMessage)
           "【ユーザー】#{m.content}"
         else
@@ -88,13 +80,16 @@ module Ai
           label =
             case kind
             when "reply"  then "【AI(受容)】"
-            when "tip"    then "【AI(深掘り)】"
-            when "weekly" then "【AI(まとめ)】"
+            when "tip"    then "【AI(深掘り/まとめ)】"
+            when "weekly" then "【AI(強みまとめ)】"
             else "【AI】"
             end
           "#{label}#{m.content}"
         end
       end.join("\n")
+
+      text = text[-MAX_LOG_CHARS..] if text.length > MAX_LOG_CHARS
+      text
     end
 
     def with_retry_on_429
@@ -113,19 +108,28 @@ module Ai
       "いま深掘り質問の生成が混み合っています…！少し時間をおいてからもう一度押してみてね🙏"
     end
 
-    def system_prompt(user:, buddy:)
-      name = buddy&.name.presence || "AIバディ"
-      <<~SYS
-        あなたは「#{name}」として、ユーザーの振り返りをやさしく深掘りする相棒です。
-        目的：ユーザーの経験から「強み・工夫・価値観・再現性」を引き出す。
+    # ここが共通化：性格(system) + 深掘り用途の追加指示
+    def system_prompt_for(user:, buddy:)
+      type = prompt_type_for(user: user, buddy: buddy)
+      base = Ai::PromptRepository.for(type, user_nickname: user.nickname)[:system]
 
-        出力ルール：
-        - 質問は1〜2個
-        - できるだけ「直前ログの内容」を引用/参照して具体的に聞く
+      base + "\n\n" + <<~SYS
+        ▼追加指示（深掘り質問）
+        - 目的：ユーザーの経験から「強み・工夫・価値観・再現性」を引き出す
+        - 質問は1〜2個だけ
+        - 直前ログの内容を引用/参照して具体的に聞く（流れを途切れさせない）
         - 1つ目は状況の具体化（何が起きた/何をした/どう感じた）
         - 2つ目は強み・工夫・再現性（なぜできた/どう工夫した/次も使える形）
-        - 断定しない、責めない、短く、答えやすく
+        - 断定しない・責めない・短く答えやすく
       SYS
+    end
+
+    def prompt_type_for(user:, buddy:)
+      return buddy.code if buddy&.respond_to?(:code) && buddy.code.present?
+      if user.respond_to?(:profile) && user.profile&.social_type.present?
+        return user.profile.social_type
+      end
+      :default
     end
 
     def user_prompt(post:, user:, recent_log:)
@@ -143,11 +147,10 @@ module Ai
 
         指示：
         - 上記ログを参照して「今の流れに合う」深掘り質問を1〜2個だけ出してください。
-        - 回答しやすいように、質問は短く。
+        - 質問は短く、答えやすく。
       PROMPT
     end
 
-    # ---- ログ（AiLogがある場合のみ）----
     def log_success(user:, post:, requested_at:, responded_at:, response:)
       return unless defined?(AiLog)
       usage = extract_usage(response)

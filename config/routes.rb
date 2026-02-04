@@ -56,13 +56,17 @@ Rails.application.routes.draw do
   get "/buddy_talks/new", to: "buddy_talks#show", as: :new_buddy_talk
 
   # 既存トピック（Post）ごとの会話画面
-  get  "/buddy_talks/:id",           to: "buddy_talks#topic",     as: :buddy_talk_topic
-  post "/buddy_talks/:id/reply",     to: "buddy_talks#reply",     as: :reply_buddy_talk
-  post "/buddy_talks/:id/deep_dive", to: "buddy_talks#deep_dive", as: :deep_dive_buddy_talk
-  post "/buddy_talks/:id/summary",   to: "buddy_talks#summary",   as: :summary_buddy_talk
+  get  "/buddy_talks/:id",              to: "buddy_talks#topic",         as: :buddy_talk_topic
+  post "/buddy_talks/:id/reply",        to: "buddy_talks#reply",         as: :reply_buddy_talk
+  post "/buddy_talks/:id/deep_dive",    to: "buddy_talks#deep_dive",     as: :deep_dive_buddy_talk
+  post "/buddy_talks/:id/summary",      to: "buddy_talks#summary",       as: :summary_buddy_talk
+  post "/buddy_talks/:id/praise_summary", to: "buddy_talks#praise_summary", as: :praise_summary_buddy_talk
+
+  # セッションを切って「新しい会話を始める」（/buddy_talk へ）
+  post "/buddy_talks/:id/restart",      to: "buddy_talks#restart",       as: :restart_buddy_talk
 
   # 閉じる（sessionを切って投稿一覧へ）
-  post "/buddy_talks/:id/close",     to: "buddy_talks#close",     as: :close_buddy_talk
+  post "/buddy_talks/:id/close",        to: "buddy_talks#close",         as: :close_buddy_talk
 
   # -------------------------------------------------------
   # バディ

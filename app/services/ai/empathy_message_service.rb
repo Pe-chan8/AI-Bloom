@@ -1,34 +1,35 @@
 module Ai
   class EmpathyMessageService
-    # 429/一時エラー時のリトライ回数
     RETRY_MAX = 2
-    # リトライ間隔（秒）※指数バックオフのベース
     RETRY_BASE_SLEEP = 1.0
+
+    # 会話履歴：最大何往復ぶん見るか（ユーザー/AI合わせて最大 24 件くらい）
+    RECENT_TURNS = 12
+    # 履歴が長すぎる時の保険（文字数）
+    MAX_LOG_CHARS = 6_000
 
     def initialize(client: OpenAI::Client.new)
       @client = client
     end
 
-    # 投稿 + ユーザー(+任意でバディ) を渡すと共感メッセージ(文字列)を返す
-    # 成功: AiMessage を作って content を返す
-    # 失敗(429等): 例外は投げず、フォールバック文を保存して返す（画面が崩れない）
     def generate_for(post:, user:, buddy: nil)
       buddy ||= user.buddy
 
-      # ここでレート制限（自前）
       Ai::RateLimiter.new(user).check_and_count!(kind: :reply)
 
       requested_at = Time.current
       response     = nil
 
       begin
+        recent_log = build_recent_log(post)
+
         response = with_retry_on_429 do
           @client.chat(
             parameters: {
               model: "gpt-4o-mini",
               messages: [
                 { role: "system", content: system_prompt_for(user:, buddy:) },
-                { role: "user", content: user_prompt(post, user: user) }
+                { role: "user", content: user_prompt(post, user: user, recent_log: recent_log) }
               ],
               temperature: 0.85
             }
@@ -57,10 +58,8 @@ module Ai
 
         cleaned
       rescue Ai::RateLimiter::LimitExceeded
-        # 自前レート制限はそのまま上に投げる（show側で表示分岐してるため）
         raise
       rescue Faraday::TooManyRequestsError => e
-        # OpenAI 429 は「画面が壊れない」方が大事なのでフォールバック保存して返す
         fallback = fallback_message
         ai_message = AiMessage.create!(
           user:    user,
@@ -81,7 +80,6 @@ module Ai
 
         fallback
       rescue => e
-        # その他のエラーもフォールバック保存して返す（必要なら raise に変えてもOK）
         fallback = fallback_message
         ai_message = AiMessage.create!(
           user:    user,
@@ -105,6 +103,44 @@ module Ai
     end
 
     private
+
+    # ---- 会話履歴を作る（BuddyMessage + AiMessage を時系列で混ぜる）----
+    def build_recent_log(post)
+      list = []
+
+      if defined?(BuddyMessage)
+        list += BuddyMessage.where(post: post).order(:created_at).to_a
+      end
+
+      # reply: 受容 / tip: 深掘りやまとめ（運用上tipに載ってる） / weekly: 自己PRまとめ
+      list += AiMessage.where(post: post, kind: [:reply, :tip, :weekly]).order(:created_at).to_a
+
+      list = list.sort_by(&:created_at)
+      list = list.last(RECENT_TURNS * 2)
+
+      text = list.map do |m|
+        if defined?(BuddyMessage) && m.is_a?(BuddyMessage)
+          "【ユーザー】#{m.content}"
+        else
+          kind = m.respond_to?(:kind) ? m.kind.to_s : ""
+          label =
+            case kind
+            when "reply"  then "【AI(受容)】"
+            when "tip"    then "【AI(深掘り/まとめ)】"
+            when "weekly" then "【AI(強みまとめ)】"
+            else "【AI】"
+            end
+          "#{label}#{m.content}"
+        end
+      end.join("\n")
+
+      # 長すぎる場合は末尾優先でカット（直近文脈が重要）
+      if text.length > MAX_LOG_CHARS
+        text = text[-MAX_LOG_CHARS..]
+      end
+
+      text
+    end
 
     # 429 のときだけ短くリトライ（指数バックオフ）
     def with_retry_on_429
@@ -202,15 +238,21 @@ module Ai
       :default
     end
 
-    def user_prompt(post, user:)
+    # ここが変更点：会話ログを渡して「流れを踏まえた受容」にする
+    def user_prompt(post, user:, recent_log:)
       <<~PROMPT
         ユーザーのニックネームは「#{user.nickname.presence || "あなた"}」です。
         このニックネームを必ず最初の2文以内に1回使って呼びかけてください。
         投稿本文に出てくる他人の名前を、ユーザー名として呼ぶのは禁止です。
 
-        ユーザーの今日のつぶやきです。
-        この内容にやさしく共感し、ねぎらいのメッセージを送ってください。
+        あなたは「会話全体の流れ」を踏まえて返信してください。
+        直前だけに反応せず、ユーザーが今どんな状態かを自然につなげて受け止めてください。
+        ただし、ログにないことは断定しないでください。
 
+        会話ログ（時系列）：
+        #{recent_log}
+
+        今回ユーザーが送った内容（最新）：
         ---
         #{post.body}
         ---

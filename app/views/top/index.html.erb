@@ -23,7 +23,7 @@
        "kansai_friend" => "buddies/kansai_friend_buddy.png"
      } %>
 
-  <section class="bg-[#FFF7EA] rounded-3xl border border-amber-100 shadow-sm px-6 py-6 space-y-4">
+  <section class="bg-white/90 backdrop-blur-sm rounded-3xl border border-amber-100 shadow-sm px-6 py-6 space-y-4">
     <div class="flex items-center justify-between">
       <h2 class="text-base font-semibold text-slate-800">あなたのバディ</h2>
     </div>
@@ -59,23 +59,18 @@
   </section>
 
     <!-- メッセージカード -->
-    <div class="bg-white rounded-3xl shadow-sm border border-amber-100 px-6 py-6 flex flex-col gap-4">
+    <div class="bg-white/90 rounded-3xl shadow-sm border border-amber-100 px-6 py-6 flex flex-col gap-4">
       <div class="flex items-center gap-2">
-        <span class="text-lg">💌</span>
         <p class="text-sm font-semibold text-slate-700">
-          AIバディからのメッセージ
+          <%= buddy.display_name %>からのメッセージ
         </p>
       </div>
 
-      <div class="bg-[#FFF7ED] rounded-2xl px-4 py-4 text-sm leading-relaxed text-slate-700">
+      <div class="rounded-2xl border border-amber-100 bg-amber-50/50 px-4 py-4 text-sm leading-relaxed text-slate-700">
         <p class="text-sm text-slate-700 leading-relaxed">
           <%= sample_message_for(buddy) %>
         </p>
       </div>
-
-      <p class="text-[11px] text-slate-400">
-        ※ バディのメッセージは、投稿や診断結果に応じて少しずつ変化していきます（MVPではサンプル文を表示）。
-      </p>
     </div>
   </section>
 </div>

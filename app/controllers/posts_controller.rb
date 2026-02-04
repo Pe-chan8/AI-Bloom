@@ -34,7 +34,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # もうモーダル運用しないなら new は不要だけど、残してもOK
   def new
     @post = Post.new
   end
@@ -61,7 +60,7 @@ class PostsController < ApplicationController
 
       redirect_to post_path(@post), notice: "投稿が完了しました！"
     else
-      # BuddyTalk の入力画面に戻す（render だと変数不足で落ちやすいので redirect 推奨）
+      # BuddyTalk の入力画面に戻す
       redirect_to buddy_talk_path, alert: @post.errors.full_messages.to_sentence
     end
   end
