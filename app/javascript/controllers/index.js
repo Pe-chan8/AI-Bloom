@@ -14,6 +14,3 @@ application.register("hamburger-menu", HamburgerMenuController)
 
 import HelloController from "controllers/hello_controller"
 application.register("hello", HelloController)
-
-import PostModalController from "controllers/post_modal_controller"
-application.register("post-modal", PostModalController)
