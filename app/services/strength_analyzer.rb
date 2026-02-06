@@ -1,20 +1,29 @@
 class StrengthAnalyzer
   TOP_N = 5
 
-  StrengthItem = Struct.new(:label, :description, :evidence, keyword_init: true)
+  StrengthItem = Struct.new(
+    :label,
+    :description,
+    :evidence,
+    keyword_init: true
+  )
 
   def initialize(user)
     @user = user
   end
 
-  # 表示用：StrongItem の配列
+  # Controller / View から使う統一インターフェース
+  def top5
+    top_strengths
+  end
+
+  # 内部ロジック（段階1：仮データ）
   def top_strengths
-    # いまは仮データ（段階1でAI算出に置き換える）
     StrengthDimension.labels.first(TOP_N).map do |label|
       StrengthItem.new(
         label: label,
         description: default_description(label),
-        evidence: default_evidence # 会話の引用が入ると「評価」感が下がる
+        evidence: default_evidence
       )
     end
   end
