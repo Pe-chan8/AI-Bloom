@@ -74,4 +74,10 @@ Rails.application.routes.draw do
   resources :buddies, only: [:index] do
     post :select, on: :member
   end
+
+  # -------------------------------------------------------
+  # 分析
+  # -------------------------------------------------------
+  resource :analysis, only: [:show]
+
 end
