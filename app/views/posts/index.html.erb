@@ -55,17 +55,20 @@
             <%= post.title.presence || "（無題）" %>
           </div>
 
-          <!-- タグ -->
-          <% tags = post.tags_text.to_s.split(",").map(&:strip).reject(&:blank?) %>
-          <% if tags.any? %>
-            <div class="mt-2 flex flex-wrap gap-2 text-xs">
-              <% tags.each do |tag| %>
-                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-50 text-slate-700 border border-slate-200">
-                  #<%= tag %>
-                </span>
-              <% end %>
-            </div>
-          <% end %>
+          <!-- 気分 + タグ -->
+          <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
+            <%# 気分（英語にならない） %>
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-100">
+              気分：<%= post.mood_label %>
+            </span>
+
+            <% tags = post.tags_text.to_s.split(",").map(&:strip).reject(&:blank?) %>
+            <% tags.each do |tag| %>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-50 text-slate-700 border border-slate-200">
+                #<%= tag %>
+              </span>
+            <% end %>
+          </div>
 
           <!-- アクション -->
           <div class="mt-4 flex items-center justify-between">

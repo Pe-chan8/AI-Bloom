@@ -1,8 +1,8 @@
 <nav
-  class="border-t bg-white/95 backdrop-blur"
-  style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;"
+  class="fixed left-0 right-0 bottom-0 z-30 border-t border-slate-200 bg-white"
+  style="padding-bottom: env(safe-area-inset-bottom);"
 >
-  <div class="mx-auto w-full max-w-screen-md px-3 pt-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+  <div class="mx-auto w-full max-w-screen-md px-3 pt-1 pb-2">
     <ul
       class="grid gap-3 justify-items-center text-[11px] w-full"
       style="grid-template-columns: repeat(6, minmax(0, 1fr));"
@@ -10,7 +10,7 @@
       <li>
         <%= link_to root_path, class: "flex flex-col items-center gap-1" do %>
           <%= image_tag "/bottom_nav/home.png", class: "w-8 h-8", alt: "マイルーム" %>
-          <span class="font-semibold">マイルーム</span>
+          <span class="font-semibold">ホーム</span>
         <% end %>
       </li>
 
@@ -31,7 +31,7 @@
       <li>
         <%= link_to buddy_talk_path, class: "flex flex-col items-center gap-1" do %>
           <%= image_tag "/bottom_nav/buddy_talk.png", class: "w-8 h-8", alt: "バディと話す" %>
-          <span class="font-semibold">バディと話す</span>
+          <span class="font-semibold">話す</span>
         <% end %>
       </li>
 

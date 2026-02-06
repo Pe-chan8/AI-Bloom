@@ -1,5 +1,5 @@
 <div class="fixed left-0 right-0 bottom-[var(--bottom-nav-h)] z-40" style="--composer-h: 220px;">
-  <div class="px-4 sm:px-6 pb-4">
+  <div class="px-4 sm:px-6 pb-0">
     <div class="bg-[#FFF6E5]/95 backdrop-blur border border-amber-100 shadow-lg rounded-3xl p-4 sm:p-5">
       <%= form_with url: reply_buddy_talk_path(buddy_talk),
             method: :post,
@@ -21,19 +21,19 @@
         </div>
       <% end %>
 
-      <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <%= button_to "バディと一緒にもう少し振り返る",
+      <div class="mt-3 flex gap-2">
+        <%= button_to "一緒に振り返る",
               deep_dive_buddy_talk_path(buddy_talk),
               method: :post,
               form: { data: { turbo: true, turbo_submits_with: "生成中…" } },
-              class: "rounded-2xl px-4 py-3 text-sm font-semibold
+              class: "flex-1 rounded-2xl px-3 py-2 text-sm font-semibold whitespace-nowrap
                       bg-white border border-amber-200 text-amber-900 hover:bg-amber-50 transition" %>
 
-        <%= button_to "バディにまとめをお願いする",
+        <%= button_to "やさしくまとめる",
               praise_summary_buddy_talk_path(buddy_talk),
               method: :post,
               form: { data: { turbo: true, turbo_submits_with: "まとめ中…" } },
-              class: "rounded-2xl px-4 py-3 text-sm font-semibold
+              class: "flex-1 rounded-2xl px-3 py-2 text-sm font-semibold whitespace-nowrap
                       bg-amber-100 border border-amber-200 text-slate-800 hover:bg-amber-200 transition" %>
       </div>
     </div>

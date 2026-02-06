@@ -38,13 +38,17 @@
     </style>
   </head>
 
-  <%# ここが重要：
-      --bottom-nav-h : ボトムナビの高さ（既定 80px）
-      --composer-h   : buddy_talk composer の高さ（既定 0px / 表示時に上書き）
+  <%# 重要：
+      --bottom-nav-h : ボトムナビ想定の高さ（mainの下余白用）
+      --composer-h   : buddy_talk composer の高さ（buddy_talk側で上書き）
   %>
   <body
     class="min-h-screen flex flex-col bg-[#FFF6E5]"
-    style="--bottom-nav-h: 80px; --composer-h: 0px;"
+    style="
+      --bottom-nav-h: 72px;
+      --composer-h: 0px;
+      <%= yield(:body_style) if content_for?(:body_style) %>
+    "
   >
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -93,7 +97,7 @@
 
     <%# main の padding-bottom を「ボトムナビ + composer」ぶん確保（被り防止） %>
     <main
-      class="flex-1 pt-2"
+      class="flex-1 pt-2 bg-[#FFF6E5]"
       style="padding-bottom: calc(var(--bottom-nav-h) + var(--composer-h) + 24px);"
     >
       <div class="max-w-5xl mx-auto px-4 py-8">
@@ -102,12 +106,7 @@
     </main>
 
     <% if (partial = current_bottom_nav_partial).present? %>
-      <nav
-        style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; height: var(--bottom-nav-h);"
-        class="bg-white/95 border-t border-slate-200"
-      >
-        <%= render "shared/nav/#{partial}" %>
-      </nav>
+      <%= render "shared/nav/#{partial}" %>
     <% end %>
 
     <div id="ga-tracker" data-controller="ga"></div>

@@ -19,11 +19,30 @@ class Post < ApplicationRecord
     その他
   ].freeze
 
-  # 気分：既存のまま（positive / neutral / negative）
+  # 気分
   enum :mood, { positive: 0, neutral: 1, negative: 2 }, prefix: true
 
-  # 公開範囲：private / public（既存のまま）
   enum :visibility, { private: 0, public: 1 }, prefix: true
+
+  # ▼ 表示用ラベル（UIで使う） ▼
+  MOOD_LABELS = {
+    "positive" => "ポジティブ",
+    "neutral"  => "ふつう",
+    "negative" => "ネガティブ"
+  }.freeze
+
+  def mood_label
+    MOOD_LABELS[mood] || mood.to_s
+  end
+
+  VISIBILITY_LABELS = {
+    "private" => "プライベート",
+    "public"  => "公開"
+  }.freeze
+
+  def visibility_label
+    VISIBILITY_LABELS[visibility] || visibility.to_s
+  end
 
   # ▼ バディ投稿MVP（#284）向け：最低限のバリデーション ▼
   validates :posted_at, presence: true
