@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ✅ Tailwind v4: app/assets/tailwind/application.css からの相対パス */
+/* Tailwind v4: app/assets/tailwind/application.css からの相対パス */
 @source "../../views/**/*.erb";
 @source "../../views/**/*.html.erb";
 @source "../../helpers/**/*.rb";
@@ -9,7 +9,6 @@
 @source "../../javascript/**/*.jsx";
 @source "../../javascript/**/*.tsx";
 
-/* （もし ViewComponent / app/components を使ってるなら） */
 @source "../../components/**/*.rb";
 @source "../../components/**/*.erb";
 @source "../../components/**/*.html.erb";
