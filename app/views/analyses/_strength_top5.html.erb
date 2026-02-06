@@ -1,0 +1,26 @@
+<div class="border border-slate-400/60 bg-[#FBF6E3] p-4">
+  <p class="font-semibold mb-3">&lt;強み傾向&gt;</p>
+
+  <p class="text-sm text-slate-600 mb-4">
+    最近の会話から、あなたらしさが出やすいポイントをまとめました。
+  </p>
+
+  <ol class="space-y-3">
+    <% @top_strengths.each_with_index do |item, idx| %>
+      <li class="bg-white/80 border border-slate-200 rounded-xl p-3">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-slate-700 text-xs font-bold">
+            <%= idx + 1 %>
+          </span>
+          <p class="font-semibold text-slate-800"><%= item.label %></p>
+        </div>
+
+        <p class="text-sm text-slate-700 mt-2"><%= item.description %></p>
+
+        <p class="text-xs text-slate-500 mt-2">
+          例：<%= item.evidence %>
+        </p>
+      </li>
+    <% end %>
+  </ol>
+</div>
