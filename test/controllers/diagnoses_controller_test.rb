@@ -18,8 +18,13 @@ class DiagnosesControllerTest < ActionDispatch::IntegrationTest
 
   test "should_post_result" do
     post diagnosis_result_url, params: {
-      answers: { "1" => "3", "2" => "4" } # 実際のパラメータに合わせて調整
+      answers: { "1" => "3", "2" => "4" }
     }
+
+    assert_response :redirect
+    assert_includes response.location, "/diagnosis/result/"
+
+    follow_redirect!
     assert_response :success
   end
 

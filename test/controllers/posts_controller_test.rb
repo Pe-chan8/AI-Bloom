@@ -2,38 +2,35 @@ require "test_helper"
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    # ログインユーザーを作成
     @user = User.create!(
-    email: "test-post@example.com",
-    password: "password123",
-    password_confirmation: "password123",
-    nickname: "ぺぺ"
-  )
-
-    # 紐づく投稿を作成
-    @post = Post.create!(
-      user: @user,
-      body: "最初の投稿",
-      posted_at: Time.current,
-      visibility: :private
+      email: "test-post@example.com",
+      password: "password123",
+      password_confirmation: "password123",
+      nickname: "ぺぺ"
     )
 
-    # Devise のログインフォーム経由でログインする
-    post user_session_path, params: {
-      user: {
-        email:    @user.email,
-        password: "password123"
-      }
-    }
+    @post = Post.create!(
+      user: @user,
+      title: "テスト投稿タイトル",
+      body: "最初の投稿",
+      posted_at: Time.current,
+      visibility: :private,
+      category: "仕事",
+      subcategory: "テスト",
+      mood: "very_positive"
+    )
 
-    # ログイン後にリダイレクトがあれば追従
+    post user_session_path, params: {
+      user: { email: @user.email, password: "password123" }
+    }
     follow_redirect! if response.redirect?
   end
 
   test "should get index when logged in" do
     get posts_path
     assert_response :success
-    assert_includes @response.body, "最初の投稿"
+
+    assert_includes @response.body, "テスト投稿タイトル"
   end
 
   test "should get edit when logged in" do
@@ -44,14 +41,17 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "should update post" do
     patch post_path(@post), params: {
       post: {
-        body: "更新後の投稿",
-        visibility: "private"
+        title: "更新後タイトル",
+        visibility: "private",
+        category: "仕事",
+        subcategory: "テスト"
+        # mood / posted_at も必須ならここに追加
       }
     }
 
-    assert_redirected_to root_path
+    assert_redirected_to buddy_talk_topic_path(@post)
 
     @post.reload
-    assert_equal "更新後の投稿", @post.body
+    assert_equal "更新後タイトル", @post.title
   end
 end
