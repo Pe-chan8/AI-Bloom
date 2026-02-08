@@ -1,9 +1,71 @@
-<% content_for :title, "投稿を編集する - AI-bloom" %>
+<div class="max-w-2xl mx-auto px-4 py-4 space-y-6">
+  <h1 class="text-2xl font-bold text-slate-800">投稿を編集</h1>
 
-<div class="max-w-3xl mx-auto pt-6">
-  <h1 class="text-lg font-semibold mb-4">投稿を編集する</h1>
+  <div class="bg-white border border-amber-100 shadow-sm rounded-3xl px-2 py-3">
+    <%= form_with model: @post, class: "space-y-4" do |f| %>
+      <div class="grid grid-cols-1 gap-3">
+        <div>
+          <%= f.label :posted_at, "日付", class: "block text-sm font-semibold text-slate-700 mb-1" %>
+          <%= f.datetime_local_field :posted_at,
+                value: (@post.posted_at || Time.zone.now).strftime("%Y-%m-%dT%H:%M"),
+                class: "w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" %>
+        </div>
 
-  <div class="bg-white rounded-2xl shadow-md px-6 py-5">
-    <%= render "form", post: @post, mode: :page %>
+        <div>
+          <%= f.label :title, "タイトル", class: "block text-sm font-semibold text-slate-700 mb-1" %>
+          <%= f.text_field :title, class: "w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" %>
+        </div>
+
+        <div>
+          <p class="block text-sm font-semibold text-slate-700 mb-2">気分</p>
+          <% mood_options = [
+            [:very_positive, "とてもいい"],
+            [:positive,      "いい"],
+            [:neutral,       "普通"],
+            [:negative,      "悪い"],
+            [:very_negative, "とても悪い"],
+          ] %>
+          <div class="flex flex-wrap gap-2">
+            <% mood_options.each do |key, label| %>
+              <label class="inline-flex items-center gap-2 rounded-full border px-3 py-2 bg-white text-sm">
+                <%= f.radio_button :mood, key %>
+                <span><%= label %></span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :category, "カテゴリー", class: "block text-sm font-semibold text-slate-700 mb-1" %>
+          <% category_options = [
+            ["仕事", "work"], ["恋愛", "love"], ["家庭", "family"], ["学習", "study"], ["その他", "other"],
+          ] %>
+          <%= f.select :category,
+                options_for_select(category_options, @post.category),
+                { include_blank: "選択してください" },
+                class: "w-full rounded-xl border border-slate-200 px-3 py-2 text-sm bg-white" %>
+        </div>
+
+        <div>
+          <%= f.label :subcategory, "サブカテゴリー", class: "block text-sm font-semibold text-slate-700 mb-1" %>
+          <%= f.text_field :subcategory, class: "w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :body, "本文（編集不可）", class: "block text-sm font-semibold text-slate-700 mb-1" %>
+          <%= f.text_area :body, rows: 6, disabled: true,
+                class: "w-full rounded-2xl border border-slate-200 px-3 py-3 text-sm bg-slate-50 text-slate-500" %>
+          <p class="text-xs text-slate-500 mt-1">※AI返信と整合が崩れるため本文は編集できません</p>
+        </div>
+      </div>
   </div>
+
+    <div class="pt-2 flex gap-2">
+      <%= f.submit "更新する",
+            class: "flex-1 rounded-2xl px-4 py-3 text-sm font-semibold bg-amber-100 border border-amber-200 text-slate-800 hover:bg-amber-200 transition" %>
+      <%= link_to "戻る", buddy_talk_topic_path(@post),
+            data: { turbo: false },
+            class: "px-4 py-3 text-sm font-semibold rounded-2xl border border-slate-200 text-slate-700 hover:bg-slate-50" %>
+    </div>
+  <% end %>
 </div>

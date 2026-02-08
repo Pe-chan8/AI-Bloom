@@ -133,7 +133,7 @@ module Ai
         end
       end
 
-      AiMessage.where(post: post, kind: [:reply, :tip]).order(:created_at).each do |m|
+      AiMessage.where(post: post, kind: [ :reply, :tip ]).order(:created_at).each do |m|
         parts << "【AI】#{m.content}"
       end
 

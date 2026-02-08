@@ -1,4 +1,50 @@
-<h1 class="text-xl font-bold mb-4">自己分析らぼ</h1>
+<div class="max-w-5xl mx-auto px-4 sm:px-6">
+  <div class="flex items-end justify-between gap-3 mt-8">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">
+        自己分析らぼ
+      </h1>
 
-<%= render "strength_top5" %>
-<%= render "weakness_top5" %>
+      <% if @subcategory.present? %>
+        <p class="text-xs text-slate-500 mt-1">
+          サブカテゴリー：<span class="font-semibold"><%= @subcategory %></span>
+        </p>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render "category_tabs", category: @category, subcategory: @subcategory, top_subcategories: @top_subcategories %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 items-stretch">
+    <%= render "strength_top5", items: @strength_items %>
+    <%= render "weakness_top5",
+        items: @weakness_items,
+        show_weakness_items: @show_weakness_items,
+        category: @category,
+        subcategory: @subcategory %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 items-stretch">
+  <%= render "tips_box", 
+      title: "強みをもっと活かすためにできること提案", 
+      tips: @tips_strength %>
+
+  <%= render "tips_box",
+      title: "苦手を克服するために意識してみてほしいこと提案",
+      tips: @tips_weakness,
+      maskable: true,
+      show_weakness_tips: @show_weakness_tips,
+      category: @category,
+      subcategory: @subcategory %>
+  </div>
+
+  <div class="mt-4">
+    <%= render "weekly_summary", text: @weekly_summary, weekly_mood_avg: @weekly_mood_avg, weekly_posts_count: @weekly_posts_count %>
+  </div>
+
+  <div class="mt-4">
+    <%= render "mood_daily", points: @mood_daily_points, category: @category, subcategory: @subcategory %>
+  </div>
+
+  <div class="mt-4"></div>
+</div>

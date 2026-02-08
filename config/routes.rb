@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # 投稿
   # -------------------------------------------------------
-  resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+  resources :posts, only: [ :index, :edit, :update, :destroy ] do
     post :preview_ai, on: :member
   end
 
@@ -71,13 +71,33 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # バディ
   # -------------------------------------------------------
-  resources :buddies, only: [:index] do
+  resources :buddies, only: [ :index ] do
     post :select, on: :member
   end
 
   # -------------------------------------------------------
   # 分析
   # -------------------------------------------------------
-  resource :analysis, only: [:show]
+  resource :analysis, only: [ :show ]
 
+  # -------------------------------------------------------
+  # 利用規約/プライバシーポリシー
+  # -------------------------------------------------------
+  get "/terms", to: "static_pages#terms", as: :terms
+  get "/privacy", to: "static_pages#privacy", as: :privacy
+
+  # -------------------------------------------------------
+  # あなたの頑張りの証（バッジ機能）
+  # -------------------------------------------------------
+  resources :badges, only: %i[index show]
+
+  # -------------------------------------------------------
+  # ユーザー設定
+  # -------------------------------------------------------
+  resource :account_setting, only: %i[show]
+
+  # -------------------------------------------------------
+  # お問い合わせフォーム
+  # -------------------------------------------------------
+  resource :contact, only: %i[new create], path: "contact", path_names: { new: "" }
 end

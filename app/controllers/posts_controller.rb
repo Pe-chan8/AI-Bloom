@@ -1,68 +1,31 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: %i[show edit update destroy]
+  before_action :set_post, only: %i[edit update destroy]
   before_action :authorize_post!, only: %i[edit update destroy]
   before_action :set_bottom_nav
 
   def index
-    base_scope = current_user.posts.order(posted_at: :desc)
-    @q = base_scope.ransack(params[:q])
-    @posts = @q.result(distinct: true).page(params[:page]).per(10)
+    @q = current_user.posts.ransack(params[:q])
+    scope = @q.result
+
+    if params[:date].present?
+      d = Date.parse(params[:date])
+      scope = scope.where(posted_at: d.beginning_of_day..d.end_of_day) # created_atよりposted_at推奨
+    end
+
+    if params[:category].present? && params[:category] != "all"
+      scope = scope.where(category: params[:category])
+    end
+
+    if params[:subcategory].present?
+      scope = scope.where(subcategory: params[:subcategory])
+    end
+
+    @posts = scope.order(posted_at: :desc).page(params[:page])
   end
 
   def show
-    @buddy        = current_user.buddy
-    @rate_limited = false
-
-    @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
-
-    placeholder =
-      @ai_message&.content.to_s.include?("混み合っています") ||
-      @ai_message&.content.to_s.include?("少し時間をおいて")
-
-    if @ai_message.nil? || placeholder
-      begin
-        service = Ai::EmpathyMessageService.new
-        service.generate_for(post: @post, user: current_user, buddy: @buddy)
-        @ai_message = @post.ai_messages.reply.order(created_at: :desc).first
-      rescue Faraday::TooManyRequestsError, Ai::RateLimiter::LimitExceeded
-        @rate_limited = true
-      rescue => e
-        Rails.logger.error "[AI] showでの生成失敗: #{e.class} #{e.message}"
-        @rate_limited = true
-      end
-    end
-  end
-
-  def new
-    @post = Post.new
-  end
-
-  def create
-    @post = current_user.posts.build(post_params)
-
-    # posted_at 未入力対策（念のため）
-    @post.posted_at ||= Time.zone.now
-
-    # tag_list(チェックボックス) → tags_text(保存) に詰める
-    @post.tags_text = Array(params.dig(:post, :tag_list)).join(", ")
-
-    if @post.save
-      begin
-        buddy   = current_user.buddy
-        service = Ai::EmpathyMessageService.new
-        service.generate_for(post: @post, user: current_user, buddy: buddy)
-      rescue => e
-        Rails.logger.error "[AI] create時のメッセージ生成に失敗: #{e.class} #{e.message}"
-      end
-
-      current_user.update!(onboarded_at: Time.current) unless current_user.onboarded?
-
-      redirect_to post_path(@post), notice: "投稿が完了しました！"
-    else
-      # BuddyTalk の入力画面に戻す
-      redirect_to buddy_talk_path, alert: @post.errors.full_messages.to_sentence
-    end
+    redirect_to buddy_talk_topic_path(params[:id]), status: :moved_permanently
   end
 
   def edit; end
@@ -70,8 +33,8 @@ class PostsController < ApplicationController
   def update
     @post.tags_text = Array(params.dig(:post, :tag_list)).join(", ")
 
-    if @post.update(post_params)
-      redirect_to post_path(@post), notice: "投稿を更新しました"
+    if @post.update(post_params_without_body)
+      redirect_to buddy_talk_topic_path(@post), notice: "投稿を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -93,7 +56,18 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:body, :mood, :visibility, :posted_at, :title, :tags_text)
+    params.require(:post).permit(
+      :mood, :visibility, :posted_at, :title,
+      :category, :subcategory,
+      :tags_text
+    )
+  end
+
+  def post_params_without_body
+    params.require(:post).permit(
+      :mood, :visibility, :posted_at, :title,
+      :tags_text, :category, :subcategory
+    )
   end
 
   def set_bottom_nav

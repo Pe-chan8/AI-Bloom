@@ -1,0 +1,22 @@
+<% text = local_assigns[:text].to_s %>
+<% weekly_mood_avg = local_assigns[:weekly_mood_avg] %>
+<% weekly_posts_count = local_assigns[:weekly_posts_count] %>
+
+<div class="border border-slate-800 bg-white p-4 rounded-2xl shadow-sm h-full">
+  <p class="font-semibold mb-2">今週のひとこと振り返り</p>
+
+  <p class="text-sm text-slate-700 mt-2">
+    気分平均：
+    <% if weekly_mood_avg.present? %>
+      <span class="font-bold"><%= weekly_mood_avg %></span> / 5（<%= weekly_posts_count %>件）
+    <% else %>
+      <span class="text-slate-500">（投稿が増えると表示されます）</span>
+    <% end %>
+  </p>
+
+  <% if text.present? %>
+    <p class="text-sm text-slate-700 mt-2"><%= text %></p>
+  <% else %>
+    <p class="text-sm text-slate-500 mt-2">まだ振り返りがありません。</p>
+  <% end %>
+</div>

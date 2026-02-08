@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_031253) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_08_095839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -101,10 +101,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_031253) do
   create_table "posts", force: :cascade do |t|
     t.text "ai_summary"
     t.text "body", null: false
+    t.string "category"
     t.datetime "created_at", null: false
     t.text "image_url"
     t.integer "mood"
     t.datetime "posted_at"
+    t.string "subcategory"
     t.string "tags_text"
     t.string "title"
     t.datetime "updated_at", null: false
@@ -255,15 +257,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_031253) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "ai_logs", "ai_messages"
-  add_foreign_key "ai_logs", "posts"
+  add_foreign_key "ai_logs", "ai_messages", on_delete: :cascade
+  add_foreign_key "ai_logs", "posts", on_delete: :cascade
   add_foreign_key "ai_logs", "users"
   add_foreign_key "ai_message_feedbacks", "ai_messages"
   add_foreign_key "ai_message_feedbacks", "users"
   add_foreign_key "ai_messages", "buddies"
   add_foreign_key "ai_messages", "posts"
   add_foreign_key "ai_messages", "users"
-  add_foreign_key "buddy_messages", "posts"
+  add_foreign_key "buddy_messages", "posts", on_delete: :cascade
   add_foreign_key "buddy_messages", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
