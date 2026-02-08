@@ -168,7 +168,10 @@ class BuddyTalksController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:posted_at, :title, :mood, :body)
+    params.require(:post).permit(
+      :posted_at, :title, :mood, :body,
+      :category, :subcategory
+    )
   end
 
   def build_timeline(post)

@@ -20,35 +20,57 @@
 
     <div>
       <p class="block text-sm font-semibold text-slate-700 mb-2">気分</p>
-      <div class="flex flex-wrap gap-2">
-        <label class="inline-flex items-center gap-2 rounded-full border px-3 py-2 bg-white text-sm">
-          <%= f.radio_button :mood, :positive %>
-          <span>いい日</span>
-        </label>
-        <label class="inline-flex items-center gap-2 rounded-full border px-3 py-2 bg-white text-sm">
-          <%= f.radio_button :mood, :neutral %>
-          <span>普通</span>
-        </label>
-        <label class="inline-flex items-center gap-2 rounded-full border px-3 py-2 bg-white text-sm">
-          <%= f.radio_button :mood, :negative %>
-          <span>悪い日</span>
-        </label>
-      </div>
-    </div>
 
-    <div class="mt-2">
-      <p class="font-semibold text-slate-800">タグ（複数選択OK）</p>
-      <div class="mt-3 flex flex-wrap gap-2">
-        <% selected = (post.tags_text || "").split(",").map(&:strip) %>
-        <% Post::TAG_OPTIONS.each do |tag| %>
-          <label class="inline-flex items-center gap-2 rounded-full border px-4 py-2 bg-white shadow-sm cursor-pointer">
-            <%= check_box_tag "post[tag_list][]", tag, selected.include?(tag),
-                  class: "rounded text-sky-500 focus:ring-sky-300" %>
-            <span class="text-sm text-slate-700"><%= tag %></span>
+      <% mood_options = [
+        [:very_positive, "とてもいい"],
+        [:positive,      "いい"],
+        [:neutral,       "普通"],
+        [:negative,      "悪い"],
+        [:very_negative, "とても悪い"],
+      ] %>
+
+      <div class="flex flex-wrap gap-2">
+        <% mood_options.each do |key, label| %>
+          <label class="inline-flex items-center gap-2 rounded-full border px-3 py-2 bg-white text-sm">
+            <%= f.radio_button :mood, key %>
+            <span><%= label %></span>
           </label>
         <% end %>
       </div>
     </div>
+
+    <!-- タグ→カテゴリー/サブカテゴリー -->
+    <div class="mt-2 space-y-3">
+
+      <% category_options = [
+        ["仕事", "work"],
+        ["恋愛", "love"],
+        ["家庭", "family"],
+        ["学習", "study"],
+        ["その他", "other"],
+      ] %>
+
+      <!-- 常に縦並び -->
+      <div class="space-y-3">
+        <div>
+          <%= f.label :category, "カテゴリー", class: "font-semibold text-slate-800" %>
+          <%= f.select :category,
+                options_for_select(category_options, post.category),
+                { include_blank: "選択してください" },
+                class: "w-full rounded-xl border border-slate-200 px-3 py-2 text-sm bg-white" %>
+          <p class="text-xs text-slate-500 mt-1">※分析タブと連動します</p>
+        </div>
+
+        <div>
+          <%= f.label :subcategory, "サブカテゴリー（任意）", class: "font-semibold text-slate-800" %>
+          <%= f.text_field :subcategory,
+                placeholder: "例）面談 / 体調 / 進捗 / 不安 など",
+                class: "w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" %>
+          <p class="text-xs text-slate-500 mt-1">※自由入力。あとで絞り込みに使えます</p>
+        </div>
+      </div>
+    </div>
+    <!-- ここまで -->
 
     <div>
       <%= f.label :body, "本文（ひとことでもOK）", class: "block text-sm font-semibold text-slate-700 mb-1" %>

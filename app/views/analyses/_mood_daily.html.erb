@@ -1,0 +1,161 @@
+<% points = Array(local_assigns[:points]) %>
+<% category = local_assigns[:category] || "all" %>
+<% subcategory = local_assigns[:subcategory] %>
+
+<div class="border border-slate-800 bg-white p-4 rounded-2xl shadow-sm h-full">
+  <p class="font-semibold">気分の傾向（直近14日）と投稿数</p>
+
+  <p class="text-sm text-slate-600 mt-1">
+    面：気分の平均（1〜5） ／ 線：投稿数（件）
+  </p>
+
+  <% total_posts = points.sum { |p| p.count.to_i } %>
+  <% avg_posts_per_day = (total_posts.to_f / [points.size, 1].max).round(1) %>
+  <% max_posts = points.map { |p| p.count.to_i }.max.to_i %>
+
+  <p class="text-sm text-slate-700 mt-2">
+    直近14日：投稿数 合計 <span class="font-semibold"><%= total_posts %>件</span> /
+    1日平均 <span class="font-semibold"><%= avg_posts_per_day %>件</span> /
+    最大 <span class="font-semibold"><%= max_posts %>件</span>
+  </p>
+
+  <% if points.empty? || total_posts == 0 %>
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 mt-3 text-sm text-slate-700">
+      まだデータがありません（このカテゴリで投稿が増えるとグラフが表示されます）
+    </div>
+  <% else %>
+    <% width = 860; height = 320 %>
+    <% padding_left = 140; padding_right = 70; padding_top = 22; padding_bottom = 64 %>
+
+    <% n = [points.size - 1, 1].max %>
+    <% xs = points.each_with_index.map { |_, i| padding_left + (i.to_f * (width - padding_left - padding_right) / n) } %>
+
+    <%# --- 気分（1..5）を y に --- %>
+    <% mood_y = points.map do |p|
+         if p.avg.present?
+           v = p.avg.to_f.clamp(1.0, 5.0)
+           padding_top + ((5.0 - v) * (height - padding_top - padding_bottom) / 4.0)
+         end
+       end %>
+
+    <%# --- 投稿数を y（右軸）に --- %>
+    <% count_max = [points.map { |p| p.count.to_i }.max.to_i, 1].max %>
+    <% count_y = points.map do |p|
+         v = p.count.to_i
+         # 0..count_max を 上下に割り当て（0は下）
+         padding_top + ((count_max - v).to_f * (height - padding_top - padding_bottom) / count_max.to_f)
+       end %>
+
+    <%# --- ① 気分の面（area）パス：投稿がある日だけ繋ぐ（avg=nilは飛ばす） --- %>
+    <% area_path = +"" %>
+    <% line_path = +"" %>
+    <% started = false %>
+    <% segments = [] %>
+
+    <% xs.zip(mood_y).each_with_index do |(x, y), i| %>
+      <% next if y.nil? %>
+      <% segments << [x, y, i] %>
+    <% end %>
+
+    <%# ベースライン（面を閉じる位置）は「気分=1」のラインに合わせる %>
+    <% mood_base_y = padding_top + ((5.0 - 1.0) * (height - padding_top - padding_bottom) / 4.0) %>
+
+    <% if segments.any? %>
+      <% # 面：最初の点へ移動 %>
+      <% area_path << "M #{segments.first[0]} #{mood_base_y} " %>
+      <% area_path << "L #{segments.first[0]} #{segments.first[1]} " %>
+
+      <% # 線（気分）：点だけ繋ぐ %>
+      <% line_path << "M #{segments.first[0]} #{segments.first[1]} " %>
+
+      <% segments.drop(1).each do |x, y, _i| %>
+        <% area_path << "L #{x} #{y} " %>
+        <% line_path << "L #{x} #{y} " %>
+      <% end %>
+
+      <% # 面：最後の点からベースラインへ戻して閉じる %>
+      <% area_path << "L #{segments.last[0]} #{mood_base_y} Z" %>
+    <% end %>
+
+    <%# --- ② 投稿数（右軸）ラインパス：全日（0含む）で繋ぐ --- %>
+    <% count_path = +"" %>
+    <% xs.zip(count_y).each_with_index do |(x, y), i| %>
+      <% if i == 0 %>
+        <% count_path << "M #{x} #{y}" %>
+      <% else %>
+        <% count_path << " L #{x} #{y}" %>
+      <% end %>
+    <% end %>
+
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 mt-3 overflow-x-auto">
+      <div class="min-w-[860px]">
+        <svg viewBox="0 0 <%= width %> <%= height %>" class="w-full h-72">
+          <%# 横グリッド（気分） %>
+          <% (1..5).each do |level| %>
+            <% y = padding_top + ((5 - level) * (height - padding_top - padding_bottom) / 4.0) %>
+            <line x1="<%= padding_left %>" y1="<%= y %>" x2="<%= width - padding_right %>" y2="<%= y %>" stroke="rgba(15,23,42,0.08)" />
+          <% end %>
+
+          <%# 左ラベル（気分） %>
+          <% labels = { 5 => "とてもいい（5）", 4 => "いい（4）", 3 => "普通（3）", 2 => "悪い（2）", 1 => "とても悪い（1）" } %>
+          <% labels.each do |level, text| %>
+            <% y = padding_top + ((5 - level) * (height - padding_top - padding_bottom) / 4.0) %>
+            <text x="<%= padding_left - 16 %>" y="<%= y + 4 %>" text-anchor="end" font-size="12" fill="rgba(15,23,42,0.55)">
+              <%= text %>
+            </text>
+          <% end %>
+
+          <%# 右ラベル（投稿数） %>
+          <text x="<%= width - 10 %>" y="<%= padding_top + 10 %>" text-anchor="end" font-size="12" fill="rgba(15,23,42,0.55)">
+            投稿数（件）
+          </text>
+
+          <%# X軸ラベル %>
+          <% xs.each_with_index do |x, i| %>
+            <text x="<%= x %>" y="<%= height - 18 %>" text-anchor="middle" font-size="11" fill="rgba(15,23,42,0.60)">
+              <%= points[i].date.strftime("%m/%d") %>
+            </text>
+          <% end %>
+
+          <%# 面（気分）を先に描画：薄く %>
+          <% if area_path.present? %>
+            <path d="<%= area_path %>" fill="rgba(56,189,248,0.22)" stroke="none" />
+          <% end %>
+
+          <%# 気分ライン（面の上に描画） %>
+          <% if line_path.present? %>
+            <path d="<%= line_path %>" fill="none" stroke="rgba(15,23,42,0.72)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <% end %>
+
+          <%# 気分の点（投稿がある日だけ） %>
+          <% xs.zip(mood_y).each_with_index do |(x, y), i| %>
+            <% next if y.nil? %>
+            <% href = posts_path(date: points[i].date.to_s, category: category, subcategory: subcategory) %>
+            <a href="<%= href %>">
+              <circle cx="<%= x %>" cy="<%= y %>" r="10" fill="transparent" />
+              <circle cx="<%= x %>" cy="<%= y %>" r="5" fill="rgba(245,158,11,0.9)" />
+            </a>
+          <% end %>
+
+          <%# 投稿数ライン（右軸） %>
+          <path d="<%= count_path %>" fill="none" stroke="rgba(37,99,235,0.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+          <%# 投稿数の点＆ラベル %>
+          <% xs.zip(count_y).each_with_index do |(x, y), i| %>
+            <% c = points[i].count.to_i %>
+            <circle cx="<%= x %>" cy="<%= y %>" r="4" fill="rgba(37,99,235,0.85)" />
+            <% if c > 0 %>
+              <text x="<%= x %>" y="<%= y - 10 %>" text-anchor="middle" font-size="11" fill="rgba(15,23,42,0.65)">
+                <%= c %>件
+              </text>
+            <% end %>
+          <% end %>
+        </svg>
+      </div>
+    </div>
+
+    <p class="text-xs text-slate-500 mt-2">
+      ※気分は「投稿がある日」だけ点が付き、その点だけが繋がります。
+    </p>
+  <% end %>
+</div>

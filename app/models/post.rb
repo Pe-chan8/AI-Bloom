@@ -1,6 +1,8 @@
 class Post < ApplicationRecord
   belongs_to :user
   has_many :ai_messages, dependent: :destroy
+  has_many :buddy_messages, dependent: :destroy
+  has_many :ai_logs, dependent: :destroy
 
   TAG_OPTIONS = %w[
     仕事
@@ -19,16 +21,24 @@ class Post < ApplicationRecord
     その他
   ].freeze
 
-  # 気分
-  enum :mood, { positive: 0, neutral: 1, negative: 2 }, prefix: true
+  # 気分（5段階）
+  enum :mood, {
+    very_negative: 0,
+    negative: 1,
+    neutral: 2,
+    positive: 3,
+    very_positive: 4
+  }, prefix: true
 
   enum :visibility, { private: 0, public: 1 }, prefix: true
 
   # ▼ 表示用ラベル（UIで使う） ▼
   MOOD_LABELS = {
-    "positive" => "ポジティブ",
-    "neutral"  => "ふつう",
-    "negative" => "ネガティブ"
+    "very_positive" => "とてもいい",
+    "positive"     => "いい",
+    "neutral"      => "ふつう",
+    "negative"     => "悪い",
+    "very_negative" => "とても悪い"
   }.freeze
 
   def mood_label
@@ -44,11 +54,12 @@ class Post < ApplicationRecord
     VISIBILITY_LABELS[visibility] || visibility.to_s
   end
 
-  # ▼ バディ投稿MVP（#284）向け：最低限のバリデーション ▼
+  # ▼ 最低限のバリデーション ▼
   validates :posted_at, presence: true
   validates :body, presence: true
   validates :title, length: { maximum: 60 }, allow_blank: true
   validates :tags_text, length: { maximum: 100 }, allow_blank: true
+  validates :category, presence: true, on: :create
 
   # ▼ Ransack で検索可能にするカラムを許可 ▼
   def self.ransackable_attributes(_auth_object = nil)
@@ -61,6 +72,8 @@ class Post < ApplicationRecord
       updated_at
       mood
       visibility
+      category
+      subcategory
     ]
   end
 end

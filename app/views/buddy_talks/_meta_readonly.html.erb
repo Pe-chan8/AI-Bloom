@@ -17,6 +17,15 @@
           <%= record.title.presence || "（未入力）" %>
         </p>
       </div>
+
+      <!-- 投稿情報を編集（Content missing対策） -->
+      <div class="shrink-0">
+        <%= link_to "投稿情報を編集",
+              edit_post_path(record),
+              data: { turbo_frame: "_top" },
+              class: "inline-flex items-center rounded-full px-3 py-2 text-xs font-semibold
+                      border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" %>
+      </div>
     </div>
   </div>
 

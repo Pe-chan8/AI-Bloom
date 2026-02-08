@@ -40,6 +40,8 @@
 
   <% if @posts.any? %>
     <div class="space-y-4">
+      <% label_map = {"work"=>"仕事","love"=>"恋愛","family"=>"家庭","study"=>"学習","other"=>"その他"} %>
+
       <% @posts.each do |post| %>
         <div class="bg-white rounded-2xl shadow-sm border border-amber-100 px-5 py-4">
           <!-- 日時 -->
@@ -55,12 +57,23 @@
             <%= post.title.presence || "（無題）" %>
           </div>
 
-          <!-- 気分 + タグ -->
+          <!-- 気分 + カテゴリ/サブカテゴリ + タグ -->
           <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
-            <%# 気分（英語にならない） %>
-            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-100">
-              気分：<%= post.mood_label %>
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-100 font-semibold">
+              気分：<%= post.respond_to?(:mood_label) ? post.mood_label : (post.mood_i18n rescue post.mood) %>
             </span>
+
+            <% if post.category.present? %>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-white text-slate-700 border border-slate-200 font-semibold">
+                <%= label_map[post.category] || post.category %>
+              </span>
+            <% end %>
+
+            <% if post.subcategory.present? %>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-white text-slate-700 border border-slate-200 font-semibold">
+                <%= post.subcategory %>
+              </span>
+            <% end %>
 
             <% tags = post.tags_text.to_s.split(",").map(&:strip).reject(&:blank?) %>
             <% tags.each do |tag| %>
@@ -70,20 +83,26 @@
             <% end %>
           </div>
 
-          <!-- アクション -->
-          <div class="mt-4 flex items-center justify-between">
+          <!-- アクション（入れ子防止：カード全体リンクはしない） -->
+          <div class="mt-4 flex items-center justify-between gap-2">
             <%= link_to "このトピックの会話を開く",
-                        buddy_talk_topic_path(post),
-                        data: { turbo: false },
-                        class: "text-sm font-semibold text-amber-800 hover:underline" %>
+                  buddy_talk_topic_path(post),
+                  data: { turbo: false },
+                  class: "text-sm font-semibold text-amber-800 hover:underline" %>
+
+            <div class="flex items-center gap-2">
+              <%= link_to "編集",
+                    edit_post_path(post),
+                    data: { turbo_frame: "_top" },
+                    class: "inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-semibold
+                            border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" %>
 
             <%= button_to "削除",
                   post_path(post),
                   method: :delete,
-                  data: { turbo_confirm: "本当にこの投稿を削除しますか？" },
-                  class: "text-xs px-4 py-2 rounded-full
-                          border border-rose-300 text-rose-600
-                          hover:bg-rose-50" %>
+                  form: { data: { turbo_confirm: "本当にこの投稿を削除しますか？" } },
+                  class: "text-xs px-4 py-2 rounded-full border border-rose-300 text-rose-600 hover:bg-rose-50" %>
+            </div>
           </div>
         </div>
       <% end %>

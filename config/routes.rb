@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # 投稿
   # -------------------------------------------------------
-  resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+  resources :posts, only: [:index, :edit, :update, :destroy] do
     post :preview_ai, on: :member
   end
 
