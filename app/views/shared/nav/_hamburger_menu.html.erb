@@ -42,12 +42,12 @@
         お問い合わせ
       <% end %>
 
-      <%= link_to "#{others_path}#terms", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+      <%= link_to "#{terms_path}#terms", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
           data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
         利用規約
       <% end %>
 
-      <%= link_to "#{others_path}#privacy", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+      <%= link_to "#{privacy_path}#privacy", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
           data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
         プライバシーポリシー
       <% end %>
