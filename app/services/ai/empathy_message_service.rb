@@ -113,7 +113,7 @@ module Ai
       end
 
       # reply: 受容 / tip: 深掘りやまとめ（運用上tipに載ってる） / weekly: 自己PRまとめ
-      list += AiMessage.where(post: post, kind: [:reply, :tip, :weekly]).order(:created_at).to_a
+      list += AiMessage.where(post: post, kind: [ :reply, :tip, :weekly ]).order(:created_at).to_a
 
       list = list.sort_by(&:created_at)
       list = list.last(RECENT_TURNS * 2)

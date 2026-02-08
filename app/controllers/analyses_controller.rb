@@ -32,7 +32,7 @@ class AnalysesController < ApplicationController
     ) || []
 
     # ▼ サブカテゴリ表示用（上位10）※「表示だけ」にする
-    posts_scope = current_user.posts.where.not(subcategory: [nil, ""])
+    posts_scope = current_user.posts.where.not(subcategory: [ nil, "" ])
     posts_scope = posts_scope.where(category: @category) unless @category == "all"
     @top_subcategories = posts_scope.group(:subcategory).order(Arel.sql("COUNT(*) DESC")).limit(10).count || {}
 

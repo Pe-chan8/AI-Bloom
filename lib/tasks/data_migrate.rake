@@ -6,13 +6,13 @@ namespace :data do
       "恋愛" => "love",
       "家庭" => "family",
       "学習" => "study",
-      "その他" => "other",
+      "その他" => "other"
     }
 
     updated = 0
 
     User.find_each do |u|
-      u.posts.where(category: [nil, ""]).find_each do |p|
+      u.posts.where(category: [ nil, "" ]).find_each do |p|
         t = p.tags_text.to_s
         next if t.blank?
 

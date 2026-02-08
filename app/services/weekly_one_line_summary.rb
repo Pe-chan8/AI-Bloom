@@ -14,7 +14,7 @@ class WeeklyOneLineSummary
     moods = posts.where.not(mood: nil).pluck(:mood).map(&:to_i)
     avg = moods.any? ? (moods.sum.to_f / moods.size) : nil
 
-    top_sub = posts.where.not(subcategory: [nil, ""])
+    top_sub = posts.where.not(subcategory: [ nil, "" ])
                    .group(:subcategory)
                    .order(Arel.sql("COUNT(*) DESC"))
                    .limit(1)

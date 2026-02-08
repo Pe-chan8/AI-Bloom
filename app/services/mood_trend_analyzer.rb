@@ -13,7 +13,7 @@ class MoodTrendAnalyzer
 
     buckets = (0...days).map do |i|
       d = (start_date + i.days)
-      [d, []]
+      [ d, [] ]
     end.to_h
 
     scope = @user.posts

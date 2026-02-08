@@ -9,6 +9,6 @@ class CreateBuddyMessages < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :buddy_messages, [:post_id, :created_at]
+    add_index :buddy_messages, [ :post_id, :created_at ]
   end
 end

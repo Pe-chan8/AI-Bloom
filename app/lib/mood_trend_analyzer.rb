@@ -27,7 +27,7 @@ class MoodTrendAnalyzer
     end_date   = Time.zone.today
     start_date = end_date - (days - 1).days
 
-    buckets = (0...days).map { |i| [(start_date + i.days).to_date, []] }.to_h
+    buckets = (0...days).map { |i| [ (start_date + i.days).to_date, [] ] }.to_h
 
     scope = @user.posts
                  .where(posted_at: start_date.beginning_of_day..end_date.end_of_day)
