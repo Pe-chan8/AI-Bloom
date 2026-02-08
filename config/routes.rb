@@ -95,4 +95,9 @@ Rails.application.routes.draw do
   # ユーザー設定
   # -------------------------------------------------------
   resource :account_setting, only: %i[show]
+
+  # -------------------------------------------------------
+  # お問い合わせフォーム
+  # -------------------------------------------------------
+  resource :contact, only: %i[new create], path: "contact", path_names: { new: "" }
 end
