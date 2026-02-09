@@ -1,54 +1,78 @@
 <% content_for :title, "バディと話す - AI-bloom" %>
 
-<% buddy = current_user.buddy || Buddy.find_by(code: "normal") %>
+<% buddy   = current_user.buddy || Buddy.find_by(code: "normal") %>
 <% started = @buddy_talk.present? && @buddy_talk.persisted? %>
+<% record  = @buddy_talk.respond_to?(:post) ? @buddy_talk.post : @buddy_talk %>
 
 <div class="w-full">
-  <%# 未開始のときだけ表示 %>
   <% unless started %>
     <div class="px-4 sm:px-6 pt-3">
-      <h1 class="text-2xl font-bold text-slate-800 text-center">バディと話す</h1>
-      <p class="text-xm text-slate-500 text-center mt-2 mb-4">
-        まずは出来事を入力して、バディとの会話をはじめよう 🌻
-      </p>
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <h1 class="text-2xl font-bold text-slate-800 text-center">バディと話す</h1>
+        <%= render "shared/help_tip",
+              text: "ここは、今日の出来事を\nバディと一緒にやさしく振り返る場所です。\nひとことでも大丈夫。",
+              position: "right" %>
+      </div>
     </div>
   <% end %>
 
-  <%# =========================
-      メタ（未開始: 入力 / 開始後: header下に固定）
-      ========================= %>
   <%= turbo_frame_tag "buddy_meta" do %>
     <% if started %>
-      <%# 固定メタ（ヘッダー高さぶん下げる） %>
-      <div class="fixed left-0 right-0 top-[72px] z-50">
-        <div class="px-4 sm:px-6">
-          <div class="bg-[#FFF6E5] border border-amber-100 shadow-sm rounded-3xl px-2 py-3">
-            <%= render "meta_readonly", buddy_talk: @buddy_talk %>
+      <%# controllerのスコープ内に spacer を入れる %>
+      <div data-controller="meta-collapse"
+           data-meta-collapse-storage-key-value="buddy-meta-collapsed">
 
-            <%# 右下ボタン（2つ） %>
-            <div class="flex justify-end gap-2 pt-2">
-              <%= button_to "投稿一覧へ",
-                    close_buddy_talk_path(@buddy_talk),
-                    method: :post,
-                    form: { data: { turbo: false } },
-                    class: "text-xs px-4 py-1.5 rounded-full
-                            border border-slate-200 bg-white
-                            text-slate-600 hover:bg-slate-50" %>
+        <%# 固定メタ（ヘッダー下） %>
+        <div class="fixed left-0 right-0 top-[72px] z-50">
+          <div class="px-4 sm:px-6">
+            <div class="bg-white/90 backdrop-blur border border-amber-200 shadow-md rounded-3xl px-2 py-3">
 
-              <%= button_to "新しい会話を始める",
-                    restart_buddy_talk_path(@buddy_talk),
-                    method: :post,
-                    form: { data: { turbo: false } },
-                    class: "text-xs px-4 py-1.5 rounded-full
-                            border border-amber-200 bg-amber-100
-                            text-amber-900 hover:bg-amber-200" %>
+              <%# ▼ メタ本体（閉じるとここだけ hidden） %>
+              <div data-meta-collapse-target="box">
+                <%= render "meta_readonly", buddy_talk: @buddy_talk %>
+              </div>
+
+              <%# ▼ ボタン列（常に表示：閉じても「開く」で戻せる） %>
+              <div class="flex flex-wrap justify-end gap-2 pt-2">
+                <button type="button"
+                        data-meta-collapse-target="toggle"
+                        data-action="click->meta-collapse#toggle"
+                        class="text-xs px-4 py-1.5 rounded-full
+                               border border-slate-200 bg-white
+                               text-slate-600 hover:bg-slate-50">
+                  閉じる
+                </button>
+
+                <%= link_to "編集",
+                      edit_post_path(record),
+                      data: { turbo_frame: "_top" },
+                      class: "inline-flex items-center rounded-full px-3 py-2 text-xs font-semibold
+                              border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" %>
+
+                <%= button_to "投稿一覧",
+                      close_buddy_talk_path(@buddy_talk),
+                      method: :post,
+                      form: { data: { turbo: false } },
+                      class: "text-xs px-4 py-1.5 rounded-full
+                              border border-slate-200 bg-white
+                              text-slate-600 hover:bg-slate-50" %>
+
+                <%= button_to "新しい会話",
+                      restart_buddy_talk_path(@buddy_talk),
+                      method: :post,
+                      form: { data: { turbo: false } },
+                      class: "text-xs px-4 py-1.5 rounded-full
+                              border border-amber-200 bg-amber-100
+                              text-amber-900 hover:bg-amber-200" %>
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
 
-      <%# 固定メタの高さ分のスペーサー（被り防止） %>
-      <div class="h-[170px]"></div>
+        <%# ▼ 固定メタの高さ分スペーサー（閉じたら消える） %>
+        <div class="h-[170px]" data-meta-collapse-target="spacer"></div>
+      </div>
     <% else %>
       <div class="px-4 sm:px-6">
         <%= render "meta_form", post: @post %>
@@ -56,13 +80,9 @@
     <% end %>
   <% end %>
 
-  <%# =========================
-      チャット（下詰めにして「メッセージ下の空白」をなくす）
-      ========================= %>
   <div class="px-4 sm:px-6">
     <%= turbo_frame_tag "buddy_chat" do %>
       <% if started %>
-        <%# 72px(ヘッダー相当) + 170px(メタスペーサー) + bottom_nav + composer(だいたい) を差し引いて高さ確保 %>
         <div class="pb-44 min-h-[calc(100vh-72px-170px-var(--bottom-nav-h)-220px)] flex flex-col justify-end">
           <%= render "chat", buddy_talk: @buddy_talk, messages: @messages, buddy: buddy %>
         </div>
@@ -71,9 +91,6 @@
   </div>
 </div>
 
-<%# =========================
-    入力（固定フッター）
-    ========================= %>
 <%= turbo_frame_tag "buddy_composer" do %>
   <% if started %>
     <%= render "composer", buddy_talk: @buddy_talk %>

@@ -1,16 +1,23 @@
 <% content_for :title, "マイルーム - AI-Bloom" %>
 
 <div class="max-w-5xl mx-auto px-6 py-4 space-y-8">
-
-  <!-- タイトル -->
   <header class="space-y-1">
-    <p class="text-xs text-sky-700 mb-4 ">日々の小さな頑張りをやさしく抱きしめる自己理解アプリ AI-Bloom</p>
-    <h1 class="text-2xl font-bold text-slate-800">マイルーム</h1>
+    <p class="text-xs text-sky-700 mb-4">
+      日々の小さな頑張りをやさしく抱きしめる<br>
+      自己理解アプリ AI-Bloom
+    </p>
   </header>
 
-  <p class="text-xm text-slate-500 mt-2">
-    あなたのバディが今日も応援しています。ゆっくりしていってくださいね。
-  </p>
+  <div class="flex justify-center">
+    <div class="inline-flex items-center gap-2">
+      <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
+        ホーム
+      </h1>
+      <%= render "shared/help_tip",
+        text: "ここはあなたのマイルームです。\nバディとゆっくり過ごしてね。",
+        position: "right" %>
+    </div>
+  </div>
 
   <%# ====================================== %>
   <%# 今日のバディ（current_buddy を反映） %>
@@ -54,8 +61,8 @@
     </div>
 
     <p class="mt-3 text-[11px] text-slate-500">
-      ※ バディは診断結果や選択に応じて変更できます。
-      あとから「バディ選択」画面で変更可能です。
+      ※ バディは、診断結果やあなたの選択に合わせて変えられます。<br>
+        あとから「バディ選択」画面で、いつでも変更できます。
     </p>
     <%= link_to "バディを変更する",
              buddies_path,

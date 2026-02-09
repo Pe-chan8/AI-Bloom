@@ -2,19 +2,19 @@
 
 <section class="px-4 py-10">
   <div class="mx-auto w-full max-w-4xl">
-    <!-- タイトル帯 -->
-    <div class="mx-auto w-fit rounded-xl bg-amber-50/60 px-10 py-3">
-      <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
-        アカウント設定
-      </h1>
+    <div class="flex justify-center">
+      <div class="inline-flex items-center gap-2">
+        <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
+          アカウント設定
+        </h1>
+        <%= render "shared/help_tip",
+          text: "あなたのアカウントや通知設定を管理します。",
+          position: "right" %>
+      </div>
     </div>
 
-    <p class="text-xm text-slate-500 text-center mt-2 mb-6">
-      あなたのアカウントや通知設定を管理します。
-    </p>
-
     <!-- 枠 -->
-    <div class="mt-10 rounded-3xl border-2 border-slate-900/80 bg-white/90 backdrop-blur-sm rounded-3xl border border-amber-100 shadow-sm p-8">
+    <div class="mt-10 bg-white rounded-2xl shadow-sm border border-amber-100 p-8">
       <!-- 入力ブロック -->
       <div class="rounded-3xl border-2 border-slate-900/60 p-6">
         <div class="space-y-6">

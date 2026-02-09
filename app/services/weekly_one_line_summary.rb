@@ -34,8 +34,8 @@ class WeeklyOneLineSummary
 
   def category_label(key)
     {
-      "all" => "総合", "work" => "仕事", "love" => "恋愛",
+      "all" => "全カテゴリー", "work" => "仕事", "love" => "恋愛",
       "family" => "家庭", "study" => "学習", "other" => "その他"
-    }[key] || "総合"
+    }[key] || "全カテゴリー"
   end
 end

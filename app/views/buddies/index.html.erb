@@ -1,14 +1,15 @@
 <% content_for :title, "バディ選択 - AI-Bloom" %>
 
-<div class="max-w-4xl mx-auto px-6 py-8 space-y-6">
-
-  <header class="space-y-1">
-    <h1 class="text-2xl font-bold text-slate-800">バディ選択</h1>
-  </header>
-
-  <p class="text-xm text-slate-500 mt-2">
-    あなたにぴったりのバディを選ぼう
-  </p>
+  <div class="flex justify-center">
+    <div class="inline-flex items-center gap-2">
+      <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
+        バディ選択
+      </h1>
+      <%= render "shared/help_tip",
+        text: "あなたのバディを選んでください。\nバディはいつでも変更できます。",
+        position: "right" %>
+    </div>
+  </div>
 
   <% buddy_image_paths = {
        "normal"        => "buddies/normal_buddy.png",
@@ -181,6 +182,6 @@
   <% end %>
 
   <p class="text-[11px] text-slate-500">
-    ※ バディを選択していない場合は、自動的に「ノーマルバディ」が設定された状態として扱います。
+    ※ バディを選んでいない場合は、<br>
+      自動的に「ノーマルバディ」があなたを見守ります。
   </p>
-</div>

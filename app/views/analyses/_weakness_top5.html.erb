@@ -5,7 +5,7 @@
 
 <div class="border border-slate-800 bg-white p-4 rounded-2xl shadow-sm h-full">
   <div class="flex items-center justify-between gap-3 mb-3">
-    <p class="font-bold">&lt;苦手傾向&gt;</p>
+    <p class="font-bold">苦手傾向</p>
 
     <% if show_items %>
       <%= link_to "▶︎ 閉じる",
@@ -16,7 +16,7 @@
             ),
             class: "text-sm font-bold text-slate-700 hover:text-slate-900 underline" %>
     <% else %>
-      <%= link_to "▶︎ 見たいときに見てね",
+      <%= link_to "▶︎ 見る",
             analysis_path(
               category: category,
               subcategory: subcategory,
@@ -29,7 +29,7 @@
 
   <% if show_items %>
     <p class="text-sm text-slate-600 mb-4">
-      最近の会話から、つまずきやすいポイントをまとめました。（“評価”ではなく「気づき」）
+      最近の会話から、少し疲れやすくなりやすいポイントをまとめました。
     </p>
 
     <% if items.empty? %>
@@ -54,8 +54,11 @@
     <% end %>
   <% else %>
     <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
-      <p class="font-bold">＊苦手の克服やストレスを避けたいときに開いてね</p>
-      <p class="text-xs text-slate-500 mt-1">（通常は非表示。必要なときだけ見られます）</p>
+      <p class="font-bold">
+         ＊しんどいときや、<br>
+           無理を減らしたいときにだけ見てください
+      </p>
+      <p class="text-xs text-slate-500 mt-1">（必要なときだけ開けば大丈夫です）</p>
     </div>
   <% end %>
 </div>

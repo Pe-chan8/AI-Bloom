@@ -1,11 +1,14 @@
 <% content_for :title, "バディと話す - AI-bloom" %>
 
-<div class="max-w-3xl mx-auto px-4 sm:px-6 pb-56 space-y-6">
-  <div class="pt-3">
-    <h1 class="text-2xl font-bold text-slate-800 text-center">バディと話す</h1>
-    <p class="text-xs text-slate-500 text-center mt-2">
-      まずは出来事を入力 → バディとの会話を緩く楽しんでくださいね。
-    </p>
+  <div class="flex justify-center">
+    <div class="inline-flex items-center gap-2">
+      <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
+        バディと話す
+      </h1>
+      <%= render "shared/help_tip",
+        text: "バディとの会話を通じて、あなたの気持ちや考えを整理しましょう。",
+        position: "right" %>
+    </div>
   </div>
 
   <%= render "meta_readonly", buddy_talk: @post %>

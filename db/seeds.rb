@@ -2,24 +2,72 @@ DiagnosisQuestion.destroy_all
 
 questions = [
   # Amiable
-  { position: 1,  content: "困っている人がいると、自分の予定を変えてでも手を差し伸べたくなることがある。", category: "amiable" },
-  { position: 2,  content: "本当は違う意見を持っていても、その場の空気を乱したくなくて言わないことがある。", category: "amiable" },
-  { position: 3,  content: "誰かに感謝されると、「もっと力になりたい」と思う自分がいる。", category: "amiable" },
+  {
+    position: 1,
+    content: "困っている人を見ると、自分の予定よりも「助けたい気持ち」が先に出ることがある。",
+    category: "amiable"
+  },
+  {
+    position: 2,
+    content: "本当は違う意見があっても、その場の雰囲気を大切にしたくて言わないことがある。",
+    category: "amiable"
+  },
+  {
+    position: 3,
+    content: "誰かに感謝されると、「もっと役に立てたらいいな」と感じることがある。",
+    category: "amiable"
+  },
 
   # Analytical
-  { position: 4,  content: "決めごとは、感情より「根拠」「情報量」「確度」で判断したいほうだ。", category: "analytical" },
-  { position: 5,  content: "何かを始める前に、できるだけ「最悪のシナリオ」も想定しておきたい。", category: "analytical" },
-  { position: 6,  content: "人から相談されたとき、まず状況の整理から入ってしまうことが多い。", category: "analytical" },
+  {
+    position: 4,
+    content: "何かを決めるときは、気持ちよりも「理由」や「情報」を大事にしたいほうだ。",
+    category: "analytical"
+  },
+  {
+    position: 5,
+    content: "新しいことを始める前に、うまくいかなかった場合も少し想像しておきたい。",
+    category: "analytical"
+  },
+  {
+    position: 6,
+    content: "誰かから相談されると、まず状況を整理して考えたくなることが多い。",
+    category: "analytical"
+  },
 
   # Expressive
-  { position: 7,  content: "話しているうちに、アイデアが湧いてきて話題がどんどん広がることがある。", category: "expressive" },
-  { position: 8,  content: "落ち込んでいる人を見ると、つい気持ちを明るくする言葉をかけたくなる。", category: "expressive" },
-  { position: 9,  content: "テンションが上がると、ついつい身振り手振りやリアクションが大きくなってしまう。", category: "expressive" },
+  {
+    position: 7,
+    content: "話しているうちにアイデアが浮かんで、話題がどんどん広がることがある。",
+    category: "expressive"
+  },
+  {
+    position: 8,
+    content: "元気がなさそうな人を見ると、気持ちが少し明るくなる言葉をかけたくなる。",
+    category: "expressive"
+  },
+  {
+    position: 9,
+    content: "気分が高まると、つい身振りや表情が大きくなることがある。",
+    category: "expressive"
+  },
 
   # Driving
-  { position: 10, content: "やるべきことが明確になると、つい他の予定よりも優先して動きたくなる。", category: "driving" },
-  { position: 11, content: "曖昧な状態が続くより、多少荒くても“結論を早く出す”方がスッキリする。", category: "driving" },
-  { position: 12, content: "「できるかどうか」より「まずやってみる」が先にくることが多い。", category: "driving" }
+  {
+    position: 10,
+    content: "やることがはっきりすると、他の予定よりも優先して動きたくなる。",
+    category: "driving"
+  },
+  {
+    position: 11,
+    content: "迷い続けるより、ある程度決めて前に進めたほうが気持ちが楽になる。",
+    category: "driving"
+  },
+  {
+    position: 12,
+    content: "「できるかどうか」よりも、「まずやってみよう」と思うことが多い。",
+    category: "driving"
+  }
 ]
 
 questions.each do |q|
@@ -31,7 +79,7 @@ puts "DiagnosisQuestion seeds created: #{DiagnosisQuestion.count}"
 # ---------- Buddies ----------
 Buddy.find_or_create_by!(code: "normal") do |b|
   b.name            = "ノーマルバディ"
-  b.description     = "まだタイプ診断をしていない人向けの、やさしい基本バディです。"
+  b.description     = "まだタイプ診断をしていない人向けの、やさしい基本バディのペンギンです。"
   b.tone_hint       = "落ち着いていて、フラット。相手を責めず、寄り添う口調。"
   b.persona_prompt  = <<~PROMPT
     あなたは穏やかでニュートラルな相談相手です。
@@ -41,7 +89,7 @@ end
 
 Buddy.find_or_create_by!(code: "analytical") do |b|
   b.name           = "分析型バディ"
-  b.description    = "事実やパターンを見つけるのが得意な、冷静分析バディ。"
+  b.description    = "事実やパターンを見つけるのが得意な、冷静分析バディのペンギン。"
   b.tone_hint      = "ロジカルで落ち着いた口調。データや具体例が好き。"
   b.persona_prompt = <<~PROMPT
     あなたは冷静で論理的なアドバイザーです。
@@ -51,7 +99,7 @@ end
 
 Buddy.find_or_create_by!(code: "amiable") do |b|
   b.name           = "協調型バディ"
-  b.description    = "あたたかく支えてくれる、聞き上手バディ。"
+  b.description    = "あたたかく支えてくれる、聞き上手バディのペンギン。"
   b.tone_hint      = "やさしく、感情に寄り添う。承認・共感の言葉が多め。"
   b.persona_prompt = <<~PROMPT
     あなたはとても共感的でやさしい聞き役です。
@@ -61,7 +109,7 @@ end
 
 Buddy.find_or_create_by!(code: "driving") do |b|
   b.name           = "行動型バディ"
-  b.description    = "背中をポンっと押してくれる、行動派バディ。"
+  b.description    = "背中をポンっと押してくれる、行動派バディのペンギン。"
   b.tone_hint      = "前向きでテンポ良く。小さな一歩を提案する。"
   b.persona_prompt = <<~PROMPT
     あなたはポジティブで行動を後押しするコーチです。
@@ -71,7 +119,7 @@ end
 
 Buddy.find_or_create_by!(code: "expressive") do |b|
   b.name           = "表現型バディ"
-  b.description    = "一緒に喜びを分かち合う、お祭りバディ。"
+  b.description    = "一緒に喜びを分かち合う、お祭りバディのペンギン。"
   b.tone_hint      = "感情表現豊かで、ちょっとオーバーに褒める。絵文字も似合う。"
   b.persona_prompt = <<~PROMPT
     あなたは明るくて表現豊かな応援団長です。

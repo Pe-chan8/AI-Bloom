@@ -61,7 +61,7 @@
         <% (1..5).each do |level| %>
           <% y = padding + ((5 - level) * (height - padding*2) / 4.0) %>
           <line
-            x1="<%= left_pad %>" y1="<%= y %>"
+            x1="<%= padding %>" y1="<%= y %>"
             x2="<%= width - padding %>" y2="<%= y %>"
             stroke="rgba(15,23,42,0.08)"
           />
@@ -71,7 +71,7 @@
         <% labels = { 5 => "とてもいい", 4 => "いい", 3 => "普通", 2 => "悪い", 1 => "とても悪い" } %>
         <% labels.each do |level, text| %>
           <% y = padding + ((5 - level) * (height - padding*2) / 4.0) %>
-          <text x="<%= left_pad - 10 %>" y="<%= y + 4 %>" text-anchor="end" font-size="11" fill="rgba(15,23,42,0.55)">
+          <text x="<%= padding - 10 %>" y="<%= y + 4 %>" text-anchor="end" font-size="11" fill="rgba(15,23,42,0.55)">
             <%= text %>
           </text>
         <% end %>
