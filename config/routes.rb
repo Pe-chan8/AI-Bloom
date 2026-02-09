@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   resources :posts, only: [ :index, :edit, :update, :destroy ] do
     post :preview_ai, on: :member
+    resource :favorite, only: %i[create destroy]
   end
 
   # -------------------------------------------------------

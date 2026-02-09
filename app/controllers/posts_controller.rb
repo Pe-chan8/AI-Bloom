@@ -10,7 +10,7 @@ class PostsController < ApplicationController
 
     if params[:date].present?
       d = Date.parse(params[:date])
-      scope = scope.where(posted_at: d.beginning_of_day..d.end_of_day) # created_atよりposted_at推奨
+      scope = scope.where(posted_at: d.beginning_of_day..d.end_of_day)
     end
 
     if params[:category].present? && params[:category] != "all"
@@ -22,6 +22,9 @@ class PostsController < ApplicationController
     end
 
     @posts = scope.order(posted_at: :desc).page(params[:page])
+
+    post_ids = @posts.map(&:id)
+    @favorite_post_ids = current_user.favorites.where(post_id: post_ids).pluck(:post_id)
   end
 
   def show

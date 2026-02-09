@@ -91,24 +91,45 @@
             </div>
 
             <!-- アクション（入れ子防止：カード全体リンクはしない） -->
-            <div class="mt-4 flex items-center justify-between gap-2">
-              <%= link_to "会話を開く",
+            <div class="mt-4 flex items-center gap-2">
+              <%= link_to "▶︎ 会話を開く",
                     buddy_talk_topic_path(post),
                     data: { turbo: false },
-                    class: "text-sm font-semibold text-amber-800 hover:underline" %>
+                    class: "shrink-0 text-sm font-semibold text-amber-800 hover:underline hover:bg-amber-50 px-1 py-1 rounded-md" %>
 
-              <div class="flex items-center gap-2">
+              <div class="ml-auto flex items-center gap-2 justify-end">
+                <% if user_signed_in? %>
+                  <% favorited = @favorite_post_ids.include?(post.id) %>
+
+                  <% if favorited %>
+                    <%= button_to "★ お気に入り",
+                      post_favorite_path(post),
+                      method: :delete,
+                      form: { class: "inline-block" },
+                      class: "inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-semibold
+                              border border-amber-200 bg-amber-50 text-slate-700 hover:bg-amber-50/70" %>
+                  <% else %>
+                    <%= button_to "☆ お気に入り",
+                      post_favorite_path(post),
+                      method: :post,
+                      form: { class: "inline-block" },
+                      class: "inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-semibold
+                              border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" %>
+                  <% end %>
+                <% end %>
+
                 <%= link_to "編集",
                       edit_post_path(post),
                       data: { turbo_frame: "_top" },
                       class: "inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-semibold
                               border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" %>
 
-              <%= button_to "削除",
-                    post_path(post),
-                    method: :delete,
-                    form: { data: { turbo_confirm: "本当にこの投稿を削除しますか？" } },
-                    class: "text-xs px-4 py-2 rounded-full border border-rose-300 text-rose-600 hover:bg-rose-50" %>
+                <%= button_to "削除",
+                      post_path(post),
+                      method: :delete,
+                      form: { class: "inline-block", data: { turbo_confirm: "本当にこの投稿を削除しますか？" } },
+                      class: "inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-semibold
+                              border border-rose-300 text-rose-600 hover:bg-rose-50" %>
               </div>
             </div>
           </div>

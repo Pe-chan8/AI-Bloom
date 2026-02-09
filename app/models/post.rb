@@ -1,7 +1,9 @@
 class Post < ApplicationRecord
   belongs_to :user
-  has_many :ai_messages, dependent: :destroy
   has_many :buddy_messages, dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :favorited_users, through: :favorites, source: :user
+  has_many :ai_messages, dependent: :destroy
   has_many :ai_logs, dependent: :destroy
 
   TAG_OPTIONS = %w[
