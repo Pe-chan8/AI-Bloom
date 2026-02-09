@@ -3,25 +3,21 @@
 <% subcategory = local_assigns[:subcategory] %>
 
 <div class="border border-slate-800 bg-white p-4 rounded-2xl shadow-sm h-full">
-  <p class="font-semibold">気分の傾向（直近14日）と投稿数</p>
+  <p class="font-semibold">気分のうつりかわりと投稿数（直近14日）</p>
 
   <p class="text-sm text-slate-600 mt-1">
-    面：気分の平均（1〜5） ／ 線：投稿数（件）
+    面：気分の平均（1〜5） ／ 線：投稿数
+  </p>
+
+  <p class="text-xs text-slate-500 mt-1">
+    ※横にスライドすると、日ごとの変化が見られます（ざっくり眺めるだけでも大丈夫です）
   </p>
 
   <% total_posts = points.sum { |p| p.count.to_i } %>
-  <% avg_posts_per_day = (total_posts.to_f / [points.size, 1].max).round(1) %>
-  <% max_posts = points.map { |p| p.count.to_i }.max.to_i %>
-
-  <p class="text-sm text-slate-700 mt-2">
-    直近14日：投稿数 合計 <span class="font-semibold"><%= total_posts %>件</span> /
-    1日平均 <span class="font-semibold"><%= avg_posts_per_day %>件</span> /
-    最大 <span class="font-semibold"><%= max_posts %>件</span>
-  </p>
 
   <% if points.empty? || total_posts == 0 %>
     <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 mt-3 text-sm text-slate-700">
-      まだデータがありません（このカテゴリで投稿が増えるとグラフが表示されます）
+      まだ記録がありません（投稿が増えるとグラフが表示されます）
     </div>
   <% else %>
     <% width = 860; height = 320 %>
@@ -42,14 +38,12 @@
     <% count_max = [points.map { |p| p.count.to_i }.max.to_i, 1].max %>
     <% count_y = points.map do |p|
          v = p.count.to_i
-         # 0..count_max を 上下に割り当て（0は下）
          padding_top + ((count_max - v).to_f * (height - padding_top - padding_bottom) / count_max.to_f)
        end %>
 
-    <%# --- ① 気分の面（area）パス：投稿がある日だけ繋ぐ（avg=nilは飛ばす） --- %>
+    <%# --- ① 気分の面（area）パス：avg=nilは飛ばす --- %>
     <% area_path = +"" %>
     <% line_path = +"" %>
-    <% started = false %>
     <% segments = [] %>
 
     <% xs.zip(mood_y).each_with_index do |(x, y), i| %>
@@ -57,15 +51,11 @@
       <% segments << [x, y, i] %>
     <% end %>
 
-    <%# ベースライン（面を閉じる位置）は「気分=1」のラインに合わせる %>
     <% mood_base_y = padding_top + ((5.0 - 1.0) * (height - padding_top - padding_bottom) / 4.0) %>
 
     <% if segments.any? %>
-      <% # 面：最初の点へ移動 %>
       <% area_path << "M #{segments.first[0]} #{mood_base_y} " %>
       <% area_path << "L #{segments.first[0]} #{segments.first[1]} " %>
-
-      <% # 線（気分）：点だけ繋ぐ %>
       <% line_path << "M #{segments.first[0]} #{segments.first[1]} " %>
 
       <% segments.drop(1).each do |x, y, _i| %>
@@ -73,11 +63,10 @@
         <% line_path << "L #{x} #{y} " %>
       <% end %>
 
-      <% # 面：最後の点からベースラインへ戻して閉じる %>
       <% area_path << "L #{segments.last[0]} #{mood_base_y} Z" %>
     <% end %>
 
-    <%# --- ② 投稿数（右軸）ラインパス：全日（0含む）で繋ぐ --- %>
+    <%# --- ② 投稿数ライン（右軸）：全日（0含む） --- %>
     <% count_path = +"" %>
     <% xs.zip(count_y).each_with_index do |(x, y), i| %>
       <% if i == 0 %>
@@ -117,12 +106,12 @@
             </text>
           <% end %>
 
-          <%# 面（気分）を先に描画：薄く %>
+          <%# 面（気分） %>
           <% if area_path.present? %>
             <path d="<%= area_path %>" fill="rgba(56,189,248,0.22)" stroke="none" />
           <% end %>
 
-          <%# 気分ライン（面の上に描画） %>
+          <%# 気分ライン %>
           <% if line_path.present? %>
             <path d="<%= line_path %>" fill="none" stroke="rgba(15,23,42,0.72)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
           <% end %>
@@ -137,7 +126,7 @@
             </a>
           <% end %>
 
-          <%# 投稿数ライン（右軸） %>
+          <%# 投稿数ライン %>
           <path d="<%= count_path %>" fill="none" stroke="rgba(37,99,235,0.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 
           <%# 投稿数の点＆ラベル %>

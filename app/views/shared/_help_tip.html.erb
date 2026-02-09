@@ -1,0 +1,24 @@
+<% text = local_assigns[:text].to_s %>
+
+<span class="relative inline-flex items-center"
+      data-controller="help-tip"
+      data-help-tip-text-value="<%= text %>">
+
+  <button type="button"
+          aria-label="ヘルプ"
+          class="ml-2 inline-flex h-6 w-6 items-center justify-center
+                 rounded-full border border-slate-200 bg-white text-slate-500
+                 hover:bg-slate-50"
+          data-action="click->help-tip#toggle">
+    ?
+  </button>
+
+  <div data-help-tip-target="panel"
+       class="hidden absolute top-8 z-50
+              left-1/2 -translate-x-1/2
+              w-[min(80vw,340px)] min-w-[220px]
+              rounded-2xl border border-slate-200 bg-white
+              px-3 py-2 text-xs leading-relaxed text-slate-700 shadow-lg">
+    <p class="whitespace-pre-line break-words"></p>
+  </div>
+</span>

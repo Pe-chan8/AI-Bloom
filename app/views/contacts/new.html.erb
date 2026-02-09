@@ -1,16 +1,16 @@
 <% content_for :title, "お問い合わせ - AI-Bloom" %>
 
 <section id="contact" class="px-4 py-10">
-  <div class="mx-auto w-full max-w-3xl">
-    <div class="mx-auto w-fit rounded-xl bg-amber-50/60 px-10 py-3">
+  <div class="flex justify-center">
+    <div class="inline-flex items-center gap-2">
       <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
         お問い合わせ
       </h1>
+      <%= render "shared/help_tip",
+        text: "ご意見・ご質問・不具合報告などがありましたら\nこちらからお気軽にお問い合わせください。",
+        position: "right" %>
     </div>
-
-    <p class="mt-2 mb-6 text-sm text-slate-500 text-center">
-      ご質問・ご意見・不具合報告などがございましたら、以下のフォームよりお気軽にお問い合わせください。
-    </p>
+  </div>
 
     <div class="mt-10 bg-white rounded-2xl shadow-sm border border-amber-100 p-8">
       <div class="space-y-6">

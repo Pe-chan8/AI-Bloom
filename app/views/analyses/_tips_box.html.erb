@@ -21,7 +21,7 @@
               ),
               class: "text-sm font-bold text-slate-700 hover:text-slate-900 underline" %>
       <% else %>
-        <%= link_to "▶︎ 見たいときに見てね",
+        <%= link_to "▶︎ 見る",
               analysis_path(
                 category: category,
                 subcategory: subcategory,
@@ -35,8 +35,8 @@
 
   <% if maskable && !show_tips %>
     <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
-      <p class="font-bold">＊必要なときだけ開ける提案です</p>
-      <p class="text-xs text-slate-500 mt-1">（通常は非表示。必要なときだけ見られます）</p>
+      <p class="font-bold">＊もう一歩踏み出すための提案です</p>
+      <p class="text-xs text-slate-500 mt-1">（必要なときだけ開けば大丈夫です）</p>
     </div>
   <% else %>
     <% if tips.empty? %>

@@ -1,14 +1,15 @@
 <% content_for :title, "投稿一覧 - AI-bloom" %>
 
-<div class="max-w-5xl mx-auto px-6 py-4 space-y-8">
-
-  <div class="space-y-1">
-    <h1 class="text-2xl font-bold text-slate-800">投稿一覧</h1>
+  <div class="flex justify-center">
+    <div class="inline-flex items-center gap-2">
+      <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
+        投稿一覧
+      </h1>
+      <%= render "shared/help_tip",
+        text: "これまでの記録をまとめて見られます。\n検索や編集もできます。",
+        position: "right" %>
+    </div>
   </div>
-
-    <p class="text-xm text-slate-500 mt-2">
-    過去の投稿の一覧です。キーワードでさがしたり、編集・削除もできます。
-    </p>
 
   <div class="max-w-3xl mx-auto pt-6 space-y-6 px-6 pb-10">
     <!-- 検索フォームカード -->
@@ -91,7 +92,7 @@
 
             <!-- アクション（入れ子防止：カード全体リンクはしない） -->
             <div class="mt-4 flex items-center justify-between gap-2">
-              <%= link_to "このトピックの会話を開く",
+              <%= link_to "会話を開く",
                     buddy_talk_topic_path(post),
                     data: { turbo: false },
                     class: "text-sm font-semibold text-amber-800 hover:underline" %>
