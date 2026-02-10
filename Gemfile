@@ -78,3 +78,9 @@ gem "ransack"
 gem "ruby-openai", "~> 8.3"
 
 gem "meta-tags"
+
+gem "image_processing", "~> 1.2"
+
+group :production do
+  gem "stackprof", require: false
+end
