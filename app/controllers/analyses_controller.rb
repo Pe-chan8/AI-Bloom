@@ -38,30 +38,30 @@ class AnalysesController < ApplicationController
 
     # ▼ 仮データ（AI化するまで）
     @strength_items = [
-      { label: "共感力", short: "誰かに寄り添うのが上手" },
-      { label: "継続",   short: "小さく積み上げられる" },
-      { label: "挑戦",   short: "一歩踏み出せる" },
-      { label: "分析",   short: "状況整理が得意" },
-      { label: "表現",   short: "言語化して伝えられる" }
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" }
     ]
 
     @weakness_items = [
-      { label: "抱え込み",   short: "一人で背負いがち" },
-      { label: "過集中",     short: "視野が狭くなりやすい" },
-      { label: "自己否定",   short: "自分に厳しくなりがち" },
-      { label: "遠慮しすぎ", short: "我慢が溜まりやすい" },
-      { label: "反芻",       short: "考えがループしやすい" }
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" },
+      { label: "準備中", short: "少々お待ちください" }
     ]
 
     @tips_strength = [
-      "「できたこと」を1行でも記録して、再現性を増やす",
-      "強みが出た場面に「サブカテゴリー」を付けて、後から見返しやすくする",
-      "週1回、強みTOP1を意識して使う“日”を作る"
+      "少々お待ちください",
+      "少々お待ちください",
+      "少々お待ちください"
     ]
     @tips_weakness = [
-      "苦手が出たら「事実 / 解釈 / 次の一手」を3分割でメモ",
-      "抱え込み対策：相談先を“1人固定”しておく（迷わない）",
-      "反芻対策：寝る前は“結論を出さない時間”を決める"
+      "少々お待ちください",
+      "少々お待ちください",
+      "少々お待ちください"
     ]
 
     @weekly_summary = WeeklyOneLineSummary.new(current_user).call(category: @category) || ""

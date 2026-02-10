@@ -1,30 +1,32 @@
-class MoodTrendAnalyzer
+class StrengthAnalyzer
   Point = Struct.new(:date, :avg, :count, keyword_init: true)
 
   def initialize(user)
     @user = user
   end
 
-  # days: 14 なら「今日含めて直近14日」
+  def call
+    {}
+  end
+
+  # とりあえず mood_trend と同じ形で日次ポイントを返す（必要なら）
   def daily_points(days: 14, category: "all", subcategory: nil)
     end_date   = Time.zone.today
     start_date = end_date - (days - 1).days
 
-    buckets = (0...days).map do |i|
-      d = (start_date + i.days).to_date
-      [ d, [] ]
-    end.to_h
+    buckets = (0...days).map { |i| [ (start_date + i.days).to_date, [] ] }.to_h
 
-    posts = @user.posts
-      .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
-      .where.not(mood: nil)
+    scope = @user.posts
+                 .where(posted_at: start_date.beginning_of_day..end_date.end_of_day)
+                 .where.not(mood: nil)
 
-    posts = posts.where(category: category) unless category == "all"
-    posts = posts.where(subcategory: subcategory) if subcategory.present?
+    scope = scope.where(category: category) if category.present? && category != "all"
+    scope = scope.where(subcategory: subcategory) if subcategory.present?
 
-    posts.find_each do |post|
-      d = post.created_at.to_date
+    scope.find_each do |post|
+      d = post.posted_at.to_date
       next unless buckets.key?(d)
+
       buckets[d] << mood_score(post.mood)
     end
 
@@ -36,8 +38,10 @@ class MoodTrendAnalyzer
 
   private
 
-  # moodが数値(1..5)想定。
-  def mood_score(mood_value)
-    mood_value.to_i
+  # Post.mood enum 0..4想定 → 1..5へ
+  def mood_score(mood)
+    MoodTrendAnalyzer::MoodScale.score(mood)
+  rescue NameError
+    mood.to_i
   end
 end
