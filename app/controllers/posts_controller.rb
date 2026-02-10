@@ -5,26 +5,50 @@ class PostsController < ApplicationController
   before_action :set_bottom_nav
 
   def index
-    @q = current_user.posts.ransack(params[:q])
+    base = current_user.posts
+    @q = base.ransack(params[:q])
     scope = @q.result
 
     if params[:date].present?
-      d = Date.parse(params[:date])
-      scope = scope.where(posted_at: d.beginning_of_day..d.end_of_day)
+      begin
+        d = Date.parse(params[:date])
+        scope = scope.where(posted_at: d.beginning_of_day..d.end_of_day)
+      rescue ArgumentError
+      end
+    end
+
+    if params[:mood].present? && params[:mood] != "all"
+      scope = scope.where(mood: params[:mood])
     end
 
     if params[:category].present? && params[:category] != "all"
       scope = scope.where(category: params[:category])
     end
 
-    if params[:subcategory].present?
-      scope = scope.where(subcategory: params[:subcategory])
+    favorite_post_ids = current_user.favorites.select(:post_id)
+    if params[:favorite].present? && params[:favorite] != "all"
+      scope =
+        case params[:favorite]
+        when "yes"
+          scope.where(id: favorite_post_ids)
+        when "no"
+          scope.where.not(id: favorite_post_ids)
+        else
+          scope
+        end
     end
 
-    @posts = scope.order(posted_at: :desc).page(params[:page])
+    sort = params[:sort].presence || "date_desc"
+    scope =
+      case sort
+      when "date_asc"
+        scope.order(posted_at: :asc)
+      else
+        scope.order(posted_at: :desc)
+      end
 
-    post_ids = @posts.map(&:id)
-    @favorite_post_ids = current_user.favorites.where(post_id: post_ids).pluck(:post_id)
+    @favorite_post_ids = current_user.favorites.pluck(:post_id)
+    @posts = scope.page(params[:page])
   end
 
   def show
