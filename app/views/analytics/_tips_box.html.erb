@@ -9,7 +9,7 @@
 
 <div class="border border-amber-100 bg-white p-4 rounded-2xl shadow-sm h-full">
   <div class="flex items-center justify-between gap-3 mb-3">
-    <p class="font-bold"><%= title %></p>
+    <p class="font-bold text-slate-900"><%= title %></p>
 
     <% if maskable %>
       <% if show_tips %>
@@ -34,18 +34,18 @@
   </div>
 
   <% if maskable && !show_tips %>
-    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700">
-      <p class="font-bold">＊必要なときだけ開けば大丈夫です</p>
-      <p class="text-xs text-amber-500 mt-1">（今は閉じたままでOKです）</p>
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-slate-700">
+      <p class="font-bold text-slate-900">＊必要なときだけ開けば大丈夫です</p>
+      <p class="text-xs text-slate-500 mt-1">（今は閉じたままでOKです）</p>
     </div>
   <% else %>
     <% if tips.empty? %>
-      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700">
-        <p class="font-bold">データが不足しています</p>
-        <p class="text-xs text-amber-500 mt-1">（投稿が増えると、ヒントがより具体的になります）</p>
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-slate-700">
+        <p class="font-bold text-slate-900">データが不足しています</p>
+        <p class="text-xs text-slate-500 mt-1">（投稿が増えると、ヒントがより具体的になります）</p>
       </div>
     <% else %>
-      <ul class="list-disc pl-5 text-sm text-amber-700 space-y-2">
+      <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
         <% tips.each do |t| %>
           <li><%= t %></li>
         <% end %>
