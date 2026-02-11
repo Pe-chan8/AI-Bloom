@@ -112,7 +112,7 @@ class AnalyticsController < ApplicationController
   end
 
   def top_subcategories_for(category)
-    posts_scope = current_user.posts.where.not(subcategory: [nil, ""])
+    posts_scope = current_user.posts.where.not(subcategory: [ nil, "" ])
     posts_scope = posts_scope.where(category: category) unless category == "all"
     posts_scope.group(:subcategory).order(Arel.sql("COUNT(*) DESC")).limit(10).count || {}
   end

@@ -105,7 +105,7 @@ module Ai
 
       if category.to_s == "all"
         stats[:category_top5] =
-          base_scope.where.not(category: [nil, ""])
+          base_scope.where.not(category: [ nil, "" ])
                     .group(:category)
                     .order(Arel.sql("COUNT(*) DESC"))
                     .limit(5)

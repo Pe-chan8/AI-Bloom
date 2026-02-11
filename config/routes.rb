@@ -79,7 +79,7 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # 分析
   # -------------------------------------------------------
-  resource :analytics, only: [:show] do
+  resource :analytics, only: [ :show ] do
     post :generate_feedback
   end
 

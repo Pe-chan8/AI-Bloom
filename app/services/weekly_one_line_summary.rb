@@ -48,7 +48,7 @@ class WeeklyOneLineSummary
 
     # 「多い言葉」：まずは subcategory の最多（軽量）
     top_word =
-      posts.where.not(subcategory: [nil, ""])
+      posts.where.not(subcategory: [ nil, "" ])
            .group(:subcategory)
            .order(Arel.sql("COUNT(*) DESC"))
            .limit(1)
