@@ -1,8 +1,6 @@
 class DiagnosesController < ApplicationController
   before_action :set_bottom_nav
 
-  skip_before_action :authenticate_user!, only: [ :top, :questions, :result, :result_page, :share ]
-
   VALID_TYPES = %w[expressive driving amiable analytical].freeze
 
   def top
