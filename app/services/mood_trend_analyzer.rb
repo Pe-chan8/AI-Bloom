@@ -11,7 +11,7 @@ class MoodTrendAnalyzer
 
     buckets = (0...days).map do |i|
       d = (start_date + i.days).to_date
-      [d, { posts: 0, scores: [] }]
+      [ d, { posts: 0, scores: [] } ]
     end.to_h
 
     scope = @user.posts.where(posted_at: start_date.beginning_of_day..end_date.end_of_day)
