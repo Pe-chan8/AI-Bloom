@@ -24,10 +24,14 @@ class StrengthAnalyzer
     scope = scope.where(subcategory: subcategory) if subcategory.present?
 
     scope.find_each do |post|
-      d = post.posted_at.to_date
+      d = post.posted_at&.to_date
+      next if d.nil?
       next unless buckets.key?(d)
 
-      buckets[d] << mood_score(post.mood)
+      score = MoodScale.score(post.mood)
+      next if score.nil?
+
+      buckets[d] << score
     end
 
     buckets.map do |d, scores|

@@ -14,18 +14,19 @@ class MoodTrendAnalyzer
 
     buckets = (0...days).map do |i|
       d = (start_date + i.days).to_date
-      [ d, [] ]
+      [d, []]
     end.to_h
 
     scope = @user.posts
-                .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
-                .where.not(mood: nil)
+                 .where(posted_at: start_date.beginning_of_day..end_date.end_of_day)
+                 .where.not(mood: nil)
 
     scope = scope.where(category: category) if category.present? && category != "all"
     scope = scope.where(subcategory: subcategory) if subcategory.present?
 
     scope.find_each do |post|
-      d = post.created_at.to_date
+      d = post.posted_at&.to_date
+      next if d.nil?
       next unless buckets.key?(d)
 
       score = MoodScale.score(post.mood)
