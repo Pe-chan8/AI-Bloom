@@ -12,7 +12,7 @@
     <% tabs.each do |label, key| %>
       <% active = (category == key) %>
 
-      <%= link_to analysis_path(
+      <%= link_to analytics_path(
             category: key,
             subcategory: subcategory,
             show_weakness_items: (params[:show_weakness_items].presence),

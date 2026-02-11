@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_09_121729) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_11_012858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -53,15 +53,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_09_121729) do
 
   create_table "ai_messages", force: :cascade do |t|
     t.bigint "buddy_id"
+    t.string "category", default: "all", null: false
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.integer "kind", default: 2, null: false
     t.bigint "post_id"
     t.integer "sentiment"
+    t.string "subcategory"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["buddy_id"], name: "index_ai_messages_on_buddy_id"
     t.index ["post_id"], name: "index_ai_messages_on_post_id"
+    t.index ["user_id", "kind", "category", "subcategory", "created_at"], name: "idx_ai_messages_analysis_scope"
     t.index ["user_id"], name: "index_ai_messages_on_user_id"
   end
 
