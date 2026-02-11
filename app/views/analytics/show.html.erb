@@ -12,9 +12,9 @@
 <%= render "category_tabs", category: @category, subcategory: @subcategory, top_subcategories: @top_subcategories %>
 
 <% if @analysis_data_insufficient %>
-  <div class="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+  <div class="mt-4 rounded-2xl border border-amber-200 bg-white px-4 py-3 text-sm text-amber-700">
     <p class="font-semibold">データが不足しています</p>
-    <p class="mt-1 text-xs text-slate-500">
+    <p class="mt-1 text-xs text-amber-500">
       このカテゴリの投稿がもう少し増えると、あなたらしさやヒントをより具体的に整理できます。
     </p>
   </div>
@@ -24,7 +24,7 @@
       generate_feedback_analytics_path(category: @category, subcategory: @subcategory),
       method: :post,
       data: { disable_with: "生成中…" },
-      class: "inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:ring-offset-2" %>
+      class: "inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-amber-800 shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:ring-offset-2" %>
   </div>
 <% end %>
 
