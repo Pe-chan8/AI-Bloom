@@ -7,11 +7,8 @@ class ApplicationController < ActionController::Base
   # meta-tags（全ページ共通の初期値）
   before_action :set_default_meta_tags
 
-  # ログイン必須（public は除外）
-  before_action :authenticate_user!, unless: :public_controller?
-
-  # オンボーディング強制リダイレクト（Devise と public は除外）
-  before_action :redirect_to_onboarding_if_needed, unless: :public_controller?
+  # 未ログインの人が protected に来たら onboarding に送る（public は除外）
+  before_action :redirect_guest_to_onboarding, unless: :public_controller?
 
   helper_method :current_buddy, :bottom_nav_key
 
@@ -49,16 +46,12 @@ class ApplicationController < ActionController::Base
     %w[top onboardings diagnoses].include?(controller_name)
   end
 
-  def redirect_to_onboarding_if_needed
-    # Devise では絶対に動かさない
-    return if devise_controller?
+  # 未ログインはオンボへ（ログイン済みなら通常ページ）
+  def redirect_guest_to_onboarding
+    return if user_signed_in?
 
-    return unless user_signed_in?
-    return if current_user.onboarded?
-    return if controller_name == "onboardings"
-
-    # オンボ完了のきっかけになる画面は通す
-    return if controller_name.in?(%w[diagnoses buddies posts])
+    # 任意：ログイン後に元のページへ戻したいなら有効化
+    store_location_for(:user, request.fullpath) if request.get?
 
     redirect_to onboarding_path
   end
