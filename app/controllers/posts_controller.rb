@@ -61,7 +61,9 @@ class PostsController < ApplicationController
     @post.tags_text = Array(params.dig(:post, :tag_list)).join(", ")
 
     if @post.update(post_params_without_body)
-      redirect_to buddy_talk_topic_path(@post), notice: "投稿を更新しました"
+      redirect_to buddy_talk_topic_path(@post),
+                  notice: "投稿を更新しました",
+                  status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end

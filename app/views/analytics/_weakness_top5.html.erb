@@ -1,23 +1,26 @@
 <% items = Array(local_assigns[:items]) %>
+<% title = local_assigns[:title].presence || "無理が溜まりやすいところ" %>
+<% description = local_assigns[:description].presence %>
+
 <% category = local_assigns[:category] || "all" %>
 <% subcategory = local_assigns[:subcategory] %>
 <% show_items = local_assigns[:show_weakness_items] %>
 
 <div class="border border-slate-800 bg-white p-4 rounded-2xl shadow-sm h-full">
   <div class="flex items-center justify-between gap-3 mb-3">
-    <p class="font-bold">苦手傾向</p>
+    <p class="font-bold"><%= title %></p>
 
     <% if show_items %>
-      <%= link_to "▶︎ 閉じる",
-            analysis_path(
+      <%= link_to "▲ 閉じる",
+            analytics_path(
               category: category,
               subcategory: subcategory,
               show_weakness_tips: (params[:show_weakness_tips].presence)
             ),
             class: "text-sm font-bold text-slate-700 hover:text-slate-900 underline" %>
     <% else %>
-      <%= link_to "▶︎ 見る",
-            analysis_path(
+      <%= link_to "▼ 見る",
+            analytics_path(
               category: category,
               subcategory: subcategory,
               show_weakness_items: "1",
@@ -27,14 +30,24 @@
     <% end %>
   </div>
 
-  <% if show_items %>
-    <p class="text-sm text-slate-600 mb-4">
-      最近の会話から、少し疲れやすくなりやすいポイントをまとめました。
-    </p>
+  <% if !show_items %>
+    <!-- 閉じている時は、内容も説明も一切出さない -->
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
+      <p class="font-bold">＊しんどいときや、無理を減らしたいときにだけ開いてください</p>
+      <p class="text-xs text-slate-500 mt-1">（元気なときは閉じたままで大丈夫です）</p>
+    </div>
+  <% else %>
+    <% if description.present? %>
+      <p class="text-sm text-slate-600 mb-4"><%= description %></p>
+    <% else %>
+      <p class="text-sm text-slate-600 mb-4">
+        少し疲れが出やすくなりそうな「考え方の癖」をそっとまとめました。
+      </p>
+    <% end %>
 
     <% if items.empty? %>
       <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
-        まだデータがありません（会話や投稿が増えると表示されます）
+        データが不足しています（投稿が増えると表示されます）
       </div>
     <% else %>
       <ol class="space-y-3">
@@ -52,13 +65,5 @@
         <% end %>
       </ol>
     <% end %>
-  <% else %>
-    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
-      <p class="font-bold">
-         ＊しんどいときや、<br>
-           無理を減らしたいときにだけ見てください
-      </p>
-      <p class="text-xs text-slate-500 mt-1">（必要なときだけ開けば大丈夫です）</p>
-    </div>
   <% end %>
 </div>

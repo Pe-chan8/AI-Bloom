@@ -6,12 +6,13 @@ class AiMessage < ApplicationRecord
   has_many :ai_message_feedbacks, dependent: :destroy
   has_many :ai_logs, dependent: :destroy
 
-  # kind: daily / weekly / reply / tip
+  # kind: daily / weekly / reply / tip / analysis_feedback
   enum :kind, {
-    daily:  0,
-    weekly: 1,
-    reply:  2,
-    tip:    3
+    daily:            0,
+    weekly:           1,
+    reply:            2,
+    tip:              3,
+    analysis_feedback: 4
   }, default: :reply
 
   enum :sentiment, {

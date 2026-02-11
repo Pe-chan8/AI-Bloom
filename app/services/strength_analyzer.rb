@@ -40,7 +40,7 @@ class StrengthAnalyzer
 
   # Post.mood enum 0..4想定 → 1..5へ
   def mood_score(mood)
-    MoodTrendAnalyzer::MoodScale.score(mood)
+    ::MoodScale.score(mood)
   rescue NameError
     mood.to_i
   end

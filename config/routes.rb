@@ -79,7 +79,9 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # 分析
   # -------------------------------------------------------
-  resource :analysis, only: [ :show ]
+  resource :analytics, only: [:show] do
+    post :generate_feedback
+  end
 
   # -------------------------------------------------------
   # 利用規約/プライバシーポリシー

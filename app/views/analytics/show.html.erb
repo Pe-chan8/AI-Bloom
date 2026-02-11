@@ -1,0 +1,78 @@
+<div class="flex justify-center">
+  <div class="inline-flex items-center gap-2">
+    <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
+      自己分析らぼ
+    </h1>
+    <%= render "shared/help_tip",
+      text: "投稿内容をもとに、バディがあなたの『考え方・行動の傾向』をやさしく整理します。\n良い・悪いの評価ではなく、『あなたらしさ』を見つけるためのヒントです。\n必要なときに、そっと覗いてみてくださいね。",
+      position: "right" %>
+  </div>
+</div>
+
+<%= render "category_tabs", category: @category, subcategory: @subcategory, top_subcategories: @top_subcategories %>
+
+<% if @analysis_data_insufficient %>
+  <div class="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+    <p class="font-semibold">データが不足しています</p>
+    <p class="mt-1 text-xs text-slate-500">
+      このカテゴリの投稿がもう少し増えると、あなたらしさやヒントをより具体的に整理できます。
+    </p>
+  </div>
+<% else %>
+  <div class="mt-4 flex justify-end">
+    <%= button_to "✨ 今すぐ更新 ✨",
+      generate_feedback_analytics_path(category: @category, subcategory: @subcategory),
+      method: :post,
+      data: { disable_with: "生成中…" },
+      class: "inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:ring-offset-2" %>
+  </div>
+<% end %>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 items-stretch">
+  <%= render "strength_top5",
+      items: @strength_items,
+      title: @strength_title,
+      description: @strength_desc %>
+
+  <%= render "weakness_top5",
+      items: @weakness_items,
+      title: @weakness_title,
+      description: @weakness_desc,
+      show_weakness_items: @show_weakness_items,
+      category: @category,
+      subcategory: @subcategory %>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 items-stretch">
+  <%= render "tips_box",
+      title: @tips_strength_title,
+      tips: @tips_strength,
+      category: @category,
+      subcategory: @subcategory %>
+
+  <%= render "tips_box",
+      title: @tips_weakness_title,
+      tips: @tips_weakness,
+      maskable: true,
+      show_weakness_tips: @show_weakness_tips,
+      category: @category,
+      subcategory: @subcategory %>
+</div>
+
+<div class="mt-4">
+  <%= render "weekly_summary",
+      category_label: @weekly_summary_category_label,
+      total_posts_count: @two_weeks_total_posts_count,
+      this_week_posts_count: @this_week_posts_count,
+      this_week_mood_avg: @this_week_mood_avg,
+      this_week_top_word: @this_week_top_word,
+      last_week_posts_count: @last_week_posts_count,
+      last_week_mood_avg: @last_week_mood_avg,
+      last_week_top_word: @last_week_top_word %>
+</div>
+
+<div class="mt-4">
+  <%= render "mood_daily", points: @mood_daily_points, category: @category, subcategory: @subcategory %>
+</div>
+
+<div class="mt-4"></div>
