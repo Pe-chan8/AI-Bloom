@@ -6,7 +6,7 @@
 <% subcategory = local_assigns[:subcategory] %>
 <% show_items = local_assigns[:show_weakness_items] %>
 
-<div class="border border-slate-800 bg-white p-4 rounded-2xl shadow-sm h-full">
+<div class="border border-amber-800 bg-white p-4 rounded-2xl shadow-sm h-full">
   <div class="flex items-center justify-between gap-3 mb-3">
     <p class="font-bold"><%= title %></p>
 
@@ -17,7 +17,7 @@
               subcategory: subcategory,
               show_weakness_tips: (params[:show_weakness_tips].presence)
             ),
-            class: "text-sm font-bold text-slate-700 hover:text-slate-900 underline" %>
+            class: "text-sm font-bold text-amber-700 hover:text-amber-900 underline" %>
     <% else %>
       <%= link_to "▼ 見る",
             analytics_path(
@@ -26,38 +26,38 @@
               show_weakness_items: "1",
               show_weakness_tips: (params[:show_weakness_tips].presence)
             ),
-            class: "text-sm font-bold text-slate-700 hover:text-slate-900 underline" %>
+            class: "text-sm font-bold text-amber-700 hover:text-amber-900 underline" %>
     <% end %>
   </div>
 
   <% if !show_items %>
     <!-- 閉じている時は、内容も説明も一切出さない -->
-    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700">
       <p class="font-bold">＊しんどいときや、無理を減らしたいときにだけ開いてください</p>
-      <p class="text-xs text-slate-500 mt-1">（元気なときは閉じたままで大丈夫です）</p>
+      <p class="text-xs text-amber-500 mt-1">（元気なときは閉じたままで大丈夫です）</p>
     </div>
   <% else %>
     <% if description.present? %>
-      <p class="text-sm text-slate-600 mb-4"><%= description %></p>
+      <p class="text-sm text-amber-600 mb-4"><%= description %></p>
     <% else %>
-      <p class="text-sm text-slate-600 mb-4">
+      <p class="text-sm text-amber-600 mb-4">
         少し疲れが出やすくなりそうな「考え方の癖」をそっとまとめました。
       </p>
     <% end %>
 
     <% if items.empty? %>
-      <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700">
         データが不足しています（投稿が増えると表示されます）
       </div>
     <% else %>
       <ol class="space-y-3">
         <% items.each_with_index do |item, idx| %>
-          <li class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+          <li class="bg-slate-50 border border-amber-200 rounded-xl p-3">
             <div class="flex items-start gap-2">
-              <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-slate-800 text-xs font-extrabold">
+              <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold">
                 <%= idx + 1 %>
               </span>
-              <p class="font-bold text-slate-900">
+              <p class="font-bold text-amber-900">
                 <%= item[:label] %>：<span class="font-semibold text-slate-700"><%= item[:short] %></span>
               </p>
             </div>
