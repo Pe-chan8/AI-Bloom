@@ -11,6 +11,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- ===== Favicon ===== -->
+    <%= favicon_link_tag "favicon/ai_bloom_favicon.ico" %>
+
     <% if Rails.env.production? && ENV["GA_MEASUREMENT_ID"].present? %>
       <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA_MEASUREMENT_ID"] %>"></script>
       <script>
@@ -25,10 +28,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
@@ -38,10 +37,6 @@
     </style>
   </head>
 
-  <%# 重要：
-      --bottom-nav-h : ボトムナビ想定の高さ（mainの下余白用）
-      --composer-h   : buddy_talk composer の高さ（buddy_talk側で上書き）
-  %>
   <body
     class="min-h-screen flex flex-col bg-[#FFF6E5]"
     style="
@@ -82,7 +77,7 @@
       </div>
     </header>
 
-    <!-- flash（ここに turbo-stream append する） -->
+    <!-- flash -->
     <div id="flash" class="fixed top-16 left-1/2 -translate-x-1/2 z-[60] space-y-2 w-[min(520px,92vw)]">
       <% flash.each do |type, message| %>
         <% color =
@@ -98,7 +93,6 @@
       <% end %>
     </div>
 
-    <%# main の padding-bottom を「ボトムナビ + composer」ぶん確保（被り防止） %>
     <main
       class="flex-1 pt-2 bg-[#FFF6E5]"
       style="padding-bottom: calc(var(--bottom-nav-h) + var(--composer-h) + 24px);"
