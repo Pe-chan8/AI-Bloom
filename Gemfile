@@ -84,3 +84,6 @@ gem "image_processing", "~> 1.2"
 group :production do
   gem "stackprof", require: false
 end
+
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"

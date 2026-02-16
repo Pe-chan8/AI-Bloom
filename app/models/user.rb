@@ -3,7 +3,32 @@ class User < ApplicationRecord
   # devise モジュール
   # -------------------------------------------------------
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :omniauthable, omniauth_providers: [ :google_oauth2 ]
+
+  # -------------------------------------------------------
+  # OmniAuth からユーザーを作成/取得
+  # -------------------------------------------------------
+  def self.from_omniauth(auth)
+    user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
+
+    # 既存ユーザー（メール一致）をGoogle連携に寄せたい場合
+    if user.new_record? && auth.info.email.present?
+      email_user = find_by(email: auth.info.email)
+      if email_user
+        email_user.update!(provider: auth.provider, uid: auth.uid)
+        return email_user
+      end
+    end
+
+    user.email = auth.info.email if user.email.blank?
+
+    # password必須バリデーション回避（validatable前提）
+    user.password = Devise.friendly_token[0, 20] if user.encrypted_password.blank?
+
+    user.save!
+    user
+  end
 
   # -------------------------------------------------------
   # アソシエーション
@@ -22,8 +47,6 @@ class User < ApplicationRecord
   # -------------------------------------------------------
   SOCIAL_TYPES = %w[expressive driving amiable analytical].freeze
   BUDDY_TYPES  = %w[expressive driving amiable analytical].freeze
-
-  # GA4 user_property 用（dominant_type）
   DOMINANT_TYPES = %w[expressive driving amiable analytical].freeze
 
   # -------------------------------------------------------
@@ -47,7 +70,6 @@ class User < ApplicationRecord
 
   # -------------------------------------------------------
   # 現在のバディを返すヘルパー
-  # （未設定なら code: "normal" のバディを返す）
   # -------------------------------------------------------
   def current_buddy
     buddy || Buddy.find_by(code: "normal")
