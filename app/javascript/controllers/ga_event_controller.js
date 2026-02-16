@@ -10,11 +10,9 @@ export default class extends Controller {
     const name = this.nameValue
     const params = this.parseParams(this.paramsValue)
 
-    // layout から <html data-env="..."> を渡す前提
     const env = document.documentElement.dataset.env || "unknown"
     const isProd = env === "production"
 
-    // 開発ではGAに送らず、consoleで発火確認だけする（GA汚染防止）
     if (!isProd) {
       console.log("[GA DEV]", name, params)
       this.element.remove()
@@ -27,13 +25,10 @@ export default class extends Controller {
       return
     }
 
-    // 追加：ユーザープロパティ設定
+    // user_property セット（永続化）
     if (name === "set_user_properties") {
       if (params && Object.keys(params).length > 0) {
         gtag("set", "user_properties", params)
-        console.log("[GA] set user_properties", params)
-      } else {
-        console.log("[GA] skip set_user_properties (no params)")
       }
       this.element.remove()
       return
@@ -46,7 +41,6 @@ export default class extends Controller {
       gtag("event", name)
     }
 
-    // 1回送ったら自分を消す（多重送信を抑える）
     this.element.remove()
   }
 

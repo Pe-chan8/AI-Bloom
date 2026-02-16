@@ -8,9 +8,11 @@
 
 <turbo-stream action="append" target="ga-tracker">
   <template>
+    <% event_params_json = json_escape({ dominant_type: (user_signed_in? ? current_user.dominant_type : nil) }.compact.to_json) %>
     <div
       data-controller="ga-event"
-      data-ga-event-name-value="buddy_talk_created">
+      data-ga-event-name-value="buddy_talk_created"
+      data-ga-event-params-value="<%= event_params_json %>">
     </div>
   </template>
 </turbo-stream>

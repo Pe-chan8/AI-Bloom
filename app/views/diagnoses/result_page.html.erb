@@ -181,17 +181,17 @@
   <% if @current_type_info.present? %>
     <% event_params_json = json_escape({ dominant_type: @dominant_type }.to_json) %>
 
-    <%# 1) 診断完了イベント（dominant_type を event param に乗せる） %>
-    <div
-      data-controller="ga-event"
-      data-ga-event-name-value="diagnosis_completed"
-      data-ga-event-params-value="<%= event_params_json %>">
-    </div>
-
-    <%# 2) ユーザープロパティにも dominant_type をセット（リピート/コホート用） %>
+    <%# 1) user_property を先にセット（以降のイベントでタイプが効くようにする） %>
     <div
       data-controller="ga-event"
       data-ga-event-name-value="set_user_properties"
+      data-ga-event-params-value="<%= event_params_json %>">
+    </div>
+
+    <%# 2) 診断完了イベント（dominant_type を event param にも乗せる） %>
+    <div
+      data-controller="ga-event"
+      data-ga-event-name-value="diagnosis_completed"
       data-ga-event-params-value="<%= event_params_json %>">
     </div>
   <% end %>
