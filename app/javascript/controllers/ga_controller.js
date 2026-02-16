@@ -43,6 +43,7 @@ export default class extends Controller {
 
     if (typeof gtag === "function") {
       gtag("set", "user_properties", { dominant_type: dominantType })
+      gtag("event", "diagnosis_completed")
     } else {
       if (this.isDev()) console.log("[GA DEV] gtag not ready (user_properties)")
     }
