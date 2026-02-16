@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = {
     name: String,
-    params: String, // JSON文字列（任意）
+    params: String,
   }
 
   connect() {
@@ -21,16 +21,29 @@ export default class extends Controller {
       return
     }
 
-    console.log("[GA]", name, params)
+    if (typeof gtag !== "function") {
+      console.log("[GA] gtag not ready", name, params)
+      this.element.remove()
+      return
+    }
 
-    if (typeof gtag === "function") {
+    // 追加：ユーザープロパティ設定
+    if (name === "set_user_properties") {
       if (params && Object.keys(params).length > 0) {
-        gtag("event", name, params)
+        gtag("set", "user_properties", params)
+        console.log("[GA] set user_properties", params)
       } else {
-        gtag("event", name)
+        console.log("[GA] skip set_user_properties (no params)")
       }
+      this.element.remove()
+      return
+    }
+
+    // 通常イベント
+    if (params && Object.keys(params).length > 0) {
+      gtag("event", name, params)
     } else {
-      console.log("gtag not ready")
+      gtag("event", name)
     }
 
     // 1回送ったら自分を消す（多重送信を抑える）

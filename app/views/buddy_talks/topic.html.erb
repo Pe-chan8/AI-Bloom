@@ -1,5 +1,10 @@
 <% content_for :title, "バディと話す - AI-bloom" %>
 
+<% buddy = (user_signed_in? ? (current_user.buddy || Buddy.find_by(code: "normal")) : nil) %>
+<% dominant_type = (user_signed_in? ? current_user.dominant_type : nil) %>
+
+<div class="max-w-5xl mx-auto px-4 py-8">
+
   <div class="flex justify-center">
     <div class="inline-flex items-center gap-2">
       <h1 class="text-3xl font-extrabold tracking-wide text-slate-900">
@@ -23,6 +28,17 @@
   </div>
 
   <%= render "chat", buddy_talk: @post, messages: @messages %>
-</div>
 
-<%= render "composer", buddy_talk: @post %>
+  <%= render "composer", buddy_talk: @post %>
+
+  <%# ---- GA送信：会話開始（dominant_type + buddy_code） ---- %>
+  <% if user_signed_in? && dominant_type.present? && buddy.present? %>
+    <% params_json = json_escape({ dominant_type: dominant_type, buddy_code: buddy.code }.to_json) %>
+    <div
+      data-controller="ga-event"
+      data-ga-event-name-value="buddy_talk_started"
+      data-ga-event-params-value="<%= params_json %>">
+    </div>
+  <% end %>
+
+</div>
