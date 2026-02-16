@@ -32,7 +32,9 @@ export default class extends Controller {
     return document.documentElement?.dataset?.env === "development"
   }
 
-  // user_property をGA4へ送信
+  // user_property をGA4へ送信（Turbo遷移でも拾う）
+  // ※ user_property は「その後のイベント」に紐づいて初めて集計に乗りやすいので
+  //    初回のみ "user_property_synced" を送る（毎回 diagnosis_completed を乱発しない）
   setUserProperties() {
     const dominantType = document.body?.dataset?.userDominantType
     if (!dominantType) return
@@ -41,11 +43,29 @@ export default class extends Controller {
       console.log("[GA DEV] set user_properties", { dominant_type: dominantType })
     }
 
-    if (typeof gtag === "function") {
-      gtag("set", "user_properties", { dominant_type: dominantType })
-      gtag("event", "diagnosis_completed")
-    } else {
+    if (typeof gtag !== "function") {
       if (this.isDev()) console.log("[GA DEV] gtag not ready (user_properties)")
+      return
+    }
+
+    // user_properties セット
+    gtag("set", "user_properties", { dominant_type: dominantType })
+
+    // user_propertyをGA側に“確実に紐づける”ための1回だけのイベント
+    // - Turboで遷移するたびに発火しないよう localStorage で抑制
+    // - dominantType が変わったら再送できるように、値もキーに含める
+    try {
+      const key = `ga:user_property_synced:dominant_type:${dominantType}`
+      const already = window.localStorage.getItem(key)
+      if (!already) {
+        gtag("event", "user_property_synced")
+        window.localStorage.setItem(key, "1")
+        if (this.isDev()) console.log("[GA DEV] fired user_property_synced once")
+      }
+    } catch (e) {
+      // localStorage が使えない環境でも落とさない（念のため）
+      gtag("event", "user_property_synced")
+      if (this.isDev()) console.log("[GA DEV] fired user_property_synced (no storage)", e)
     }
   }
 
