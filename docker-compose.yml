@@ -1,6 +1,9 @@
+version: "3.9"
+
 services:
   db:
     image: postgres:15
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -26,12 +29,13 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: password
       TZ: Asia/Tokyo
+    restart: unless-stopped
 
   web:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bash -c "bin/rails server -b 0.0.0.0 -p 3000"
+    command: bash -c "rm -f tmp/pids/server.pid && bin/rails server -b 0.0.0.0 -p 3000"
     volumes:
       - .:/app
     ports:
@@ -45,6 +49,7 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: password
       TZ: Asia/Tokyo
+    restart: unless-stopped
 
 volumes:
   db-data:

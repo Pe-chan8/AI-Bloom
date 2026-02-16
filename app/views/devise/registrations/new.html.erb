@@ -1,7 +1,6 @@
 <% content_for :title, "アカウント登録 - AI-Bloom" %>
 
 <div class="min-h-[calc(100vh-80px)] bg-[#FFF3D6] flex items-start md:items-center justify-center px-4 py-10">
-
   <div class="w-full max-w-2xl">
     <!-- タイトル -->
     <header class="space-y-1 text-center mb-6">
@@ -14,6 +13,22 @@
 
     <!-- カード -->
     <section class="bg-white rounded-[32px] shadow-md border border-amber-100 px-8 py-8 space-y-6">
+      <% if ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present? %>
+        <%= button_to user_google_oauth2_omniauth_authorize_path,
+              method: :post,
+              form: { data: { turbo: false } },
+              class: "w-full inline-flex items-center justify-center rounded-full
+                      border border-slate-200 bg-white text-slate-700 text-[13px] font-semibold
+                      px-4 py-2 transition hover:bg-slate-50" do %>
+          Googleアカウントで続ける
+        <% end %>
+
+        <div class="flex items-center gap-3">
+          <div class="h-px flex-1 bg-amber-100"></div>
+          <span class="text-[11px] text-slate-400">または</span>
+          <div class="h-px flex-1 bg-amber-100"></div>
+        </div>
+      <% end %>
 
       <%= form_with model: resource,
                     url: registration_path(resource_name),
@@ -34,21 +49,22 @@
         <!-- ニックネーム -->
         <div class="space-y-1">
           <%= f.label :nickname, "ニックネーム", class: "block text-xs font-semibold text-slate-700" %>
-          <%= f.text_field :nickname,autofocus: true,autocomplete: "nickname",
+          <%= f.text_field :nickname,
+                autofocus: true,
+                autocomplete: "nickname",
                 class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
-                         text-sm text-slate-800 placeholder:text-slate-300
-                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+                        text-sm text-slate-800 placeholder:text-slate-300
+                        focus:outline-none focus:ring-2 focus:ring-sky-300" %>
         </div>
 
         <!-- メールアドレス -->
         <div class="space-y-1">
           <%= f.label :email, "Eメール", class: "block text-xs font-semibold text-slate-700" %>
           <%= f.email_field :email,
-                autofocus: true,
                 autocomplete: "email",
                 class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
-                         text-sm text-slate-800 placeholder:text-slate-300
-                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+                        text-sm text-slate-800 placeholder:text-slate-300
+                        focus:outline-none focus:ring-2 focus:ring-sky-300" %>
         </div>
 
         <!-- パスワード -->
@@ -58,8 +74,8 @@
           <%= f.password_field :password,
                 autocomplete: "new-password",
                 class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
-                         text-sm text-slate-800 placeholder:text-slate-300
-                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+                        text-sm text-slate-800 placeholder:text-slate-300
+                        focus:outline-none focus:ring-2 focus:ring-sky-300" %>
         </div>
 
         <!-- パスワード確認 -->
@@ -69,8 +85,8 @@
           <%= f.password_field :password_confirmation,
                 autocomplete: "new-password",
                 class: "w-full rounded-2xl border border-amber-200 bg-[#FFFDF8] px-3 py-2
-                         text-sm text-slate-800 placeholder:text-slate-300
-                         focus:outline-none focus:ring-2 focus:ring-sky-300" %>
+                        text-sm text-slate-800 placeholder:text-slate-300
+                        focus:outline-none focus:ring-2 focus:ring-sky-300" %>
         </div>
 
         <!-- ボタン -->
@@ -78,9 +94,8 @@
           <%= f.submit "アカウント登録",
                 class: "w-full inline-flex items-center justify-center rounded-full
                         bg-sky-500 hover:bg-sky-600 text-white text-[13px] font-semibold
-                        px-4 py-2 transition hover:bg-sky-50" %>
+                        px-4 py-2 transition" %>
 
-          <!-- 診断だけ遊ぶボタン -->
           <%= link_to "新規登録せずにソーシャル診断で遊ぶ",
                 diagnosis_top_path,
                 class: "w-full inline-flex items-center justify-center rounded-full
