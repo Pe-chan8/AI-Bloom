@@ -17,11 +17,20 @@ class User < ApplicationRecord
       email_user = find_by(email: auth.info.email)
       if email_user
         email_user.update!(provider: auth.provider, uid: auth.uid)
+
+        # nicknameが空だった時の保険（過去データ対策）
+        if email_user.nickname.blank?
+          email_user.update!(nickname: build_nickname_from_auth(auth))
+        end
+
         return email_user
       end
     end
 
     user.email = auth.info.email if user.email.blank?
+
+    # nickname 必須対策（Googleログインでも必ず入るようにする）
+    user.nickname = build_nickname_from_auth(auth) if user.nickname.blank?
 
     # password必須バリデーション回避（validatable前提）
     user.password = Devise.friendly_token[0, 20] if user.encrypted_password.blank?
@@ -29,6 +38,13 @@ class User < ApplicationRecord
     user.save!
     user
   end
+
+  def self.build_nickname_from_auth(auth)
+    auth.info.name.presence ||
+      auth.info.email.to_s.split("@").first.presence ||
+      "user_#{SecureRandom.hex(4)}"
+  end
+  private_class_method :build_nickname_from_auth
 
   # -------------------------------------------------------
   # アソシエーション
