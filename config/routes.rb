@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # 投稿
   # -------------------------------------------------------
-  resources :posts, only: [:index, :edit, :update, :destroy] do
+  resources :posts, only: [ :index, :edit, :update, :destroy ] do
     post :preview_ai, on: :member
     resource :favorite, only: %i[create destroy]
   end
@@ -68,14 +68,14 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # バディ
   # -------------------------------------------------------
-  resources :buddies, only: [:index] do
+  resources :buddies, only: [ :index ] do
     post :select, on: :member
   end
 
   # -------------------------------------------------------
   # 分析
   # -------------------------------------------------------
-  resource :analytics, only: [:show] do
+  resource :analytics, only: [ :show ] do
     post :generate_feedback
   end
 
