@@ -4,6 +4,14 @@
 <% started = @buddy_talk.present? && @buddy_talk.persisted? %>
 <% record  = @buddy_talk.respond_to?(:post) ? @buddy_talk.post : @buddy_talk %>
 
+<% if started %>
+  <div data-controller="ga-event" data-ga-event-name-value="buddy_talk_started"></div>
+<% end %>
+
+<% if params[:created].present? %>
+  <div data-controller="ga-event" data-ga-event-name-value="buddy_talk_created"></div>
+<% end %>
+
 <div class="w-full">
   <% unless started %>
     <div class="px-4 sm:px-6 pt-3">
@@ -18,21 +26,17 @@
 
   <%= turbo_frame_tag "buddy_meta" do %>
     <% if started %>
-      <%# controllerのスコープ内に spacer を入れる %>
       <div data-controller="meta-collapse"
            data-meta-collapse-storage-key-value="buddy-meta-collapsed">
 
-        <%# 固定メタ（ヘッダー下） %>
         <div class="fixed left-0 right-0 top-[72px] z-50">
           <div class="px-4 sm:px-6">
             <div class="bg-white/90 backdrop-blur border border-amber-200 shadow-md rounded-3xl px-2 py-3">
 
-              <%# ▼ メタ本体（閉じるとここだけ hidden） %>
               <div data-meta-collapse-target="box">
                 <%= render "meta_readonly", buddy_talk: @buddy_talk %>
               </div>
 
-              <%# ▼ ボタン列（常に表示：閉じても「開く」で戻せる） %>
               <div class="flex flex-wrap justify-end gap-2 pt-2">
                 <button type="button"
                         data-meta-collapse-target="toggle"
@@ -70,7 +74,6 @@
           </div>
         </div>
 
-        <%# ▼ 固定メタの高さ分スペーサー（閉じたら消える） %>
         <div class="h-[170px]" data-meta-collapse-target="spacer"></div>
       </div>
     <% else %>

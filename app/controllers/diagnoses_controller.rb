@@ -49,7 +49,8 @@ class DiagnosesController < ApplicationController
     if user_signed_in?
       current_user.update(
         social_type: dominant_type,
-        recommended_buddy_type: dominant_type
+        recommended_buddy_type: dominant_type,
+        dominant_type: dominant_type # GA4 user_property 用に保存
       )
     end
 
