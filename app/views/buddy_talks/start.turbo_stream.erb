@@ -5,3 +5,12 @@
 <%= turbo_stream.replace "buddy_chat",
   partial: "chat",
   locals: { buddy_talk: @buddy_talk } %>
+
+<turbo-stream action="append" target="ga-tracker">
+  <template>
+    <div
+      data-controller="ga-event"
+      data-ga-event-name-value="buddy_talk_created">
+    </div>
+  </template>
+</turbo-stream>

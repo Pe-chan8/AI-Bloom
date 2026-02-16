@@ -23,6 +23,9 @@ class User < ApplicationRecord
   SOCIAL_TYPES = %w[expressive driving amiable analytical].freeze
   BUDDY_TYPES  = %w[expressive driving amiable analytical].freeze
 
+  # GA4 user_property 用（dominant_type）
+  DOMINANT_TYPES = %w[expressive driving amiable analytical].freeze
+
   # -------------------------------------------------------
   # バリデーション
   # -------------------------------------------------------
@@ -32,6 +35,10 @@ class User < ApplicationRecord
 
   validates :recommended_buddy_type,
             inclusion: { in: BUDDY_TYPES },
+            allow_nil: true
+
+  validates :dominant_type,
+            inclusion: { in: DOMINANT_TYPES },
             allow_nil: true
 
   validates :nickname,

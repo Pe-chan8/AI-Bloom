@@ -47,10 +47,16 @@ class BuddyTalksController < ApplicationController
               "buddy_composer",
               partial: "buddy_talks/composer",
               locals: { buddy_talk: @buddy_talk }
+            ),
+            # created を Turboでも確実に発火させる
+            turbo_stream.append(
+              "ga-tracker",
+              "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_talk_created\"></div>".html_safe
             )
           ]
         end
-        format.html { redirect_to buddy_talk_topic_path(@buddy_talk) }
+        # HTML遷移でも created=1 を付けて show 側で拾えるようにする
+        format.html { redirect_to buddy_talk_topic_path(@buddy_talk, created: 1) }
       end
     else
       respond_to do |format|
@@ -83,7 +89,6 @@ class BuddyTalksController < ApplicationController
   end
 
   def deep_dive
-    # 「ボタン押下」を“自分の発言”として残す
     if defined?(BuddyMessage)
       BuddyMessage.create!(
         user: current_user,
@@ -99,7 +104,6 @@ class BuddyTalksController < ApplicationController
   end
 
   def praise_summary
-    # 「ボタン押下」を“自分の発言”として残す
     if defined?(BuddyMessage)
       BuddyMessage.create!(
         user: current_user,
@@ -121,7 +125,8 @@ class BuddyTalksController < ApplicationController
 
   def restart
     session.delete(:buddy_talk_post_id)
-    redirect_to buddy_talk_path
+    # “新しい会話”開始＝次の show で created を取れるようにする
+    redirect_to buddy_talk_path(created: 1)
   end
 
   def close
@@ -147,6 +152,15 @@ class BuddyTalksController < ApplicationController
             "buddy_composer",
             partial: "buddy_talks/composer",
             locals: { buddy_talk: @buddy_talk }
+          ),
+          # “会話したか” を成功時だけ計測（reply/deep_dive/praise_summary/summary 共通）
+          turbo_stream.append(
+            "ga-tracker",
+            "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_message_sent\"></div>".html_safe
+          ),
+          turbo_stream.append(
+            "ga-tracker",
+            "<div data-controller=\"ga-event\" data-ga-event-name-value=\"ai_reply_generated\"></div>".html_safe
           )
         ]
       end

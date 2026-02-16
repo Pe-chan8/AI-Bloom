@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-env="<%= Rails.env %>">
   <head>
     <title><%= content_for(:title) || "AI-bloom" %></title>
 
@@ -38,6 +38,7 @@
   </head>
 
   <body
+    data-user-dominant-type="<%= user_signed_in? ? current_user.dominant_type : "" %>"
     class="min-h-screen flex flex-col bg-[#FFF6E5]"
     style="
       --bottom-nav-h: 72px;
