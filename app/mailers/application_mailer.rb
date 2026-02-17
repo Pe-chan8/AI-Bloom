@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "AI-bloom <no-reply@ai-bloom.example>"
+  default from: ENV.fetch("MAILER_FROM", "AI-bloom <no-reply@localhost>")
   layout "mailer"
 end
