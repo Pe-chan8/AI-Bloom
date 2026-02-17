@@ -6,7 +6,9 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       email: "test-post@example.com",
       password: "password123",
       password_confirmation: "password123",
-      nickname: "ぺぺ"
+      nickname: "ぺぺ",
+      confirmed_at: Time.current,
+      onboarded_at: Time.current
     )
 
     @post = Post.create!(

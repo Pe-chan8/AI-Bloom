@@ -57,6 +57,8 @@ class ApplicationController < ActionController::Base
     return if controller_name == "diagnoses"
     return if user_signed_in?
 
+    return if request.path == onboarding_path # 念のため（ループ防止）
+
     redirect_to onboarding_path
   end
 

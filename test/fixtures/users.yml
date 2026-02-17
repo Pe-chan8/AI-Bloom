@@ -6,10 +6,14 @@
 #
 one:
   email: one@example.com
+  nickname: "one"
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
-  nickname: ぺぺ
+  confirmed_at: <%= Time.zone.now %>
+  onboarded_at: <%= Time.zone.now %>
 
 two:
   email: two@example.com
+  nickname: "two"
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
-  nickname: ぺー
+  confirmed_at: <%= Time.zone.now %>
+  onboarded_at: <%= Time.zone.now %>
