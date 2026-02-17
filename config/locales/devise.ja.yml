@@ -1,0 +1,5 @@
+ja:
+  devise:
+    mailer:
+      confirmation_instructions:
+        subject: "【AI-bloom】メールアドレス確認のお願い"

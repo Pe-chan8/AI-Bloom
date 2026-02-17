@@ -1,10 +1,8 @@
 class User < ApplicationRecord
-  # -------------------------------------------------------
-  # devise モジュール
-  # -------------------------------------------------------
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [ :google_oauth2 ]
+         :confirmable,
+         :omniauthable, omniauth_providers: [:google_oauth2]
 
   # -------------------------------------------------------
   # OmniAuth からユーザーを作成/取得
