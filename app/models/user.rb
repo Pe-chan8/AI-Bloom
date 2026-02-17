@@ -82,7 +82,6 @@ class User < ApplicationRecord
 
   validates :nickname,
             presence: true,
-            on: :create,
             length: { maximum: 30 }
 
   # -------------------------------------------------------

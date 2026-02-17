@@ -13,33 +13,45 @@
       </div>
     </div>
 
-    <!-- 枠 -->
-    <div class="mt-10 bg-white rounded-2xl shadow-sm border border-amber-100 p-8">
+    <div class="mt-10 bg-white rounded-2xl shadow-sm border border-amber-100 p-8 space-y-8">
+    
       <!-- 入力ブロック -->
       <div class="rounded-3xl border-2 border-amber-300 p-6">
-        <div class="space-y-6">
-          <div>
-            <p class="text-sm font-semibold text-slate-800">ニックネーム変更</p>
-            <div class="mt-2 h-12 w-full rounded-2xl border-2 border-slate-900/50 bg-slate-100/30 flex items-center justify-center">
-              <span class="text-slate-700 font-semibold">お待ちください</span>
+        <%= form_with model: @user, url: account_setting_path, method: :patch, local: true do |f| %>
+          <div class="space-y-6">
+            <div>
+              <p class="text-sm font-semibold text-slate-800">ニックネーム変更</p>
+
+              <div class="mt-2">
+                <%= f.text_field :nickname,
+                  maxlength: 30,
+                  class: "h-12 w-full rounded-2xl border-2 border-slate-900/50 bg-white px-4 font-semibold text-slate-900" %>
+
+                <p class="mt-2 text-xs text-slate-500 font-semibold">
+                  30文字以内。プロフィール表示に使用されます。
+                </p>
+
+                <!-- ボタン -->
+                <div class="mt-4 flex justify-end">
+                  <button type="submit" style="background:#f59e0b;color:#fff;padding:10px 18px;border-radius:9999px;font-weight:800;">
+                    保存する
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p class="text-sm font-semibold text-slate-800">メールアドレス変更</p>
+              <div class="mt-2 h-12 w-full rounded-2xl border-2 border-slate-900/50 bg-slate-100/30 flex items-center justify-center">
+                <span class="text-slate-700 font-semibold">お待ちください</span>
+              </div>
             </div>
           </div>
-
-          <div>
-            <p class="text-sm font-semibold text-slate-800">メールアドレス変更</p>
-            <div class="mt-2 h-12 w-full rounded-2xl border-2 border-slate-900/50 bg-slate-100/30 flex items-center justify-center">
-              <span class="text-slate-700 font-semibold">お待ちください</span>
-            </div>
-          </div>
-
-          <div class="pt-2 text-center text-sm text-slate-700 font-semibold">
-            パスワードをお忘れの方（準備中）
-          </div>
-        </div>
+        <% end %>
       </div>
 
-      <!-- トグル系 -->
-      <div class="mt-8 space-y-4">
+      <!-- トグル系（フォーム外） -->
+      <div class="space-y-4">
         <div class="flex items-center justify-between rounded-2xl border-2 border-amber-300 px-6 py-4">
           <p class="text-lg font-extrabold text-slate-900">通知設定</p>
           <div class="flex gap-3">
@@ -57,12 +69,6 @@
         </div>
       </div>
 
-      <!-- 保存ボタン -->
-      <div class="mt-8 flex justify-end">
-        <button type="button" class="rounded-full bg-slate-300/70 px-8 py-3 font-extrabold text-slate-900 border border-slate-900/30">
-          変更を保存（準備中）
-        </button>
-      </div>
     </div>
   </div>
 </section>

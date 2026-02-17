@@ -99,7 +99,7 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # ユーザー設定
   # -------------------------------------------------------
-  resource :account_setting, only: %i[show]
+  resource :account_setting, only: %i[show update]
 
   # -------------------------------------------------------
   # お問い合わせフォーム
