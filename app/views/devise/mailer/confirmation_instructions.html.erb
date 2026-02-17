@@ -1,5 +1,14 @@
-<p>Welcome <%= @email %>!</p>
+<p><%= @email %> さん</p>
 
-<p>You can confirm your account email through the link below:</p>
+<p>AI-bloom をご利用いただきありがとうございます。</p>
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<p>下のボタン（リンク）をクリックして、メールアドレスの確認を完了してください。</p>
+
+<p>
+  <%= link_to "メールアドレスを確認する",
+              confirmation_url(@resource, confirmation_token: @token) %>
+</p>
+
+<p>※このメールに心当たりがない場合は、破棄してください。</p>
+
+<p>AI-bloom</p>
