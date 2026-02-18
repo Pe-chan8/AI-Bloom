@@ -97,8 +97,6 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # お問い合わせフォーム
   # -------------------------------------------------------
-  resource :contact,
-  only: %i[new create],
-  path: "contact",
-  path_names: { new: "" }
+  get  "/feedback",        to: "feedback#new"
+  get  "/feedback/thanks", to: "feedback#thanks"
 end

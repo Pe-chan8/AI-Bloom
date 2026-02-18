@@ -32,10 +32,9 @@
         アカウント設定
       <% end %>
 
-      <%= link_to "#{new_contact_path}#contact",
-        class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
+      <%= link_to feedback_path, class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700",
         data: { action: "click->hamburger-menu#closeAndNavigate" } do %>
-        お問い合わせ
+        AI-Bloomを育てる声
       <% end %>
 
       <%= link_to "#{terms_path}#terms", class: "block w-full rounded-full border bg-white px-4 py-3 text-center font-semibold text-slate-700 shadow-sm",
