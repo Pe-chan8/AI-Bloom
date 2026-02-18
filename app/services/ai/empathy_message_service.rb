@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ai
   class EmpathyMessageService
     RETRY_MAX = 2
@@ -7,6 +9,9 @@ module Ai
     RECENT_TURNS = 12
     # 履歴が長すぎる時の保険（文字数）
     MAX_LOG_CHARS = 6_000
+
+    MODEL = "gpt-4o-mini"
+    TEMPERATURE = 0.85
 
     def initialize(client: OpenAI::Client.new)
       @client = client
@@ -21,17 +26,21 @@ module Ai
       response     = nil
 
       begin
-        recent_log = build_recent_log(post)
+        recent_log = build_recent_log(post, buddy: buddy)
+
+        messages = Ai::PromptBuilder.build_buddy_reply(
+          user: user,
+          buddy: buddy,
+          post: post,
+          recent_log: recent_log
+        )
 
         response = with_retry_on_429 do
           @client.chat(
             parameters: {
-              model: "gpt-4o-mini",
-              messages: [
-                { role: "system", content: system_prompt_for(user:, buddy:) },
-                { role: "user", content: user_prompt(post, user: user, recent_log: recent_log) }
-              ],
-              temperature: 0.85
+              model: MODEL,
+              messages: messages,
+              temperature: TEMPERATURE
             }
           )
         end
@@ -61,6 +70,7 @@ module Ai
         raise
       rescue Faraday::TooManyRequestsError => e
         fallback = fallback_message
+
         ai_message = AiMessage.create!(
           user:    user,
           buddy:   buddy,
@@ -81,6 +91,7 @@ module Ai
         fallback
       rescue => e
         fallback = fallback_message
+
         ai_message = AiMessage.create!(
           user:    user,
           buddy:   buddy,
@@ -105,15 +116,19 @@ module Ai
     private
 
     # ---- 会話履歴を作る（BuddyMessage + AiMessage を時系列で混ぜる）----
-    def build_recent_log(post)
+    # NOTE:
+    # 口調混入を防ぐため、AiMessage は「今のbuddy」に紐づくものだけを採用する。
+    def build_recent_log(post, buddy:)
       list = []
 
       if defined?(BuddyMessage)
         list += BuddyMessage.where(post: post).order(:created_at).to_a
       end
 
-      # reply: 受容 / tip: 深掘りやまとめ（運用上tipに載ってる） / weekly: 自己PRまとめ
-      list += AiMessage.where(post: post, kind: [ :reply, :tip, :weekly ]).order(:created_at).to_a
+      # reply: 受容 / tip: 深掘りやまとめ / weekly: 強みまとめ
+      ai_scope = AiMessage.where(post: post, kind: [ :reply, :tip, :weekly ])
+      ai_scope = ai_scope.where(buddy: buddy) if buddy.present?
+      list += ai_scope.order(:created_at).to_a
 
       list = list.sort_by(&:created_at)
       list = list.last(RECENT_TURNS * 2)
@@ -134,11 +149,7 @@ module Ai
         end
       end.join("\n")
 
-      # 長すぎる場合は末尾優先でカット（直近文脈が重要）
-      if text.length > MAX_LOG_CHARS
-        text = text[-MAX_LOG_CHARS..]
-      end
-
+      text = text[-MAX_LOG_CHARS..] if text.length > MAX_LOG_CHARS
       text
     end
 
@@ -172,7 +183,7 @@ module Ai
         post:        post,
         ai_message:  ai_message,
         provider:    "openai",
-        model:       "gpt-4o-mini",
+        model:       MODEL,
         variant:     nil,
         prompt_tokens:     usage[:prompt_tokens],
         completion_tokens: usage[:completion_tokens],
@@ -193,7 +204,7 @@ module Ai
         user:        user,
         post:        post,
         provider:    "openai",
-        model:       "gpt-4o-mini",
+        model:       MODEL,
         variant:     nil,
         prompt_tokens:     usage[:prompt_tokens],
         completion_tokens: usage[:completion_tokens],
@@ -218,45 +229,6 @@ module Ai
         completion_tokens: usage["completion_tokens"] || usage[:completion_tokens],
         total_tokens:      usage["total_tokens"]      || usage[:total_tokens]
       }
-    end
-
-    # ===== プロンプト =====
-
-    def system_prompt_for(user:, buddy:)
-      type = prompt_type_for(user:, buddy:)
-      prompt = Ai::PromptRepository.for(type, user_nickname: user.nickname)
-      prompt[:system]
-    end
-
-    def prompt_type_for(user:, buddy:)
-      return buddy.code if buddy&.respond_to?(:code) && buddy.code.present?
-
-      if user.respond_to?(:profile) && user.profile&.social_type.present?
-        return user.profile.social_type
-      end
-
-      :default
-    end
-
-    # ここが変更点：会話ログを渡して「流れを踏まえた受容」にする
-    def user_prompt(post, user:, recent_log:)
-      <<~PROMPT
-        ユーザーのニックネームは「#{user.nickname.presence || "あなた"}」です。
-        このニックネームを必ず最初の2文以内に1回使って呼びかけてください。
-        投稿本文に出てくる他人の名前を、ユーザー名として呼ぶのは禁止です。
-
-        あなたは「会話全体の流れ」を踏まえて返信してください。
-        直前だけに反応せず、ユーザーが今どんな状態かを自然につなげて受け止めてください。
-        ただし、ログにないことは断定しないでください。
-
-        会話ログ（時系列）：
-        #{recent_log}
-
-        今回ユーザーが送った内容（最新）：
-        ---
-        #{post.body}
-        ---
-      PROMPT
     end
   end
 end
