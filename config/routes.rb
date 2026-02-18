@@ -99,5 +99,4 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   get  "/feedback",        to: "feedback#new"
   get  "/feedback/thanks", to: "feedback#thanks"
-
 end
