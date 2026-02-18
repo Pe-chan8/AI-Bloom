@@ -92,11 +92,6 @@ Rails.application.routes.draw do
   get "/privacy", to: "static_pages#privacy", as: :privacy
 
   # -------------------------------------------------------
-  # あなたの頑張りの証（バッジ機能）
-  # -------------------------------------------------------
-  resources :badges, only: %i[index show]
-
-  # -------------------------------------------------------
   # ユーザー設定
   # -------------------------------------------------------
   resource :account_setting, only: %i[show update]
