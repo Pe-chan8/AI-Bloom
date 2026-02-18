@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",
-    passwords: "users/passwords"
+    passwords: "users/passwords",
+    registrations: "users/registrations"
   }
 
   if Rails.env.development?
@@ -15,11 +16,8 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # オンボーディング
   # -------------------------------------------------------
-  get "onboardings/welcome", to: "onboardings#welcome", as: :onboardings_welcome
-  get "onboardings/about",   to: "onboardings#about",   as: :onboardings_about
-
-  get  "/onboarding",          to: "onboardings#welcome",  as: :onboarding
-  get  "/onboarding/about",    to: "onboardings#about",    as: :onboarding_about
+  get  "/onboarding",       to: "onboardings#welcome",  as: :onboarding
+  get  "/onboarding/about", to: "onboardings#about",    as: :onboarding_about
   post "/onboarding/complete", to: "onboardings#complete", as: :complete_onboarding
 
   # -------------------------------------------------------
@@ -99,5 +97,8 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   # お問い合わせフォーム
   # -------------------------------------------------------
-  resource :contact, only: %i[new create], path: "contact", path_names: { new: "" }
+  resource :contact,
+  only: %i[new create],
+  path: "contact",
+  path_names: { new: "" }
 end

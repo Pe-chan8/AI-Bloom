@@ -67,13 +67,14 @@ Rails.application.configure do
     protocol: "https"
   }
 
-  config.action_mailer.delivery_method = :postmark
-  config.action_mailer.postmark_settings = {
-    api_token: ENV.fetch("POSTMARK_API_TOKEN")
-  }
-
-  config.action_mailer.default_options = {
-    from: ENV.fetch("MAILER_FROM")
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: "smtp.resend.com",
+    port: 587,
+    user_name: "resend",
+    password: ENV.fetch("RESEND_API_KEY"),
+    authentication: :plain,
+    enable_starttls_auto: true
   }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
