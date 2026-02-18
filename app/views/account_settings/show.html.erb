@@ -41,8 +41,9 @@
         <div>
           <p class="text-sm font-semibold text-slate-800">メールアドレス変更</p>
 
-          <%= form_with model: @user, url: account_setting_path, method: :patch, local: true do |f| %>
-            <%= hidden_field_tag :commit_target, "email" %>
+          <%= form_with model: @user, url: account_setting_path, method: :patch,
+                        data: { turbo: false } do |f| %>
+            <%= hidden_field_tag :kind, "email" %>
 
             <div class="mt-2 space-y-4">
               <%= f.email_field :email,

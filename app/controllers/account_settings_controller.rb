@@ -8,20 +8,20 @@ class AccountSettingsController < ApplicationController
   def update
     @user = current_user
 
-    if params[:commit_target] == "email"
-      handle_email_change!
-      return
-    end
+    case params[:kind]
+    when "nickname"
+      if @user.update(nickname_params)
+        redirect_to account_setting_path, notice: "ニックネームを更新しました"
+      else
+        render :show, status: :unprocessable_entity
+      end
 
-    if @user.update(nickname_params)
-      redirect_to account_setting_path, notice: "ニックネームを更新しました"
+    when "email"
+      handle_email_change!
+
     else
-      flash.now[:alert] = "ニックネームを更新できませんでした"
-      render :show, status: :unprocessable_entity
+      redirect_to account_setting_path, alert: "更新内容を確認してください"
     end
-  ensure
-    Rails.logger.debug("ACCOUNT_SETTING update target=#{params[:commit_target]} errors=#{@user&.errors&.full_messages}")
-    Rails.logger.debug("email now=#{@user&.email} unconfirmed_email=#{@user&.try(:unconfirmed_email)}")
   end
 
   private
@@ -30,18 +30,26 @@ class AccountSettingsController < ApplicationController
     new_email = email_params[:email].to_s.strip
     current_password = email_params[:current_password].to_s
 
-    if new_email.blank?
-      @user.errors.add(:email, "を入力してください")
-      flash.now[:alert] = "メールアドレスを更新できませんでした"
-      render :show, status: :unprocessable_entity
-      return
-    end
-
     unless @user.valid_password?(current_password)
       @user.errors.add(:current_password, "が正しくありません")
       flash.now[:alert] = "メールアドレスを更新できませんでした"
-      render :show, status: :unprocessable_entity
-      return
+      return render :show, status: :unprocessable_entity
+    end
+
+    if new_email.blank?
+      @user.errors.add(:email, "を入力してください")
+      flash.now[:alert] = "メールアドレスを更新できませんでした"
+      return render :show, status: :unprocessable_entity
+    end
+
+    if new_email == @user.email
+      return redirect_to account_setting_path, alert: "メールアドレスが変更されていません"
+    end
+
+    # すでに確認待ちで、入力も同じ = 再送
+    if @user.unconfirmed_email.present? && @user.unconfirmed_email == new_email
+      @user.resend_confirmation_instructions
+      return redirect_to account_setting_path, notice: "確認メールを再送しました。メール内のリンクから変更を完了してください"
     end
 
     if @user.update(email: new_email)
