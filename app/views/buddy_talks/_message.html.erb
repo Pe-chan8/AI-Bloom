@@ -10,24 +10,43 @@
 
 <% elsif message.is_a?(AiMessage) %>
   <% is_tip = message.kind.to_s == "tip" %>
+  <% message_buddy = message.buddy || buddy %>
 
   <div class="flex items-start gap-3">
     <div class="w-10 h-10 rounded-full bg-amber-50 border border-amber-200 overflow-hidden flex items-center justify-center">
-      <%= image_tag buddy.avatar_image_path,
-            alt: buddy.display_name,
+      <%= image_tag message_buddy.avatar_image_path,
+            alt: message_buddy.display_name,
             class: "w-full h-full object-cover" %>
     </div>
 
-    <div class="max-w-[84%] rounded-2xl border px-4 py-3 shadow-sm
-                <%= is_tip ? "bg-amber-50 border-amber-100" : "bg-white border-slate-200" %>">
-      <p class="text-xs font-semibold text-slate-500 mb-1">
-        <%= "#{buddy.display_name}からのメッセージ" %>
+    <div class="max-w-[84%]">
+
+      <!-- 返信担当固定ラベル（このメッセージの生成バディ基準） -->
+      <div class="mb-1 text-[11px] text-slate-500">
+        <span class="inline-flex items-center rounded-full border border-slate-200 px-2 py-0.5 bg-slate-50">
+          返信担当：<%= message_buddy.display_name %>（この会話では固定）
+        </span>
+      </div>
+
+      <div class="rounded-2xl border px-4 py-3 shadow-sm
+                  <%= is_tip ? "bg-amber-50 border-amber-100" : "bg-white border-slate-200" %>">
+        <p class="text-xs font-semibold text-slate-500 mb-1">
+          <%= "#{message_buddy.display_name}からのメッセージ" %>
+        </p>
+
+        <p class="text-sm text-slate-800 whitespace-pre-wrap break-words">
+          <%= message.content %>
+        </p>
+
+        <p class="text-[11px] text-slate-400 mt-1">
+          <%= message.created_at.strftime("%m/%d %H:%M") %>
+        </p>
+      </div>
+
+      <p class="mt-1 text-[10px] text-slate-400">
+        ※バディを変更した場合は「新しい会話」から反映されます。
       </p>
 
-      <p class="text-sm text-slate-800 whitespace-pre-wrap break-words"><%= message.content %></p>
-      <p class="text-[11px] text-slate-400 mt-1">
-        <%= message.created_at.strftime("%m/%d %H:%M") %>
-      </p>
     </div>
   </div>
 <% end %>

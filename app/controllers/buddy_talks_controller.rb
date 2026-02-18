@@ -7,7 +7,10 @@ class BuddyTalksController < ApplicationController
 
   def show
     @post ||= Post.new(posted_at: Time.zone.now)
-    @messages = build_timeline(@buddy_talk) if @buddy_talk.present?
+    return unless @buddy_talk.present?
+
+    @messages = build_timeline(@buddy_talk)
+    @buddy    = @buddy_talk.buddy || current_buddy_fallback
   end
 
   def start
@@ -15,6 +18,9 @@ class BuddyTalksController < ApplicationController
 
     tags = Array(params.dig(:post, :tag_list)).reject(&:blank?)
     @post.tags_text = tags.join(",") if @post.respond_to?(:tags_text=)
+
+    # この会話の返信担当バディを固定（1会話＝1バディ）
+    @post.buddy = current_buddy_fallback
 
     if @post.save
       session[:buddy_talk_post_id] = @post.id
@@ -24,11 +30,11 @@ class BuddyTalksController < ApplicationController
         BuddyMessage.create!(user: current_user, post: @post, role: :user, content: first_text)
       end
 
-      Ai::EmpathyMessageService.new.generate_for(post: @post, user: current_user, buddy: current_user.buddy)
+      Ai::EmpathyMessageService.new.generate_for(post: @post, user: current_user, buddy: @post.buddy)
 
       @buddy_talk = @post
       @messages   = build_timeline(@buddy_talk)
-      buddy       = current_user.buddy || Buddy.find_by(code: "normal")
+      @buddy      = @buddy_talk.buddy || current_buddy_fallback
 
       respond_to do |format|
         format.turbo_stream do
@@ -41,21 +47,19 @@ class BuddyTalksController < ApplicationController
             turbo_stream.replace(
               "buddy_chat",
               partial: "buddy_talks/chat",
-              locals: { buddy_talk: @buddy_talk, messages: @messages, buddy: buddy }
+              locals: { buddy_talk: @buddy_talk, messages: @messages, buddy: @buddy }
             ),
             turbo_stream.replace(
               "buddy_composer",
               partial: "buddy_talks/composer",
               locals: { buddy_talk: @buddy_talk }
             ),
-            # created を Turboでも確実に発火させる
             turbo_stream.append(
               "ga-tracker",
               "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_talk_created\"></div>".html_safe
             )
           ]
         end
-        # HTML遷移でも created=1 を付けて show 側で拾えるようにする
         format.html { redirect_to buddy_talk_topic_path(@buddy_talk, created: 1) }
       end
     else
@@ -75,6 +79,7 @@ class BuddyTalksController < ApplicationController
   def topic
     session[:buddy_talk_post_id] = @buddy_talk.id
     @messages = build_timeline(@buddy_talk)
+    @buddy    = @buddy_talk.buddy || current_buddy_fallback
     render :show
   end
 
@@ -83,7 +88,9 @@ class BuddyTalksController < ApplicationController
     return redirect_to buddy_talk_topic_path(@buddy_talk) if text.blank?
 
     BuddyMessage.create!(user: current_user, post: @buddy_talk, role: :user, content: text) if defined?(BuddyMessage)
-    Ai::EmpathyMessageService.new.generate_for(post: @buddy_talk, user: current_user, buddy: current_user.buddy)
+
+    buddy = @buddy_talk.buddy || current_buddy_fallback
+    Ai::EmpathyMessageService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
 
     rerender_messages_and_composer
   end
@@ -98,7 +105,8 @@ class BuddyTalksController < ApplicationController
       )
     end
 
-    Ai::DeepDiveQuestionService.new.generate_for(post: @buddy_talk, user: current_user, buddy: current_user.buddy)
+    buddy = @buddy_talk.buddy || current_buddy_fallback
+    Ai::DeepDiveQuestionService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
 
     rerender_messages_and_composer
   end
@@ -113,19 +121,20 @@ class BuddyTalksController < ApplicationController
       )
     end
 
-    Ai::PraiseSummaryService.new.generate_for(post: @buddy_talk, user: current_user, buddy: current_user.buddy)
+    buddy = @buddy_talk.buddy || current_buddy_fallback
+    Ai::PraiseSummaryService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
 
     rerender_messages_and_composer
   end
 
   def summary
-    Ai::SelfPrSummaryService.new.generate_for(post: @buddy_talk, user: current_user, buddy: current_user.buddy)
+    buddy = @buddy_talk.buddy || current_buddy_fallback
+    Ai::SelfPrSummaryService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
     rerender_messages_and_composer
   end
 
   def restart
     session.delete(:buddy_talk_post_id)
-    # “新しい会話”開始＝次の show で created を取れるようにする
     redirect_to buddy_talk_path(created: 1)
   end
 
@@ -138,7 +147,7 @@ class BuddyTalksController < ApplicationController
 
   def rerender_messages_and_composer
     @messages = build_timeline(@buddy_talk)
-    buddy = current_user.buddy || Buddy.find_by(code: "normal")
+    buddy = @buddy_talk.buddy || current_buddy_fallback
 
     respond_to do |format|
       format.turbo_stream do
@@ -153,7 +162,6 @@ class BuddyTalksController < ApplicationController
             partial: "buddy_talks/composer",
             locals: { buddy_talk: @buddy_talk }
           ),
-          # “会話したか” を成功時だけ計測（reply/deep_dive/praise_summary/summary 共通）
           turbo_stream.append(
             "ga-tracker",
             "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_message_sent\"></div>".html_safe
@@ -188,10 +196,19 @@ class BuddyTalksController < ApplicationController
     )
   end
 
+  # “1会話＝1バディ” を守るため、timelineも会話担当buddyのAiMessageだけに絞る
   def build_timeline(post)
     list = []
     list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)
-    list += AiMessage.where(post: post, kind: [ :reply, :tip, :weekly ]).order(:created_at).to_a
+
+    ai_scope = AiMessage.where(post: post, kind: [ :reply, :tip, :weekly ])
+    ai_scope = ai_scope.where(buddy_id: post.buddy_id) if post.buddy_id.present?
+    list += ai_scope.order(:created_at).to_a
+
     list.sort_by(&:created_at)
+  end
+
+  def current_buddy_fallback
+    current_user.buddy || Buddy.find_by(code: "normal")
   end
 end

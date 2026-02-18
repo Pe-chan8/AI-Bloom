@@ -1,5 +1,9 @@
 class Post < ApplicationRecord
   belongs_to :user
+
+  # ▼ 1会話 = 1バディ固定 ▼
+  belongs_to :buddy, optional: true
+
   has_many :buddy_messages, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :favorited_users, through: :favorites, source: :user
@@ -37,9 +41,9 @@ class Post < ApplicationRecord
   # ▼ 表示用ラベル（UIで使う） ▼
   MOOD_LABELS = {
     "very_positive" => "とてもいい",
-    "positive"     => "いい",
-    "neutral"      => "ふつう",
-    "negative"     => "悪い",
+    "positive" => "いい",
+    "neutral" => "ふつう",
+    "negative" => "悪い",
     "very_negative" => "とても悪い"
   }.freeze
 
@@ -49,7 +53,7 @@ class Post < ApplicationRecord
 
   VISIBILITY_LABELS = {
     "private" => "プライベート",
-    "public"  => "公開"
+    "public" => "公開"
   }.freeze
 
   def visibility_label
@@ -76,6 +80,7 @@ class Post < ApplicationRecord
       visibility
       category
       subcategory
+      buddy_id
     ]
   end
 end

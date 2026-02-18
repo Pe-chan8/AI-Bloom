@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_17_182644) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_18_134207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -114,6 +114,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_17_182644) do
   create_table "posts", force: :cascade do |t|
     t.text "ai_summary"
     t.text "body", null: false
+    t.bigint "buddy_id"
     t.string "category"
     t.datetime "created_at", null: false
     t.text "image_url"
@@ -125,6 +126,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_17_182644) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "visibility", default: 0, null: false
+    t.index ["buddy_id"], name: "index_posts_on_buddy_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
     t.index ["visibility", "posted_at"], name: "index_posts_on_visibility_and_posted_at"
   end
@@ -292,6 +294,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_17_182644) do
   add_foreign_key "buddy_messages", "users"
   add_foreign_key "favorites", "posts"
   add_foreign_key "favorites", "users"
+  add_foreign_key "posts", "buddies"
   add_foreign_key "posts", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

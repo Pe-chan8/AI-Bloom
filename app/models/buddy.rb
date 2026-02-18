@@ -1,5 +1,7 @@
 class Buddy < ApplicationRecord
   has_many :users, foreign_key: :current_buddy_id, inverse_of: :current_buddy
+  has_many :posts, dependent: :nullify
+  has_many :ai_messages, dependent: :nullify
 
   validates :code, presence: true, uniqueness: true
   validates :name, presence: true
