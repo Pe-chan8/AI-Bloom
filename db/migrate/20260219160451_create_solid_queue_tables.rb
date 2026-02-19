@@ -35,7 +35,7 @@ class CreateSolidQueueTables < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :solid_queue_jobs, [:queue_name, :scheduled_at]
+    add_index :solid_queue_jobs, [ :queue_name, :scheduled_at ]
     add_index :solid_queue_jobs, :active_job_id
     add_index :solid_queue_jobs, :concurrency_key
     add_index :solid_queue_jobs, :status
