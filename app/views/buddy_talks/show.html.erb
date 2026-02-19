@@ -24,6 +24,11 @@
     </div>
   <% end %>
 
+  <%# ---- 非同期Turbo配信の購読（started時のみ）---- %>
+  <% if started %>
+    <%= turbo_stream_from "buddy_talks:#{record.id}" %>
+  <% end %>
+
   <%= turbo_frame_tag "buddy_meta" do %>
     <% if started %>
       <div data-controller="meta-collapse"

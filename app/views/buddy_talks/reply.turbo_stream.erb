@@ -1,4 +1,8 @@
 <%= turbo_stream.append "messages",
   partial: "message",
-  collection: @buddy_talk.messages.order(:id).last(2),
+  collection: @buddy_talk.messages.order(:id).last(1),
   as: :message %>
+
+<%= turbo_stream.append "messages",
+  partial: "pending_ai",
+  locals: { placeholder_id: @placeholder_id } %>
