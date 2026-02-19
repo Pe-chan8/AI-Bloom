@@ -53,10 +53,10 @@ module Ai
         { system: system }
       rescue KeyError => e
         Rails.logger.warn("[PromptRepository] system_for failed: #{e.class} #{e.message}")
-        { system: merged.to_s }
+        { system: (defined?(merged) ? merged.to_s : base_system(locale: locale)) }
       rescue => e
         Rails.logger.error("[PromptRepository] system_for error: #{e.class} #{e.message}")
-        { system: "" }
+        { system: (defined?(merged) ? merged.to_s : "") }
       end
 
       def for(type, user_nickname: nil, buddy: nil, locale: DEFAULT_LOCALE)
