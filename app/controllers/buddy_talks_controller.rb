@@ -4,8 +4,8 @@ class BuddyTalksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_bottom_nav
 
-  before_action :set_current_buddy_talk, only: [:show]
-  before_action :set_topic_buddy_talk,   only: [:topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart]
+  before_action :set_current_buddy_talk, only: [ :show ]
+  before_action :set_topic_buddy_talk,   only: [ :topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart ]
 
   def show
     @post ||= Post.new(posted_at: Time.zone.now)
@@ -278,7 +278,7 @@ class BuddyTalksController < ApplicationController
     list = []
     list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)
 
-    ai_scope = AiMessage.where(post: post, kind: [:reply, :tip, :weekly])
+    ai_scope = AiMessage.where(post: post, kind: [ :reply, :tip, :weekly ])
     ai_scope = ai_scope.where(buddy_id: post.buddy_id) if post.buddy_id.present?
     list += ai_scope.order(:created_at).to_a
 
