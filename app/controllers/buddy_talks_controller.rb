@@ -64,16 +64,14 @@ class BuddyTalksController < ApplicationController
               locals: { buddy_talk: @buddy_talk }
             ),
 
-            # 一言メッセージ（新規投稿後）
+            # ここから append は messages_list に統一
             turbo_stream.append(
-              "messages",
+              "messages_list",
               partial: "buddy_talks/system_notice",
               locals: { text: "よし、ここから一緒にやさしく振り返ろう🐧" }
             ),
-
-            # 「考え中…」プレースホルダ
             turbo_stream.append(
-              "messages",
+              "messages_list",
               partial: "buddy_talks/pending_ai",
               locals: { placeholder_id: @placeholder_id }
             ),
@@ -142,7 +140,6 @@ class BuddyTalksController < ApplicationController
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
-    # ---- 非同期：深掘り質問生成 ----
     @placeholder_id = build_placeholder_id
     Ai::GenerateDeepDiveJob.perform_later(
       post_id: @buddy_talk.id,
@@ -169,7 +166,6 @@ class BuddyTalksController < ApplicationController
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
-    # ---- 非同期：やさしくまとめ生成 ----
     @placeholder_id = build_placeholder_id
     Ai::GeneratePraiseSummaryJob.perform_later(
       post_id: @buddy_talk.id,
@@ -187,7 +183,6 @@ class BuddyTalksController < ApplicationController
   def summary
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
-    # ---- 非同期：自己PR要約生成（既存サービスをJobで）----
     @placeholder_id = build_placeholder_id
     Ai::GenerateSelfPrSummaryJob.perform_later(
       post_id: @buddy_talk.id,
@@ -227,16 +222,14 @@ class BuddyTalksController < ApplicationController
             locals: { messages: @messages, buddy: buddy }
           ),
 
-          # 一言メッセージ（返信後・各ボタン押下後）
+          # append は messages_list に統一
           turbo_stream.append(
-            "messages",
+            "messages_list",
             partial: "buddy_talks/system_notice",
             locals: { text: notice_text }
           ),
-
-          # 「考え中…」プレースホルダ
           turbo_stream.append(
-            "messages",
+            "messages_list",
             partial: "buddy_talks/pending_ai",
             locals: { placeholder_id: placeholder_id }
           ),
@@ -281,7 +274,6 @@ class BuddyTalksController < ApplicationController
     )
   end
 
-  # “1会話＝1バディ” を守るため、timelineも会話担当buddyのAiMessageだけに絞る
   def build_timeline(post)
     list = []
     list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)

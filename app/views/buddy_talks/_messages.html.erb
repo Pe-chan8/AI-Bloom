@@ -1,5 +1,7 @@
-<div class="space-y-4">
-  <% messages.each do |message| %>
-    <%= render "message", message: message, buddy: buddy %>
-  <% end %>
-</div>
+<%= turbo_frame_tag "messages" do %>
+  <div id="messages_list" class="space-y-4 px-2 sm:px-4">
+    <% messages.each do |message| %>
+      <%= render "message", message: message, buddy: buddy %>
+    <% end %>
+  </div>
+<% end %>
