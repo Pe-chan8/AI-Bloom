@@ -108,11 +108,11 @@ module Ai
 
       user_rows = BuddyMessage.where(post: post)
                               .select(:content, :created_at)
-                              .map { |m| [m.created_at, "USER: #{m.content}"] }
+                              .map { |m| [ m.created_at, "USER: #{m.content}" ] }
 
       ai_rows = AiMessage.where(post: post, buddy: buddy, kind: :reply)
                         .select(:content, :created_at)
-                        .map { |m| [m.created_at, "AI: #{m.content}"] }
+                        .map { |m| [ m.created_at, "AI: #{m.content}" ] }
 
       combined = (user_rows + ai_rows)
                 .sort_by { |created_at, _| created_at }
