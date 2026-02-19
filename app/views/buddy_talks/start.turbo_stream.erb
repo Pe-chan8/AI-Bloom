@@ -4,7 +4,11 @@
 
 <%= turbo_stream.replace "buddy_chat",
   partial: "chat",
-  locals: { buddy_talk: @buddy_talk } %>
+  locals: { buddy_talk: @buddy_talk, messages: @messages, buddy: @buddy } %>
+
+<%= turbo_stream.append "messages",
+  partial: "pending_ai",
+  locals: { placeholder_id: @placeholder_id } %>
 
 <turbo-stream action="append" target="ga-tracker">
   <template>

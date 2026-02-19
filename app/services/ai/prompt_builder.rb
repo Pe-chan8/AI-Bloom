@@ -4,7 +4,6 @@ module Ai
   class PromptBuilder
     DEFAULT_LOCALE = :ja
 
-    # ---- 共通：短文化ガード（毎回 system に追加して効かせる）----
     SHORT_OUTPUT_RULE = <<~RULE
       ・回答は最大200文字
       ・段落は最大2つまで
@@ -24,7 +23,7 @@ module Ai
         locale: locale
       ).fetch(:system)
 
-      system = "#{base_system}\n\n#{SHORT_OUTPUT_RULE}"
+      system = apply_short_rule_if_needed(base_system)
 
       user_tpl = Ai::PromptRepository.user_template_for(key: :buddy_reply, locale: locale)
 
@@ -52,7 +51,7 @@ module Ai
         locale: locale
       ).fetch(:system)
 
-      system = "#{base_system}\n\n#{SHORT_OUTPUT_RULE}"
+      system = apply_short_rule_if_needed(base_system)
 
       user_tpl = Ai::PromptRepository.user_template_for(key: :deep_dive_questions, locale: locale)
 
@@ -79,7 +78,7 @@ module Ai
         locale: locale
       ).fetch(:system)
 
-      system = "#{base_system}\n\n#{SHORT_OUTPUT_RULE}"
+      system = apply_short_rule_if_needed(base_system)
 
       user_tpl = Ai::PromptRepository.user_template_for(key: :praise_summary, locale: locale)
 
@@ -106,7 +105,7 @@ module Ai
         locale: locale
       ).fetch(:system)
 
-      system = "#{base_system}\n\n#{SHORT_OUTPUT_RULE}"
+      system = apply_short_rule_if_needed(base_system)
 
       user_tpl = Ai::PromptRepository.user_template_for(key: :analysis_feedback, locale: locale)
 
@@ -123,6 +122,14 @@ module Ai
       ]
     end
 
+    def self.apply_short_rule_if_needed(system_text)
+      enabled = ENV.fetch("AI_SHORT_OUTPUT", "0") == "1"
+      return system_text unless enabled
+
+      "#{system_text}\n\n#{SHORT_OUTPUT_RULE}"
+    end
+    private_class_method :apply_short_rule_if_needed
+
     def self.prompt_type_for(user:, buddy:)
       return buddy.code if buddy&.respond_to?(:code) && buddy.code.present?
 
@@ -132,7 +139,6 @@ module Ai
 
       :default
     end
-
     private_class_method :prompt_type_for
   end
 end

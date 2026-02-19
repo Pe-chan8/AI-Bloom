@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BuddyTalksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_bottom_nav
@@ -30,7 +32,14 @@ class BuddyTalksController < ApplicationController
         BuddyMessage.create!(user: current_user, post: @post, role: :user, content: first_text)
       end
 
-      Ai::EmpathyMessageService.new.generate_for(post: @post, user: current_user, buddy: @post.buddy)
+      # ---- 非同期：AI返信生成（ここでは待たない）----
+      @placeholder_id = build_placeholder_id
+      Ai::GenerateBuddyReplyJob.perform_later(
+        post_id: @post.id,
+        user_id: current_user.id,
+        buddy_id: @post.buddy_id,
+        placeholder_id: @placeholder_id
+      )
 
       @buddy_talk = @post
       @messages   = build_timeline(@buddy_talk)
@@ -54,6 +63,19 @@ class BuddyTalksController < ApplicationController
               partial: "buddy_talks/composer",
               locals: { buddy_talk: @buddy_talk }
             ),
+
+            # ここから append は messages_list に統一
+            turbo_stream.append(
+              "messages_list",
+              partial: "buddy_talks/system_notice",
+              locals: { text: "よし、ここから一緒にやさしく振り返ろう🐧" }
+            ),
+            turbo_stream.append(
+              "messages_list",
+              partial: "buddy_talks/pending_ai",
+              locals: { placeholder_id: @placeholder_id }
+            ),
+
             turbo_stream.append(
               "ga-tracker",
               "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_talk_created\"></div>".html_safe
@@ -90,9 +112,20 @@ class BuddyTalksController < ApplicationController
     BuddyMessage.create!(user: current_user, post: @buddy_talk, role: :user, content: text) if defined?(BuddyMessage)
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
-    Ai::EmpathyMessageService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
 
-    rerender_messages_and_composer
+    # ---- 非同期：AI返信生成（ここでは待たない）----
+    @placeholder_id = build_placeholder_id
+    Ai::GenerateBuddyReplyJob.perform_later(
+      post_id: @buddy_talk.id,
+      user_id: current_user.id,
+      buddy_id: buddy.id,
+      placeholder_id: @placeholder_id
+    )
+
+    rerender_messages_and_composer(
+      notice_text: "送信できたよ。バディが返事を考えてる…🐧💭",
+      placeholder_id: @placeholder_id
+    )
   end
 
   def deep_dive
@@ -106,9 +139,19 @@ class BuddyTalksController < ApplicationController
     end
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
-    Ai::DeepDiveQuestionService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
 
-    rerender_messages_and_composer
+    @placeholder_id = build_placeholder_id
+    Ai::GenerateDeepDiveJob.perform_later(
+      post_id: @buddy_talk.id,
+      user_id: current_user.id,
+      buddy_id: buddy.id,
+      placeholder_id: @placeholder_id
+    )
+
+    rerender_messages_and_composer(
+      notice_text: "いいね。もう少しだけ一緒に深掘りしよう🐧",
+      placeholder_id: @placeholder_id
+    )
   end
 
   def praise_summary
@@ -122,15 +165,36 @@ class BuddyTalksController < ApplicationController
     end
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
-    Ai::PraiseSummaryService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
 
-    rerender_messages_and_composer
+    @placeholder_id = build_placeholder_id
+    Ai::GeneratePraiseSummaryJob.perform_later(
+      post_id: @buddy_talk.id,
+      user_id: current_user.id,
+      buddy_id: buddy.id,
+      placeholder_id: @placeholder_id
+    )
+
+    rerender_messages_and_composer(
+      notice_text: "うん、やさしくまとめるね🐧🫶",
+      placeholder_id: @placeholder_id
+    )
   end
 
   def summary
     buddy = @buddy_talk.buddy || current_buddy_fallback
-    Ai::SelfPrSummaryService.new.generate_for(post: @buddy_talk, user: current_user, buddy: buddy)
-    rerender_messages_and_composer
+
+    @placeholder_id = build_placeholder_id
+    Ai::GenerateSelfPrSummaryJob.perform_later(
+      post_id: @buddy_talk.id,
+      user_id: current_user.id,
+      buddy_id: buddy.id,
+      placeholder_id: @placeholder_id
+    )
+
+    rerender_messages_and_composer(
+      notice_text: "振り返りを“言葉”に整えるね🐧✨",
+      placeholder_id: @placeholder_id
+    )
   end
 
   def restart
@@ -145,7 +209,7 @@ class BuddyTalksController < ApplicationController
 
   private
 
-  def rerender_messages_and_composer
+  def rerender_messages_and_composer(notice_text:, placeholder_id:)
     @messages = build_timeline(@buddy_talk)
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
@@ -157,23 +221,37 @@ class BuddyTalksController < ApplicationController
             partial: "buddy_talks/messages",
             locals: { messages: @messages, buddy: buddy }
           ),
+
+          # append は messages_list に統一
+          turbo_stream.append(
+            "messages_list",
+            partial: "buddy_talks/system_notice",
+            locals: { text: notice_text }
+          ),
+          turbo_stream.append(
+            "messages_list",
+            partial: "buddy_talks/pending_ai",
+            locals: { placeholder_id: placeholder_id }
+          ),
+
           turbo_stream.replace(
             "buddy_composer",
             partial: "buddy_talks/composer",
             locals: { buddy_talk: @buddy_talk }
           ),
+
           turbo_stream.append(
             "ga-tracker",
             "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_message_sent\"></div>".html_safe
-          ),
-          turbo_stream.append(
-            "ga-tracker",
-            "<div data-controller=\"ga-event\" data-ga-event-name-value=\"ai_reply_generated\"></div>".html_safe
           )
         ]
       end
       format.html { redirect_to buddy_talk_topic_path(@buddy_talk) }
     end
+  end
+
+  def build_placeholder_id
+    "ai_pending_#{SecureRandom.hex(8)}"
   end
 
   def set_bottom_nav
@@ -196,7 +274,6 @@ class BuddyTalksController < ApplicationController
     )
   end
 
-  # “1会話＝1バディ” を守るため、timelineも会話担当buddyのAiMessageだけに絞る
   def build_timeline(post)
     list = []
     list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)

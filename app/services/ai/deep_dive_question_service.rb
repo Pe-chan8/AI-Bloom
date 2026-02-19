@@ -111,7 +111,11 @@ module Ai
     # 性格(system) + 深掘り用途の追加指示
     def system_prompt_for(user:, buddy:)
       type = prompt_type_for(user: user, buddy: buddy)
-      base = Ai::PromptRepository.for(type, user_nickname: user.nickname)[:system]
+      base = Ai::PromptRepository.system_for(
+        type: type,
+        user_nickname: user.nickname,
+        buddy: buddy
+      )[:system]
 
       base + "\n\n" + <<~SYS
         ▼追加指示（やさしい深掘り問いかけ）
