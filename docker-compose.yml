@@ -49,6 +49,10 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: password
       TZ: Asia/Tokyo
+      AI_DEBUG: "1"
+      AI_DEBUG_BODY: "0"
+      AI_RECENT_TURNS: "2"
+      AI_REPLY_MAX_TOKENS: "350"
     restart: unless-stopped
 
 volumes:
