@@ -1,5 +1,9 @@
 <%= turbo_frame_tag "messages" do %>
-  <div id="messages_list" class="space-y-4 px-2 sm:px-4">
+  <% talk = local_assigns[:buddy_talk] || @buddy_talk %>
+
+  <div id="messages_list"
+       class="space-y-4"
+       data-ai-polling-post-id="<%= talk&.id %>">
     <% messages.each do |message| %>
       <%= render "message", message: message, buddy: buddy %>
     <% end %>
