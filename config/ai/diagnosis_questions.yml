@@ -1,0 +1,30 @@
+# frozen_string_literal: true
+ja:
+  questions:
+    - category: amiable
+      content: "困っている人を見ると、自分の予定よりも「助けたい気持ち」が先に出ることがある。"
+    - category: amiable
+      content: "本当は違う意見があっても、その場の雰囲気を大切にしたくて言わないことがある。"
+    - category: amiable
+      content: "誰かに感謝されると、「もっと役に立てたらいいな」と感じることがある。"
+
+    - category: analytical
+      content: "何かを決めるときは、気持ちよりも「理由」や「情報」を大事にしたいほうだ。"
+    - category: analytical
+      content: "新しいことを始める前に、うまくいかなかった場合も少し想像して備えたい。"
+    - category: analytical
+      content: "誰かから相談されると、まず状況を整理して考えたくなることが多い。"
+
+    - category: expressive
+      content: "話しているうちにアイデアが浮かんで、話題がどんどん広がることがある。"
+    - category: expressive
+      content: "元気がなさそうな人を見ると、気持ちが少し明るくなる言葉をかけたくなる。"
+    - category: expressive
+      content: "気分が高まると、つい身振りや表情が大きくなることがある。"
+
+    - category: driving
+      content: "やることがはっきりすると、他の予定よりも優先して動きたくなる。"
+    - category: driving
+      content: "迷い続けるより、ある程度決めて前に進めたほうが気持ちが楽になる。"
+    - category: driving
+      content: "「できるかどうか」よりも、「まずやってみよう」と思うことが多い。"
