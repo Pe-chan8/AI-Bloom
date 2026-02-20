@@ -314,7 +314,7 @@ class BuddyTalksController < ApplicationController
   end
 
   def set_current_buddy_talk
-    id = session[:buddy_talk_post_id]
+    id = params[:id].presence || session[:buddy_talk_post_id]
     @buddy_talk = current_user.posts.find_by(id: id) if id.present?
   end
 

@@ -33,6 +33,18 @@ module Ai
         post: post,
         recent_log: recent_log
       )
+
+      # --- DEBUG: verify persona prompt is actually injected ---
+      system_msg = messages.find { |m| m[:role].to_s == "system" } || {}
+      system_txt = system_msg[:content].to_s
+
+      Rails.logger.warn(
+        "[AI_DEBUG] post=#{post.id} buddy_id=#{buddy&.id} buddy_code=#{buddy&.code} " \
+        "system_len=#{system_txt.length} " \
+        "system_head=#{system_txt.first(240).inspect} " \
+        "system_tail=#{system_txt.last(240).inspect}"
+      )
+
       t2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
       # -------------------------
