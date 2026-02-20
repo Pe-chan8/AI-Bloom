@@ -1,9 +1,17 @@
 <%= turbo_frame_tag "messages" do %>
   <% talk = local_assigns[:buddy_talk] || @buddy_talk %>
 
+  <% active =
+       @show_initial_pending ||
+       (defined?(@placeholder_id) && @placeholder_id.present?) ||
+       (defined?(placeholder_id) && placeholder_id.present?)
+  %>
+
   <div id="messages_list"
-       class="space-y-4"
-       data-ai-polling-post-id="<%= talk&.id %>">
+       class="space-y-4 px-2 sm:px-4"
+       data-ai-polling-post-id="<%= talk&.id %>"
+       data-ai-status-url="<%= talk.present? ? buddy_talk_ai_status_path(talk) : "" %>"
+       data-ai-polling-active="<%= active ? 1 : 0 %>">
     <% messages.each do |message| %>
       <%= render "message", message: message, buddy: buddy %>
     <% end %>

@@ -34,6 +34,11 @@ class BuddyTalksController < ApplicationController
 
       # ---- 非同期：AI返信生成（ここでは待たない）----
       @placeholder_id = build_placeholder_id
+
+      # ポーリング開始時刻を記録（この時刻以降に生成されたAiMessageがあればcompleted）
+      session[:ai_polling_started_at] ||= {}
+      session[:ai_polling_started_at][@post.id.to_s] = Time.zone.now.iso8601
+
       Ai::GenerateBuddyReplyJob.perform_later(
         post_id: @post.id,
         user_id: current_user.id,
@@ -64,7 +69,7 @@ class BuddyTalksController < ApplicationController
               locals: { buddy_talk: @buddy_talk }
             ),
 
-            # ここから append は messages_list に統一
+            # append は messages_list に統一
             turbo_stream.append(
               "messages_list",
               partial: "buddy_talks/system_notice",
@@ -82,6 +87,8 @@ class BuddyTalksController < ApplicationController
             )
           ]
         end
+
+        # start は redirect で topic に飛ぶため、topic側で pending 表示を出せるよう created=1 を付ける
         format.html { redirect_to buddy_talk_topic_path(@buddy_talk, created: 1) }
       end
     else
@@ -102,6 +109,13 @@ class BuddyTalksController < ApplicationController
     session[:buddy_talk_post_id] = @buddy_talk.id
     @messages = build_timeline(@buddy_talk)
     @buddy    = @buddy_talk.buddy || current_buddy_fallback
+
+    # created=1 の初回表示で「まだAI返信が無い」なら pending を表示するフラグを立てる
+    if params[:created].present?
+      has_ai = @messages.any? { |m| m.is_a?(AiMessage) }
+      @show_initial_pending = !has_ai
+    end
+
     render :show
   end
 
@@ -115,6 +129,11 @@ class BuddyTalksController < ApplicationController
 
     # ---- 非同期：AI返信生成（ここでは待たない）----
     @placeholder_id = build_placeholder_id
+
+    # ポーリング開始時刻を記録（この時刻以降に生成されたAiMessageがあればcompleted）
+    session[:ai_polling_started_at] ||= {}
+    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
+
     Ai::GenerateBuddyReplyJob.perform_later(
       post_id: @buddy_talk.id,
       user_id: current_user.id,
@@ -141,6 +160,11 @@ class BuddyTalksController < ApplicationController
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
     @placeholder_id = build_placeholder_id
+
+    # ポーリング開始時刻を記録
+    session[:ai_polling_started_at] ||= {}
+    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
+
     Ai::GenerateDeepDiveJob.perform_later(
       post_id: @buddy_talk.id,
       user_id: current_user.id,
@@ -167,6 +191,11 @@ class BuddyTalksController < ApplicationController
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
     @placeholder_id = build_placeholder_id
+
+    # ポーリング開始時刻を記録
+    session[:ai_polling_started_at] ||= {}
+    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
+
     Ai::GeneratePraiseSummaryJob.perform_later(
       post_id: @buddy_talk.id,
       user_id: current_user.id,
@@ -184,6 +213,11 @@ class BuddyTalksController < ApplicationController
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
     @placeholder_id = build_placeholder_id
+
+    # ポーリング開始時刻を記録
+    session[:ai_polling_started_at] ||= {}
+    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
+
     Ai::GenerateSelfPrSummaryJob.perform_later(
       post_id: @buddy_talk.id,
       user_id: current_user.id,
@@ -205,6 +239,27 @@ class BuddyTalksController < ApplicationController
   def close
     session.delete(:buddy_talk_post_id)
     redirect_to posts_path
+  end
+
+  # ポーリング用：AI生成完了確認
+  def ai_status
+    post = current_user.posts.find(params[:id])
+
+    # ポーリング開始時刻（なければ post更新時刻を基準にする）
+    started_at =
+      begin
+        t = session.dig(:ai_polling_started_at, post.id.to_s)
+        t.present? ? Time.zone.parse(t) : nil
+      rescue
+        nil
+      end
+
+    started_at ||= post.updated_at || post.created_at
+
+    # 「開始時刻以降」に生成されたAIメッセージがあるかで判定
+    ai_completed = AiMessage.where(post: post).where("created_at >= ?", started_at).exists?
+
+    render json: { completed: ai_completed }
   end
 
   private
@@ -287,14 +342,5 @@ class BuddyTalksController < ApplicationController
 
   def current_buddy_fallback
     current_user.buddy || Buddy.find_by(code: "normal")
-  end
-
-  def ai_status
-    post = current_user.posts.find(params[:id])
-
-    # pendingプレースホルダが消えていたら＝AI返信完了とみなす
-    ai_completed = AiMessage.where(post: post).exists?
-
-    render json: { completed: ai_completed }
   end
 end
