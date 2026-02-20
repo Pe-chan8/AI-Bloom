@@ -219,7 +219,7 @@ class BuddyTalksController < ApplicationController
           turbo_stream.replace(
             "messages",
             partial: "buddy_talks/messages",
-            locals: { messages: @messages, buddy: buddy }
+            locals: { messages: @messages, buddy: buddy, buddy_talk: @buddy_talk }
           ),
 
           # append は messages_list に統一
