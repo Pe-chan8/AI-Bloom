@@ -1,3 +1,7 @@
 <div class="space-y-4 px-2 sm:px-4">
   <%= render "messages", messages: messages, buddy: buddy, buddy_talk: @buddy_talk %>
 </div>
+
+<% if @show_initial_pending %>
+  <%= render "buddy_talks/pending_ai", placeholder_id: "initial_pending" %>
+<% end %>
