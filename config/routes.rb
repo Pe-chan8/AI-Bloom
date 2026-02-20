@@ -65,9 +65,11 @@ Rails.application.routes.draw do
   post "/buddy_talks/:id/deep_dive",       to: "buddy_talks#deep_dive",      as: :deep_dive_buddy_talk
   post "/buddy_talks/:id/summary",         to: "buddy_talks#summary",        as: :summary_buddy_talk
   post "/buddy_talks/:id/praise_summary",  to: "buddy_talks#praise_summary", as: :praise_summary_buddy_talk
+  post "/buddy_talks/:id/restart",         to: "buddy_talks#restart",        as: :restart_buddy_talk
+  post "/buddy_talks/:id/close",           to: "buddy_talks#close",          as: :close_buddy_talk
 
-  post "/buddy_talks/:id/restart", to: "buddy_talks#restart", as: :restart_buddy_talk
-  post "/buddy_talks/:id/close",   to: "buddy_talks#close",   as: :close_buddy_talk
+  # AI返信完了確認用
+  get "/buddy_talks/:id/ai_status", to: "buddy_talks#ai_status", as: :buddy_talk_ai_status
 
   # -------------------------------------------------------
   # バディ

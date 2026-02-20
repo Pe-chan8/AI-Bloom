@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_19_160451) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_19_180934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -222,12 +222,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_160451) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "key", null: false
+    t.datetime "last_run_at"
+    t.datetime "next_run_at"
     t.integer "priority", default: 0
     t.string "queue_name"
     t.string "schedule", null: false
     t.boolean "static", default: true, null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_solid_queue_recurring_tasks_on_key", unique: true
+    t.index ["next_run_at"], name: "index_solid_queue_recurring_tasks_on_next_run_at"
     t.index ["static"], name: "index_solid_queue_recurring_tasks_on_static"
   end
 

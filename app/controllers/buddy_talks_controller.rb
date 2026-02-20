@@ -288,4 +288,13 @@ class BuddyTalksController < ApplicationController
   def current_buddy_fallback
     current_user.buddy || Buddy.find_by(code: "normal")
   end
+
+  def ai_status
+    post = current_user.posts.find(params[:id])
+
+    # pendingプレースホルダが消えていたら＝AI返信完了とみなす
+    ai_completed = AiMessage.where(post: post).exists?
+
+    render json: { completed: ai_completed }
+  end
 end

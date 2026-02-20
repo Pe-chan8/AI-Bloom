@@ -12,3 +12,5 @@ pin "controllers/hamburger_menu_controller", to: "controllers/hamburger_menu_con
 pin "controllers/hello_controller", to: "controllers/hello_controller.js"
 pin "controllers/help_tip_controller", to: "controllers/help_tip_controller.js"
 pin "controllers/meta_collapse_controller", to: "controllers/meta_collapse_controller.js"
+
+pin "poll_ai_reply", to: "poll_ai_reply.js"

@@ -1,5 +1,9 @@
 <%= turbo_frame_tag "messages" do %>
-  <div id="messages" class="space-y-4 px-2 sm:px-4">
+  <div id="messages_list"
+       class="space-y-4 px-2 sm:px-4"
+       data-ai-polling-post-id="<%= @buddy_talk&.id %>">
+
     <%= render "messages", messages: messages, buddy: buddy %>
+
   </div>
 <% end %>
