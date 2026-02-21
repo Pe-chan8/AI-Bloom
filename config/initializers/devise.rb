@@ -24,7 +24,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = ENV.fetch("MAILER_FROM", "no-reply@ai-bloom.onrender.com")
+  config.mailer_sender = ENV.fetch("MAILER_FROM", "no-reply@ai-bloom.jp")
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -273,6 +273,11 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  config.omniauth :google_oauth2,
+    ENV.fetch("GOOGLE_CLIENT_ID"),
+    ENV.fetch("GOOGLE_CLIENT_SECRET"),
+    scope: "email,profile",
+    prompt: "select_account"
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
