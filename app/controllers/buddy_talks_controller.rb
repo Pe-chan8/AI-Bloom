@@ -4,15 +4,19 @@ class BuddyTalksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_bottom_nav
 
-  before_action :set_current_buddy_talk, only: [ :show ]
-  before_action :set_topic_buddy_talk,   only: [ :topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart ]
+  before_action :set_current_buddy_talk, only: [:show]
+  before_action :set_topic_buddy_talk,   only: [:topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart]
 
   def show
-    @post ||= Post.new(posted_at: Time.zone.now)
-    return unless @buddy_talk.present?
+    @post = Post.new(posted_at: Time.zone.now)
 
-    @messages = build_timeline(@buddy_talk)
-    @buddy    = @buddy_talk.buddy || current_buddy_fallback
+    if @buddy_talk.present?
+      @messages = build_timeline(@buddy_talk)
+      @buddy    = @buddy_talk.buddy || current_buddy_fallback
+    else
+      @messages = []
+      @buddy    = current_buddy_fallback
+    end
   end
 
   def start
@@ -315,7 +319,10 @@ class BuddyTalksController < ApplicationController
 
   def set_current_buddy_talk
     id = params[:id].presence || session[:buddy_talk_post_id]
-    @buddy_talk = current_user.posts.find_by(id: id) if id.present?
+    return if id.blank?
+
+    @buddy_talk = current_user.posts.find_by(id: id)
+    session[:buddy_talk_post_id] = @buddy_talk.id if @buddy_talk.present?
   end
 
   def set_topic_buddy_talk
