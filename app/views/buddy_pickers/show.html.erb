@@ -1,0 +1,35 @@
+<% content_for :title, "バディ選びサポート - AI-Bloom" %>
+
+<section class="px-4 py-10 max-w-3xl mx-auto">
+  <h1 class="text-xl font-bold text-center">バディ選びサポート</h1>
+  <p class="text-center text-sm text-gray-600 mt-2">
+    迷ったときは、ランダム or 3問おすすめで試してみよう。
+  </p>
+
+  <div class="mt-8 space-y-6">
+    <div class="bg-white rounded-xl shadow p-5">
+      <h2 class="font-semibold">ランダムで選ぶ</h2>
+      <p class="text-sm text-gray-600 mt-1">6種類のバディからランダムに選びます。</p>
+
+      <%= button_to "ランダムに選ぶ",
+            random_buddy_picker_path,
+            method: :post,
+            class: "mt-4 w-full py-3 rounded-full bg-amber-200 hover:bg-amber-300 font-semibold" %>
+    </div>
+
+    <div class="bg-white rounded-xl shadow p-5">
+      <h2 class="font-semibold">今の気分でおすすめ（3問）</h2>
+      <p class="text-sm text-gray-600 mt-1">いま欲しい関わり方に合わせておすすめします。</p>
+
+      <%= render "quiz" %>
+    </div>
+
+    <% if @result.present? %>
+      <%= render "result", result: @result %>
+    <% end %>
+
+    <div class="text-center">
+      <%= link_to "バディ一覧に戻る", buddies_path, class: "text-sm underline text-slate-600" %>
+    </div>
+  </div>
+</section>

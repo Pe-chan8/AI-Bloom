@@ -72,6 +72,14 @@ Rails.application.routes.draw do
   get "/buddy_talks/:id/ai_status", to: "buddy_talks#ai_status", as: :buddy_talk_ai_status
 
   # -------------------------------------------------------
+  # バディ選択サポート（ランダム / 3問おすすめ）
+  # -------------------------------------------------------
+  resource :buddy_picker, only: [ :show ] do
+    post :random
+    post :recommend
+  end
+
+  # -------------------------------------------------------
   # バディ
   # -------------------------------------------------------
   resources :buddies, only: [ :index ] do

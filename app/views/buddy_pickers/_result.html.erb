@@ -1,0 +1,47 @@
+<% primary = result[:primary_buddy] %>
+<% extras  = result[:extra_buddies] %>
+
+<div class="bg-white rounded-xl shadow p-5">
+  <h3 class="font-semibold">おすすめ結果</h3>
+
+  <% if primary.present? %>
+    <div class="mt-4 border rounded-xl p-4">
+      <p class="text-sm text-gray-600">あなたにおすすめ</p>
+      <p class="text-lg font-bold mt-1"><%= primary.name %></p>
+      <p class="text-sm text-slate-700 mt-2"><%= primary.description %></p>
+
+      <div class="mt-4">
+        <%= button_to "このバディにする",
+              select_buddy_path(primary),
+              method: :post,
+              onclick: "return confirm('#{primary.name} にバディを変更しますか？')",
+              class: "w-full py-3 rounded-full bg-sky-500 hover:bg-sky-600 text-white font-semibold" %>
+      </div>
+    </div>
+  <% else %>
+    <p class="mt-4 text-sm text-red-600">おすすめのバディを決められませんでした。もう一度お試しください。</p>
+  <% end %>
+
+  <% if extras.present? %>
+    <div class="mt-6">
+      <p class="text-sm text-gray-600">気分転換したいときは…</p>
+
+      <div class="mt-2 space-y-3">
+        <% extras.each do |b| %>
+          <div class="border rounded-xl p-4">
+            <p class="text-lg font-bold"><%= b.name %></p>
+            <p class="text-sm text-slate-700 mt-1"><%= b.description %></p>
+
+            <div class="mt-3">
+              <%= button_to "このバディにする",
+                    select_buddy_path(b),
+                    method: :post,
+                    onclick: "return confirm('#{b.name} にバディを変更しますか？')",
+                    class: "w-full py-2 rounded-full bg-emerald-200 hover:bg-emerald-300 font-semibold" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
