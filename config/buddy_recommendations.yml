@@ -1,0 +1,20 @@
+development:
+  expressive: [5]   # エルフィ
+  driving: [4]      # ヴァル
+  amiable: [3]      # ルナ
+  analytical: [2]   # キエル
+  special: [6]      # レオ（関西フレンド）
+
+test:
+  expressive: [5]
+  driving: [4]
+  amiable: [3]
+  analytical: [2]
+  special: [6]
+
+production:
+  expressive: [5]
+  driving: [4]
+  amiable: [3]
+  analytical: [2]
+  special: [6]

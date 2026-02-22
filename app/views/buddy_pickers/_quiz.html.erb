@@ -1,0 +1,53 @@
+<%= form_with url: recommend_buddy_picker_path, method: :post, data: { turbo: false } do |f| %>
+  <div class="mt-4 space-y-5">
+
+    <div>
+      <p class="font-medium">Q1. 考えを深めるとき、どちらが近い？</p>
+      <div class="mt-2 space-y-2 text-sm">
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q1, "talk" %> 人と話して整理したい
+        </label>
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q1, "solo" %> ひとりでじっくり考えたい
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <p class="font-medium">Q2. 判断するとき、どちらを優先しがち？</p>
+      <div class="mt-2 space-y-2 text-sm">
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q2, "intuition" %> 感性・直感
+        </label>
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q2, "logic" %> 根拠・論理
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <p class="font-medium">Q3. いま一番ほしいのは？</p>
+      <div class="mt-2 space-y-2 text-sm">
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q3, "energize" %> 気持ちを明るくしたい
+        </label>
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q3, "decide" %> 迷いを減らして前に進みたい
+        </label>
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q3, "soothe" %> やさしく落ち着きたい
+        </label>
+        <label class="flex items-center gap-2">
+          <%= radio_button_tag :q3, "organize" %> 事実を整理して納得したい
+        </label>
+      </div>
+    </div>
+
+    <%= f.submit "おすすめのバディを見る",
+          class: "mt-2 w-full py-3 rounded-full bg-emerald-200 hover:bg-emerald-300 font-semibold" %>
+
+    <p class="text-xs text-gray-500 text-center">
+      ※おすすめは“固定”ではなく、あくまで「試しやすい入口」です
+    </p>
+  </div>
+<% end %>
