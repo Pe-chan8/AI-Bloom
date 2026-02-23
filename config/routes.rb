@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # -------------------------------------------------------
+  # Devise
+  # -------------------------------------------------------
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",
@@ -6,11 +9,17 @@ Rails.application.routes.draw do
     registrations: "users/registrations"
   }
 
+  # -------------------------------------------------------
+  # 開発環境用
+  # -------------------------------------------------------
   if Rails.env.development?
     require "letter_opener_web"
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 
+  # -------------------------------------------------------
+  # ヘルスチェック
+  # -------------------------------------------------------
   get "up" => "rails/health#show", as: :rails_health_check
 
   # -------------------------------------------------------
@@ -91,6 +100,11 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   resource :analytics, only: [ :show ] do
     post :generate_feedback
+  end
+
+  # 診断結果の履歴
+  namespace :analyses do
+    resources :social_type_results, only: %i[index show]
   end
 
   # -------------------------------------------------------

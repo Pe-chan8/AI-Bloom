@@ -52,6 +52,7 @@ class User < ApplicationRecord
   has_many :favorite_posts, through: :favorites, source: :post
   has_many :ai_messages, dependent: :destroy
   has_many :ai_message_feedbacks, dependent: :destroy
+  has_many :social_type_results, dependent: :destroy
 
   # Buddy との関連付け（NULL 許可）
   belongs_to :buddy, optional: true

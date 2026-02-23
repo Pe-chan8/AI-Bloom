@@ -1,0 +1,22 @@
+<%= link_to analyses_social_type_result_path(result),
+            class: "block p-4 rounded-xl bg-white shadow-sm hover:shadow transition" do %>
+  <div class="flex items-center justify-between">
+    <div>
+      <div class="text-sm text-gray-500">
+        <%= l(result.diagnosed_at, format: :short) %>
+      </div>
+      <div class="font-semibold mt-1">
+        結果：<%= result.dominant_type.humanize %>
+        <span class="text-xs text-gray-500 ml-2">（v<%= result.schema_version %>）</span>
+      </div>
+    </div>
+    <span class="text-sm text-gray-500">詳細 →</span>
+  </div>
+
+  <% if result.scores.present? %>
+    <div class="mt-3 text-xs text-gray-600">
+      スコア：
+      <%= result.scores.map { |k, v| "#{k}: #{v}" }.join(" / ") %>
+    </div>
+  <% end %>
+<% end %>

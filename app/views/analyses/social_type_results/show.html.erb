@@ -1,0 +1,29 @@
+<% content_for :title, "診断結果 - AI-Bloom" %>
+
+<section class="px-4 py-8 max-w-3xl mx-auto">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-bold">診断結果</h1>
+    <%= link_to "履歴一覧へ", analyses_social_type_results_path, class: "text-sm underline" %>
+  </div>
+
+  <div class="p-5 rounded-2xl bg-white shadow-sm">
+    <div class="text-sm text-gray-500">
+      <%= l(@result.diagnosed_at, format: :long) %>（v<%= @result.schema_version %>）
+    </div>
+
+    <div class="text-lg font-semibold mt-2">
+      あなたのタイプ：<%= @result.dominant_type.humanize %>
+    </div>
+
+    <% if @result.scores.present? %>
+      <div class="mt-4">
+        <h2 class="font-semibold mb-2">スコア</h2>
+        <ul class="text-sm text-gray-700 space-y-1">
+          <% @result.scores.each do |k, v| %>
+            <li><%= k %>：<%= v %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</section>

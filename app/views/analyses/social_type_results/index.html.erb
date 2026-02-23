@@ -1,0 +1,17 @@
+<% content_for :title, "診断結果（履歴） - AI-Bloom" %>
+
+<section class="px-4 py-8 max-w-3xl mx-auto">
+  <h1 class="text-xl font-bold mb-4">診断結果（履歴）</h1>
+
+  <% if @results.blank? %>
+    <div class="p-4 rounded-xl bg-white shadow-sm">
+      <p class="text-sm text-gray-600">まだ診断結果がありません。診断を受けるとここに履歴が残ります。</p>
+    </div>
+  <% else %>
+    <div class="space-y-3">
+      <% @results.each do |result| %>
+        <%= render "result_card", result: result %>
+      <% end %>
+    </div>
+  <% end %>
+</section>
