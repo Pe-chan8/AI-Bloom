@@ -159,21 +159,35 @@ YAMLで紐付け管理しており、将来の16分類拡張に対応可能な�
 コミュニケーション傾向を可視化する補助機能。
 
 <p align="center">
-  <img src="docs/images/screens/posts.png" width="850">
+  <img src="docs/images/screens/ai-bloom-social-type-diagnosis-top.png" width="850">
 </p>
 ---
 
 ## 6）分析（自己理解レポート）
 
 <p align="center">
-  <img src="docs/images/screens/ai-bloom-social-type-diagnosis-top.png" width="850">
+  <img src="docs/images/screens/analytics.png" width="850">
 </p>
 
+- ソーシャルタイプ診断結果（履歴）
 - あなたらしい点
+- あなたらしさを活かすヒント
 - しんどくなりやすい傾向
+- しんどい時のヒント
 - 気分推移（直近14日）
 
 主観データを再構造化し、言語化します。
+
+## 7）その他
+
+<p align="center">
+  <img src="docs/images/screens/other.png" width="850">
+</p>
+
+- アカウント設定（ニックネーム/メールアドレス変更　など）
+- AI-Bloomを育てる声（ユーザーの声収集）
+- 利用規約
+- プライバシーポリシー
 
 ---
 
@@ -249,8 +263,6 @@ UXと運用コストの両立。
 # 最後に
 
 他者評価に依存しない自信は、
-
-経験を構造化し、  
-意味づけし直すことで生まれると考えています。
+経験を構造化し、意味づけし直すことで生まれると考えています。
 
 AI-bloomはそのための仕組みです。
