@@ -158,19 +158,15 @@ YAMLで紐付け管理しており、将来の16分類拡張に対応可能な�
 
 コミュニケーション傾向を可視化する補助機能。
 
-| タイプ | 特徴 |
-|--------|------|
-| 🟢 エミアブル | 協調・安心重視 |
-| 🟡 エクスプレッシブ | 感情豊か・直感型 |
-| 🔵 アナリティカル | 冷静・構造重視 |
-| 🔴 ドライバー | 成果志向・決断型 |
-
+<p align="center">
+  <img src="docs/images/screens/posts.png" width="850">
+</p>
 ---
 
 ## 6）分析（自己理解レポート）
 
 <p align="center">
-  <img src="docs/images/screens/analysis.png" width="850">
+  <img src="docs/images/screens/ai-bloom-social-type-diagnosis-top.png" width="850">
 </p>
 
 - あなたらしい点

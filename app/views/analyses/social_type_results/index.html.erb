@@ -1,17 +1,35 @@
 <% content_for :title, "診断結果（履歴） - AI-Bloom" %>
 
-<section class="px-4 py-8 max-w-3xl mx-auto">
-  <h1 class="text-xl font-bold mb-4">診断結果（履歴）</h1>
+<section class="px-4 py-10">
+  <div class="mx-auto w-full max-w-3xl">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-extrabold tracking-wide text-slate-900">
+        診断結果（履歴）
+      </h1>
 
-  <% if @results.blank? %>
-    <div class="p-4 rounded-xl bg-white shadow-sm">
-      <p class="text-sm text-gray-600">まだ診断結果がありません。診断を受けるとここに履歴が残ります。</p>
-    </div>
-  <% else %>
-    <div class="space-y-3">
-      <% @results.each do |result| %>
-        <%= render "result_card", result: result %>
+      <%= link_to diagnosis_top_path, class: "text-sm text-slate-600 hover:text-slate-900 underline" do %>
+        診断へ
       <% end %>
     </div>
-  <% end %>
+
+    <p class="mt-2 text-sm text-slate-600">
+      そのときの「あなたらしさ」を、いつでも見返せます。
+    </p>
+
+    <div class="mt-6 space-y-3">
+      <% if @results.blank? %>
+        <div class="rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm text-slate-600">
+          まだ診断結果がありません。診断をしてみましょう。
+          <div class="mt-3">
+            <%= link_to "診断をスタートする", diagnosis_questions_path,
+              class: "inline-flex items-center rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-amber-800 shadow-sm hover:bg-amber-50" %>
+          </div>
+        </div>
+      <% else %>
+        <% @results.each do |result| %>
+          <%= render "result_card", result: result %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </section>

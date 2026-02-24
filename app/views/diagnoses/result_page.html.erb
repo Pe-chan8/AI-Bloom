@@ -135,7 +135,7 @@
       <div
         id="diagnosis-type-meta"
         data-type="<%= @dominant_type %>"
-        data-image-url="<%= image_path.present? ? asset_path(image_path) : "" %>">
+        data-image-url="<%= @share_image_url.presence || "" %>">
       </div>
     </section>
 

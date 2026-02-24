@@ -236,7 +236,6 @@ class DiagnosesController < ApplicationController
     host = ENV["APP_HOST"].presence || request.base_url
     host = host.sub(/\Ahttp:/, "https:")
 
-    path = view_context.asset_path(logical_path)
-    "#{host}#{path}"
+    ActionController::Base.helpers.asset_url(logical_path, host: host)
   end
 end
