@@ -86,7 +86,7 @@ AI-bloomは
 ## 1）ホーム（バディがお出迎え）
 
 <p align="center">
-  <img src="docs/images/screens/home.png" width="850">
+  <img src="docs/images/screens/top.png" width="850">
 </p>
 
 ログインすると、バディがやさしく声をかけてくれます。  
@@ -129,7 +129,7 @@ AI-bloomは
 ## 4）バディ選択（6種類）
 
 <p align="center">
-  <img src="docs/images/screens/buddy.png" width="850">
+  <img src="docs/images/screens/buddy6.png" width="850">
 </p>
 
 性格・口調の異なる6種のバディから選択可能。
@@ -153,7 +153,7 @@ YAMLで紐付け管理しており、将来の16分類拡張に対応可能な�
 ## 5）ソーシャル診断（4タイプ分類）
 
 <p align="center">
-  <img src="docs/images/screens/diagnosis.png" width="850">
+  <img src="docs/images/screens/diagnosis4.png" width="850">
 </p>
 
 コミュニケーション傾向を可視化する補助機能。
@@ -181,7 +181,7 @@ YAMLで紐付け管理しており、将来の16分類拡張に対応可能な�
 ## 7）その他
 
 <p align="center">
-  <img src="docs/images/screens/other.png" width="850">
+  <img src="docs/images/screens/others.png" width="850">
 </p>
 
 - アカウント設定（ニックネーム/メールアドレス変更　など）
