@@ -1,0 +1,51 @@
+<% dominant = result.dominant_type.to_s %>
+
+<% type_names = {
+  "expressive" => "Expressive（表現型）",
+  "driving" => "Driving（行動型）",
+  "amiable" => "Amiable（協調型）",
+  "analytical" => "Analytical（分析型）"
+} %>
+
+<% summaries = {
+  "expressive" => "感情豊かでアイデアが多く、場を明るくするタイプ。",
+  "driving" => "決断・スピード・結果にこだわるタイプ。",
+  "amiable" => "やさしさ・調和を大切にし、支えることが得意なタイプ。",
+  "analytical" => "論理的にじっくり考えるタイプ。"
+} %>
+
+<% buddy_images = {
+  "expressive" => "buddies/expressive_buddy.png",
+  "driving" => "buddies/driving_buddy.png",
+  "amiable" => "buddies/amiable_buddy.png",
+  "analytical" => "buddies/analytical_buddy.png"
+} %>
+
+<%= link_to analyses_social_type_result_path(result),
+  class: "block rounded-3xl border border-slate-200 bg-white px-5 py-4 shadow-sm hover:shadow-md transition" do %>
+
+  <div class="flex items-center gap-4">
+    <div class="shrink-0">
+      <%= image_tag buddy_images[dominant] || buddy_images["amiable"],
+        alt: "",
+        class: "h-16 w-16 rounded-full object-cover border-4 border-white shadow-md" %>
+    </div>
+
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center justify-between">
+        <div class="text-xs text-slate-500">
+          <%= (result.diagnosed_at || result.created_at).strftime("%Y/%m/%d %H:%M") %>
+        </div>
+        <div class="text-xs text-slate-400">詳細 →</div>
+      </div>
+
+      <div class="mt-1 text-base font-semibold text-slate-900">
+        あなたのタイプ：<%= type_names[dominant] || type_names["amiable"] %>
+      </div>
+
+      <div class="mt-1 text-sm text-slate-600">
+        <%= summaries[dominant] || summaries["amiable"] %>
+      </div>
+    </div>
+  </div>
+<% end %>

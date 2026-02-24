@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_19_180934) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_23_094904) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -129,6 +129,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_180934) do
     t.index ["buddy_id"], name: "index_posts_on_buddy_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
     t.index ["visibility", "posted_at"], name: "index_posts_on_visibility_and_posted_at"
+  end
+
+  create_table "social_type_results", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "diagnosed_at", null: false
+    t.integer "dominant_type", null: false
+    t.string "question_set_key"
+    t.integer "schema_version", default: 4, null: false
+    t.jsonb "scores", default: {}, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["diagnosed_at"], name: "index_social_type_results_on_diagnosed_at"
+    t.index ["user_id"], name: "index_social_type_results_on_user_id"
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
@@ -299,6 +312,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_180934) do
   add_foreign_key "favorites", "users"
   add_foreign_key "posts", "buddies"
   add_foreign_key "posts", "users"
+  add_foreign_key "social_type_results", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

@@ -47,11 +47,23 @@ class DiagnosesController < ApplicationController
     }
 
     if user_signed_in?
-      current_user.update(
-        social_type: dominant_type,
-        recommended_buddy_type: dominant_type,
-        dominant_type: dominant_type # GA4 user_property 用に保存
-      )
+      ActiveRecord::Base.transaction do
+        # ユーザーへ保存
+        current_user.update!(
+          social_type: dominant_type,
+          recommended_buddy_type: dominant_type,
+          dominant_type: dominant_type # GA4 user_property 用に保存
+        )
+
+        # 診断履歴として保存（将来16分類にも耐える形）
+        current_user.social_type_results.create!(
+          schema_version: 4,
+          dominant_type: dominant_type.to_sym,              # enum想定
+          scores: scores.transform_keys(&:to_s),            # jsonb向けにキーを文字列化
+          question_set_key: "v1",
+          diagnosed_at: Time.current
+        )
+      end
     end
 
     redirect_to diagnosis_result_page_path(type: dominant_type), status: :see_other
@@ -224,7 +236,6 @@ class DiagnosesController < ApplicationController
     host = ENV["APP_HOST"].presence || request.base_url
     host = host.sub(/\Ahttp:/, "https:")
 
-    path = view_context.asset_path(logical_path)
-    "#{host}#{path}"
+    ActionController::Base.helpers.asset_url(logical_path, host: host)
   end
 end

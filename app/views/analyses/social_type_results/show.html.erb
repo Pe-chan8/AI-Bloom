@@ -1,0 +1,71 @@
+<% content_for :title, "診断結果 - AI-Bloom" %>
+
+<section class="px-4 py-10">
+  <div class="mx-auto w-full max-w-3xl">
+
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-extrabold tracking-wide text-slate-900">診断結果</h1>
+
+      <%= link_to "履歴一覧へ", analyses_social_type_results_path,
+        class: "text-sm text-slate-600 hover:text-slate-900 underline" %>
+    </div>
+
+    <div class="mt-6 rounded-3xl border border-slate-200 bg-white px-8 py-8 shadow-sm">
+
+      <div class="flex items-center gap-6">
+        <div class="shrink-0">
+          <%= image_tag @buddy_image_path,
+            alt: "",
+            class: "h-20 w-20 rounded-full object-cover border-4 border-white shadow-md" %>
+        </div>
+
+        <div>
+          <div class="text-xs text-slate-500">
+            <%= (@result.diagnosed_at || @result.created_at).strftime("%Y/%m/%d %H:%M") %>
+          </div>
+
+          <div class="mt-1 text-xl font-extrabold text-slate-900">
+            あなたのタイプ：<%= @current_type_info[:name] %>
+          </div>
+
+          <div class="mt-2 text-sm text-slate-700">
+            <%= @current_type_info[:summary] %>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 space-y-5 text-sm text-slate-700">
+
+        <div>
+          <div class="font-semibold text-slate-900">どんな特徴？</div>
+          <div class="mt-1"><%= @current_type_info[:detail] %></div>
+        </div>
+
+        <div>
+          <div class="font-semibold text-slate-900">あなたらしさ</div>
+          <div class="mt-1"><%= @current_type_info[:personality] %></div>
+        </div>
+
+        <div>
+          <div class="font-semibold text-slate-900">得意なこと</div>
+          <div class="mt-1"><%= @current_type_info[:strengths] %></div>
+        </div>
+
+        <div>
+          <div class="font-semibold text-slate-900">ひとことヒント</div>
+          <div class="mt-1"><%= @current_type_info[:other] %></div>
+        </div>
+
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <%= link_to "もう一度診断する", diagnosis_questions_path,
+          class: "inline-flex items-center rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-amber-800 shadow-sm hover:bg-amber-50" %>
+
+        <%= link_to "分析ページへ", analytics_path,
+          class: "inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50" %>
+      </div>
+
+    </div>
+  </div>
+</section>

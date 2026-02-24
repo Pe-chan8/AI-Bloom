@@ -13,6 +13,23 @@
 
 <%= render "category_tabs", category: @category, subcategory: @subcategory, top_subcategories: @top_subcategories %>
 
+<% if user_signed_in? %>
+  <div class="mt-4">
+    <%= link_to analyses_social_type_results_path,
+      class: "block rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm hover:shadow transition focus:outline-none focus:ring-2 focus:ring-amber-200 focus:ring-offset-2" do %>
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="text-sm font-semibold text-slate-900">ソーシャルタイプ診断結果（履歴）</div>
+          <div class="mt-1 text-xs text-slate-500">
+            前回の診断結果や過去の履歴を、いつでも見返せます
+          </div>
+        </div>
+        <span class="text-sm text-slate-500">見る →</span>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
 <% if @analysis_data_insufficient %>
   <div class="mt-4 rounded-2xl border border-amber-200 bg-white px-4 py-3 text-sm text-slate-700">
     <p class="font-semibold text-slate-900">データが不足しています</p>
