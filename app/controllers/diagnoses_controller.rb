@@ -87,7 +87,7 @@ class DiagnosesController < ApplicationController
       #AI_Bloom #ソーシャルタイプ診断
     TEXT
 
-    @share_url = diagnosis_share_url(@dominant_type)
+    @share_url = diagnosis_result_page_url(type: @dominant_type)
     @twitter_intent_url =
       "https://twitter.com/intent/tweet" \
       "?text=#{ERB::Util.url_encode(raw_share_text.strip)}" \

@@ -80,11 +80,51 @@ module Ai
       "いま「まとめ」の生成が混み合っています…！少し時間をおいてからもう一度押してみてね🙏"
     end
 
+    # --- バディの“人格”をできるだけ拾って system に入れる ---
     def system_prompt(buddy:, user:)
       name = buddy&.display_name.presence || buddy&.name.presence || "AIバディ"
+
+      # Buddyのカラム名が不明でも拾えるように候補を broad に
+      tone =
+        buddy&.try(:tone).presence ||
+        buddy&.try(:speaking_style).presence ||
+        buddy&.try(:voice).presence
+
+      personality =
+        buddy&.try(:personality).presence ||
+        buddy&.try(:description).presence ||
+        buddy&.try(:profile).presence ||
+        buddy&.try(:concept).presence ||
+        buddy&.try(:prompt).presence
+
+      first_person =
+        buddy&.try(:first_person).presence ||
+        buddy&.try(:pronoun).presence
+
+      ending =
+        buddy&.try(:ending).presence ||
+        buddy&.try(:phrase).presence ||
+        buddy&.try(:speech_ending).presence
+
+      # 存在する情報だけで persona を組み立てる
+      persona_lines = []
+      persona_lines << "話し方のトーン：#{tone}" if tone.present?
+      persona_lines << "性格・スタンス：#{personality}" if personality.present?
+      persona_lines << "一人称：#{first_person}" if first_person.present?
+      persona_lines << "語尾・口癖：#{ending}" if ending.present?
+
+      persona_block =
+        if persona_lines.any?
+          "【バディ設定】\n" + persona_lines.join("\n")
+        else
+          "【バディ設定】\nやさしく、否定せず、安心感のある相棒として話してください。"
+        end
+
       <<~SYS
         あなたは「#{name}」として、ユーザーの会話内容をやさしく整理し、前向きな言葉で褒める相棒です。
         出力は日本語。自己PR・応募書類風の文体は禁止。
+
+        #{persona_block}
 
         目的：
         - ユーザーが「自分って悪くないかも」と感じられるように、事実ベースで優しく言語化する。
