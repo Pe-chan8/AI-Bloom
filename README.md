@@ -159,7 +159,7 @@ YAMLで紐付け管理しており、将来の16分類拡張に対応可能な�
 コミュニケーション傾向を可視化する補助機能。
 
 <p align="center">
-  <img src="docs/images/screens/ai-bloom-social-type-diagnosis-top.png" width="850">
+  <img src="docs/images/screens/ai-bloom-social-type-diagnosis.png" width="850">
 </p>
 ---
 
