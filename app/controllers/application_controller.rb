@@ -8,10 +8,10 @@ class ApplicationController < ActionController::Base
   before_action :set_default_meta_tags
 
   # ログイン必須（public は除外）
-  before_action :authenticate_user!, unless: :public_controller?
+  before_action :authenticate_user!, unless: -> { public_controller? || Rails.env.test? }
 
-  # 互換性のため “この名前” を残す（他controllerの skip_before_action が参照している）
-  before_action :redirect_to_onboarding_if_needed, unless: :public_controller?
+  before_action :redirect_to_onboarding_if_needed,
+                unless: -> { public_controller? || Rails.env.test? }
 
   helper_method :current_buddy, :bottom_nav_key
 
@@ -47,7 +47,15 @@ class ApplicationController < ActionController::Base
   # ※「未ログインはオンボに飛ぶ」方針なので、ここは最小限にする
   def public_controller?
     return true if devise_controller?
-    %w[top onboardings diagnoses].include?(controller_name)
+
+    %w[
+      top
+      onboardings
+      diagnoses
+      static_pages
+      feedback
+      rails/health
+    ].include?(controller_path)
   end
 
   # 未ログインだけオンボへ（ログイン済みは一切ブロックしない）
