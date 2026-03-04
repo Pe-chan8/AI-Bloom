@@ -338,12 +338,17 @@ class BuddyTalksController < ApplicationController
 
   def build_timeline(post)
     list = []
+
     list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)
 
-    ai_scope = AiMessage.where(post: post, kind: [:reply, :tip, :weekly]).includes(:buddy)
+    ai_scope = AiMessage.where(post: post, kind: %i[reply tip weekly])
     ai_scope = ai_scope.where(buddy_id: post.buddy_id) if post.buddy_id.present?
-    list += ai_scope.order(:created_at).to_a
 
+    ai_messages = ai_scope.order(:created_at).to_a
+
+    ActiveRecord::Associations::Preloader.new(records: ai_messages, associations: :buddy).call
+
+    list += ai_messages
     list.sort_by(&:created_at)
   end
 

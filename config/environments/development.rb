@@ -77,9 +77,7 @@ Rails.application.configure do
 
   config.active_job.queue_adapter = :async
 
-  # ----------------------------------------
   # Bullet (Development only)
-  # ----------------------------------------
   require "bullet"
   require "bullet/rack"
 

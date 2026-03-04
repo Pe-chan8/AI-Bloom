@@ -133,7 +133,10 @@ module Ai
         end
       end
 
-      AiMessage.where(post: post).order(:created_at).each do |m|
+      AiMessage.where(post: post)
+              .includes(:buddy)
+              .order(:created_at)
+              .each do |m|
         kind = m.respond_to?(:kind) ? m.kind.to_s : ""
         label =
           case kind

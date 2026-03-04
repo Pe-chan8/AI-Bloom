@@ -84,7 +84,6 @@ module Ai
     def system_prompt(buddy:, user:)
       name = buddy&.display_name.presence || buddy&.name.presence || "AIバディ"
 
-      # Buddyのカラム名が不明でも拾えるように候補を broad に
       tone =
         buddy&.try(:tone).presence ||
         buddy&.try(:speaking_style).presence ||
@@ -106,7 +105,6 @@ module Ai
         buddy&.try(:phrase).presence ||
         buddy&.try(:speech_ending).presence
 
-      # 存在する情報だけで persona を組み立てる
       persona_lines = []
       persona_lines << "話し方のトーン：#{tone}" if tone.present?
       persona_lines << "性格・スタンス：#{personality}" if personality.present?
@@ -120,11 +118,27 @@ module Ai
           "【バディ設定】\nやさしく、否定せず、安心感のある相棒として話してください。"
         end
 
+      # 関西弁の強制（レオ想定：名前で判定。speaking_style等に「関西」が入っててもOK）
+      kansai = [name, tone, personality, ending].compact.join(" ").match?(/関西|大阪|レオ/)
+      dialect_rule =
+        if kansai
+          <<~DIALECT
+            方言ルール：
+            - 必ず関西弁で話す（箇条書きも含めて関西弁）
+            - 「〜している」「〜です/ます」調は極力使わない
+            - やわらかい関西弁（きつい/煽り/ツッコミ過多は禁止）
+          DIALECT
+        else
+          ""
+        end
+
       <<~SYS
         あなたは「#{name}」として、ユーザーの会話内容をやさしく整理し、前向きな言葉で褒める相棒です。
         出力は日本語。自己PR・応募書類風の文体は禁止。
 
         #{persona_block}
+
+        #{dialect_rule}
 
         目的：
         - ユーザーが「自分って悪くないかも」と感じられるように、事実ベースで優しく言語化する。
@@ -132,19 +146,17 @@ module Ai
         重要ルール：
         - 会話ログに根拠がある範囲だけを書く（盛らない）
         - 説教しない / 断定しない / 責めない
-        - 長文にしない（読みやすさ優先）
+        - 読みやすさ優先（長文にしない）
         - STAR/CAR/自己PR/面接などの単語は出さない
-        - 「1)」「2)」などの番号、見出しの数字は一切使わない
-        - 「まとめ」「いいところ」「次の一歩」などの見出しラベルも出さない
+        - 見出しラベル（「まとめ」「いいところ」「次の一歩」等）は出さない
 
-        出力フォーマット（この形を厳守）：
-        1) 最初に、2〜3行でやさしい要約を書く（箇条書き禁止）
-        2) 次に、ユーザーの「いいところ」を3つだけ箇条書きで書く
-          - 形式は必ず「- 強み：具体的な根拠文章」
+        出力フォーマット（順序を守る・番号は付けない）：
+        - 最初に、2〜3行でやさしい要約を書く（箇条書き禁止）
+        - 次に、「いいところ」を3つだけ箇条書きで書く
+          - 形式は必ず「- 強み：根拠の具体文」
           - 強みは短い名詞（例：思いやり / 自己理解 / 継続力 / 表現力 / 誠実さ）
-          - 根拠文章は会話ログの内容に結びつく具体文
-        3) その次に、1行だけ「そういうところ素敵だね」と温かく添える（絵文字は0〜1個）
-        4) 最後に、負担のない「次の一歩」を1行だけ提案する（命令禁止）
+        - 次に、1行だけ「そういうところ素敵だね」と温かく添える（絵文字は0〜1個）
+        - 最後に、負担のない「次の一歩」を1行だけ提案する（命令禁止）
       SYS
     end
 
@@ -173,7 +185,9 @@ module Ai
         end
       end
 
-      AiMessage.where(post: post, kind: [ :reply, :tip ]).order(:created_at).each do |m|
+      AiMessage.where(post: post, kind: %i[reply tip])
+              .order(:created_at)
+              .each do |m|
         parts << "【AI】#{m.content}"
       end
 
