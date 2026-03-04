@@ -129,4 +129,6 @@ Rails.application.routes.draw do
   # -------------------------------------------------------
   get "/feedback",        to: "feedback#new"
   get "/feedback/thanks", to: "feedback#thanks"
+
+  get "/__bullet_test", to: "debug/bullet_test#index"
 end

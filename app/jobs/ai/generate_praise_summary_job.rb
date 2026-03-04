@@ -13,12 +13,20 @@ module Ai
 
       Turbo::StreamsChannel.broadcast_remove_to("buddy_talks:#{post.id}", target: placeholder_id)
 
-      ai_message = AiMessage.where(post: post, buddy_id: buddy.id).order(:created_at).last
+      ai_message =
+        AiMessage
+          .where(post: post, buddy_id: buddy.id)
+          .includes(:buddy)
+          .order(:created_at)
+          .last
+
+      return if ai_message.nil?
+
       Turbo::StreamsChannel.broadcast_append_to(
         "buddy_talks:#{post.id}",
-        target: "messages",
+        target: "messages_list",
         partial: "buddy_talks/message",
-        locals: { message: ai_message, buddy: buddy }
+        locals: { message: ai_message, buddy: ai_message.buddy }
       )
     rescue => e
       Rails.logger.error("[GeneratePraiseSummaryJob] #{e.class} #{e.message}")

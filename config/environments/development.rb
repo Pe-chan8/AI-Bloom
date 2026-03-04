@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -74,4 +76,8 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.active_job.queue_adapter = :async
+
+  # Bullet (Development only)
+  require "bullet"
+  require "bullet/rack"
 end
