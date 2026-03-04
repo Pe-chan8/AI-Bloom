@@ -80,5 +80,4 @@ Rails.application.configure do
   # Bullet (Development only)
   require "bullet"
   require "bullet/rack"
-
 end

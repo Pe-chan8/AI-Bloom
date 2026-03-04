@@ -119,7 +119,7 @@ module Ai
         end
 
       # 関西弁の強制（レオ想定：名前で判定。speaking_style等に「関西」が入っててもOK）
-      kansai = [name, tone, personality, ending].compact.join(" ").match?(/関西|大阪|レオ/)
+      kansai = [ name, tone, personality, ending ].compact.join(" ").match?(/関西|大阪|レオ/)
       dialect_rule =
         if kansai
           <<~DIALECT
