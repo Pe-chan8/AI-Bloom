@@ -14,23 +14,31 @@ module Ai
       Turbo::StreamsChannel.broadcast_remove_to("buddy_talks:#{post.id}", target: placeholder_id)
 
       ai_message =
-        AiMessage
-          .where(post: post, buddy_id: buddy.id)
-          .includes(:buddy)
-          .order(:created_at)
-          .last
+        AiMessage.where(post: post, buddy_id: buddy.id)
+                 .order(created_at: :desc)
+                 .first
 
-      return if ai_message.nil?
+      if ai_message.blank?
+        ai_message = AiMessage.create!(
+          user: user,
+          buddy: buddy,
+          post: post,
+          kind: :reply,
+          content: "ごめんね、いまうまく作れなかった…🙏 もう一度押してみてね。"
+        )
+      end
 
       Turbo::StreamsChannel.broadcast_append_to(
         "buddy_talks:#{post.id}",
         target: "messages_list",
         partial: "buddy_talks/message",
-        locals: { message: ai_message, buddy: ai_message.buddy }
+        locals: { message: ai_message, buddy: buddy }
       )
     rescue => e
       Rails.logger.error("[GenerateDeepDiveJob] #{e.class} #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
       Turbo::StreamsChannel.broadcast_remove_to("buddy_talks:#{post_id}", target: placeholder_id)
+      raise
     end
   end
 end

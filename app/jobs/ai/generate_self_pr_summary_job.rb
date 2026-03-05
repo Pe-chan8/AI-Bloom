@@ -13,16 +13,32 @@ module Ai
 
       Turbo::StreamsChannel.broadcast_remove_to("buddy_talks:#{post.id}", target: placeholder_id)
 
-      ai_message = AiMessage.where(post: post, buddy_id: buddy.id).order(:created_at).last
+      ai_message =
+        AiMessage.where(post: post, buddy_id: buddy.id)
+                 .order(created_at: :desc)
+                 .first
+
+      if ai_message.blank?
+        ai_message = AiMessage.create!(
+          user: user,
+          buddy: buddy,
+          post: post,
+          kind: :reply,
+          content: "ごめんね、整理文を作れなかった…🙏 もう一度押してみてね。"
+        )
+      end
+
       Turbo::StreamsChannel.broadcast_append_to(
         "buddy_talks:#{post.id}",
-        target: "messages",
+        target: "messages_list",
         partial: "buddy_talks/message",
         locals: { message: ai_message, buddy: buddy }
       )
     rescue => e
       Rails.logger.error("[GenerateSelfPrSummaryJob] #{e.class} #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
       Turbo::StreamsChannel.broadcast_remove_to("buddy_talks:#{post_id}", target: placeholder_id)
+      raise
     end
   end
 end

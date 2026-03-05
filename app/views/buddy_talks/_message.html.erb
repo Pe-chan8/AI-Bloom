@@ -10,7 +10,7 @@
 
 <% elsif message.is_a?(AiMessage) %>
   <% is_tip = message.kind.to_s == "tip" %>
-  <% message_buddy = message.buddy || buddy %>
+  <% message_buddy = buddy %>
 
   <div class="flex items-start gap-3">
     <div class="w-10 h-10 rounded-full bg-amber-50 border border-amber-200 overflow-hidden flex items-center justify-center">
@@ -20,8 +20,6 @@
     </div>
 
     <div class="max-w-[84%]">
-
-      <!-- 返信担当固定ラベル（このメッセージの生成バディ基準） -->
       <div class="mb-1 text-[11px] text-slate-500">
         <span class="inline-flex items-center rounded-full border border-slate-200 px-2 py-0.5 bg-slate-50">
           返信担当：<%= message_buddy.display_name %>（この会話では固定）
@@ -46,7 +44,6 @@
       <p class="mt-1 text-[10px] text-slate-400">
         ※バディを変更した場合は「新しい会話」から反映されます。
       </p>
-
     </div>
   </div>
 <% end %>

@@ -18,15 +18,9 @@ module Ai
 
       t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-      # -------------------------
-      # A: log build
-      # -------------------------
-      recent_log = build_recent_log(post, buddy: buddy)
+      recent_log = build_recent_log(post)
       t1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-      # -------------------------
-      # B: prompt build
-      # -------------------------
       messages = Ai::PromptBuilder.build_buddy_reply(
         user: user,
         buddy: buddy,
@@ -34,7 +28,6 @@ module Ai
         recent_log: recent_log
       )
 
-      # --- DEBUG: verify persona prompt is actually injected ---
       system_msg = messages.find { |m| m[:role].to_s == "system" } || {}
       system_txt = system_msg[:content].to_s
 
@@ -47,9 +40,6 @@ module Ai
 
       t2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-      # -------------------------
-      # C: OpenAI
-      # -------------------------
       response = @client.chat(
         parameters: {
           model: MODEL,
@@ -63,9 +53,6 @@ module Ai
       raw     = response.dig("choices", 0, "message", "content").to_s
       cleaned = raw.strip
 
-      # -------------------------
-      # D: save message
-      # -------------------------
       ai_message = AiMessage.create!(
         user: user,
         buddy: buddy,
@@ -75,9 +62,6 @@ module Ai
       )
       t4 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-      # -------------------------
-      # E: save log
-      # -------------------------
       AiLog.create!(
         user: user,
         post: post,
@@ -112,23 +96,20 @@ module Ai
 
     private
 
-    def build_recent_log(post, buddy:)
+    # UIと同じ：BuddyMessageだけから会話ログを作る
+    def build_recent_log(post)
       limit = RECENT_TURNS * 2
 
-      user_rows = BuddyMessage.where(post: post)
-                              .select(:content, :created_at)
-                              .map { |m| [ m.created_at, "USER: #{m.content}" ] }
+      rows =
+        BuddyMessage.where(post: post)
+                   .order(:created_at)
+                   .last(limit)
+                   .map do |m|
+                     prefix = (m.role.to_s == "ai") ? "AI:" : "USER:"
+                     "#{prefix} #{m.content}"
+                   end
 
-      ai_rows = AiMessage.where(post: post, buddy: buddy, kind: :reply).includes(:buddy)
-                         .select(:content, :created_at)
-                         .map { |m| [ m.created_at, "AI: #{m.content}" ] }
-
-      combined = (user_rows + ai_rows)
-        .sort_by { |created_at, _| created_at }
-        .last(limit)
-        .map { |_, text| text }
-
-      text = combined.join("\n")
+      text = rows.join("\n")
       text = text.last(MAX_LOG_CHARS) if text.length > MAX_LOG_CHARS
       text
     end
