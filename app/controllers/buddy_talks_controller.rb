@@ -25,7 +25,7 @@ class BuddyTalksController < ApplicationController
     tags = Array(params.dig(:post, :tag_list)).reject(&:blank?)
     @post.tags_text = tags.join(",") if @post.respond_to?(:tags_text=)
 
-    # この会話の返信担当バディを固定（1会話＝1バディ）
+    # この会話の返信担当バディを固定
     @post.buddy = current_buddy_fallback
 
     if @post.save
@@ -36,10 +36,8 @@ class BuddyTalksController < ApplicationController
         BuddyMessage.create!(user: current_user, post: @post, role: :user, content: first_text)
       end
 
-      # ---- 非同期：AI返信生成（ここでは待たない）----
       @placeholder_id = build_placeholder_id
 
-      # ポーリング開始時刻を記録（この時刻以降に生成されたAiMessageがあればcompleted）
       session[:ai_polling_started_at] ||= {}
       session[:ai_polling_started_at][@post.id.to_s] = Time.zone.now.iso8601
 
@@ -72,8 +70,6 @@ class BuddyTalksController < ApplicationController
               partial: "buddy_talks/composer",
               locals: { buddy_talk: @buddy_talk }
             ),
-
-            # append は messages_list に統一
             turbo_stream.append(
               "messages_list",
               partial: "buddy_talks/system_notice",
@@ -84,15 +80,12 @@ class BuddyTalksController < ApplicationController
               partial: "buddy_talks/pending_ai",
               locals: { placeholder_id: @placeholder_id }
             ),
-
             turbo_stream.append(
               "ga-tracker",
               "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_talk_created\"></div>".html_safe
             )
           ]
         end
-
-        # start は redirect で topic に飛ぶため、topic側で pending 表示を出せるよう created=1 を付ける
         format.html { redirect_to buddy_talk_topic_path(@buddy_talk, created: 1) }
       end
     else
@@ -114,7 +107,6 @@ class BuddyTalksController < ApplicationController
     @messages = build_timeline(@buddy_talk)
     @buddy    = @buddy_talk.buddy || current_buddy_fallback
 
-    # created=1 の初回表示で「まだAI返信が無い」なら pending を表示するフラグを立てる
     if params[:created].present?
       has_ai = @messages.any? { |m| m.is_a?(AiMessage) }
       @show_initial_pending = !has_ai
@@ -131,10 +123,8 @@ class BuddyTalksController < ApplicationController
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
-    # ---- 非同期：AI返信生成（ここでは待たない）----
     @placeholder_id = build_placeholder_id
 
-    # ポーリング開始時刻を記録（この時刻以降に生成されたAiMessageがあればcompleted）
     session[:ai_polling_started_at] ||= {}
     session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
 
@@ -162,10 +152,8 @@ class BuddyTalksController < ApplicationController
     end
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
-
     @placeholder_id = build_placeholder_id
 
-    # ポーリング開始時刻を記録
     session[:ai_polling_started_at] ||= {}
     session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
 
@@ -193,10 +181,8 @@ class BuddyTalksController < ApplicationController
     end
 
     buddy = @buddy_talk.buddy || current_buddy_fallback
-
     @placeholder_id = build_placeholder_id
 
-    # ポーリング開始時刻を記録
     session[:ai_polling_started_at] ||= {}
     session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
 
@@ -215,10 +201,8 @@ class BuddyTalksController < ApplicationController
 
   def summary
     buddy = @buddy_talk.buddy || current_buddy_fallback
-
     @placeholder_id = build_placeholder_id
 
-    # ポーリング開始時刻を記録
     session[:ai_polling_started_at] ||= {}
     session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
 
@@ -245,11 +229,9 @@ class BuddyTalksController < ApplicationController
     redirect_to posts_path
   end
 
-  # ポーリング用：AI生成完了確認
   def ai_status
     post = current_user.posts.find(params[:id])
 
-    # ポーリング開始時刻（なければ post更新時刻を基準にする）
     started_at =
       begin
         t = session.dig(:ai_polling_started_at, post.id.to_s)
@@ -260,9 +242,7 @@ class BuddyTalksController < ApplicationController
 
     started_at ||= post.updated_at || post.created_at
 
-    # 「開始時刻以降」に生成されたAIメッセージがあるかで判定
     ai_completed = AiMessage.where(post: post).where("created_at >= ?", started_at).exists?
-
     render json: { completed: ai_completed }
   end
 
@@ -280,8 +260,6 @@ class BuddyTalksController < ApplicationController
             partial: "buddy_talks/messages",
             locals: { messages: @messages, buddy: buddy, buddy_talk: @buddy_talk }
           ),
-
-          # append は messages_list に統一
           turbo_stream.append(
             "messages_list",
             partial: "buddy_talks/system_notice",
@@ -292,13 +270,11 @@ class BuddyTalksController < ApplicationController
             partial: "buddy_talks/pending_ai",
             locals: { placeholder_id: placeholder_id }
           ),
-
           turbo_stream.replace(
             "buddy_composer",
             partial: "buddy_talks/composer",
             locals: { buddy_talk: @buddy_talk }
           ),
-
           turbo_stream.append(
             "ga-tracker",
             "<div data-controller=\"ga-event\" data-ga-event-name-value=\"buddy_message_sent\"></div>".html_safe
@@ -339,16 +315,15 @@ class BuddyTalksController < ApplicationController
   def build_timeline(post)
     list = []
 
-    list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)
+    if defined?(BuddyMessage)
+      list += BuddyMessage.where(post: post, role: :user).order(:created_at).to_a
+    end
 
     ai_scope = AiMessage.where(post: post, kind: %i[reply tip weekly])
     ai_scope = ai_scope.where(buddy_id: post.buddy_id) if post.buddy_id.present?
 
-    ai_messages = ai_scope.order(:created_at).to_a
+    list += ai_scope.order(:created_at).to_a
 
-    ActiveRecord::Associations::Preloader.new(records: ai_messages, associations: :buddy).call
-
-    list += ai_messages
     list.sort_by(&:created_at)
   end
 
