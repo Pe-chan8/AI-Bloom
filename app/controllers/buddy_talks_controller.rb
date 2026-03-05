@@ -4,8 +4,8 @@ class BuddyTalksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_bottom_nav
 
-  before_action :set_current_buddy_talk, only: [:show]
-  before_action :set_topic_buddy_talk,   only: [:topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart]
+  before_action :set_current_buddy_talk, only: [ :show ]
+  before_action :set_topic_buddy_talk,   only: [ :topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart ]
 
   def show
     @post = Post.new(posted_at: Time.zone.now)
