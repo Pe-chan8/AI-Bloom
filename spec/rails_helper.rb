@@ -22,15 +22,14 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.filter_rails_from_backtrace!
 
-  # supportで定義したヘルパーを使えるようにする
   config.include TestHelpers
-  # Deviseのsign_in/sign_outをrequest specで使う
   config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include FactoryBot::Syntax::Methods
 
-  # ActiveJobをテスト用アダプタに
   config.before(:each) do
     ActiveJob::Base.queue_adapter = :test
   end
+
   config.before(:each, type: :request) do
     host! "www.example.com"
   end
