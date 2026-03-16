@@ -1,7 +1,9 @@
 module TestHelpers
-  def create_user(email: "test@example.com", password: "password", nickname: "テストユーザー")
+  def create_user(email: nil, password: "password", nickname: "テストユーザー")
+    unique_email = email || "test_#{SecureRandom.hex(4)}@example.com"
+
     attrs = {
-      email: email,
+      email: unique_email,
       password: password,
       password_confirmation: password,
       nickname: nickname
