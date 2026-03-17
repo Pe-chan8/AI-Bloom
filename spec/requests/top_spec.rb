@@ -5,6 +5,7 @@ RSpec.describe "Top", type: :request do
     it "onboarding にリダイレクトされる" do
       get root_path
 
+      expect(response).to have_http_status(:found)
       expect(response).to redirect_to(onboarding_path)
     end
   end
@@ -13,6 +14,7 @@ RSpec.describe "Top", type: :request do
     it "onboarding にリダイレクトされる" do
       get top_index_path
 
+      expect(response).to have_http_status(:found)
       expect(response).to redirect_to(onboarding_path)
     end
   end
