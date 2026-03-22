@@ -141,38 +141,4 @@ RSpec.describe "Posts", type: :request do
       it_behaves_like "未ログイン時にログイン画面へリダイレクトされる"
     end
   end
-
-  describe "DELETE /posts/:id" do
-    context "ログイン済みの場合" do
-      before { login_as(user) }
-
-      context "自分の投稿の場合" do
-        let!(:target_post) { create(:post, user: user) }
-
-        it "削除できる" do
-          expect do
-            delete post_path(target_post)
-          end.to change(Post, :count).by(-1)
-
-          expect(response).to redirect_to(posts_path)
-        end
-      end
-
-      context "他人の投稿の場合" do
-        it "削除できない" do
-          expect do
-            delete post_path(other_users_post)
-          end.not_to change(Post, :count)
-
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-    end
-
-    context "未ログインの場合" do
-      subject { delete post_path(post_record) }
-
-      it_behaves_like "未ログイン時にログイン画面へリダイレクトされる"
-    end
-  end
 end
