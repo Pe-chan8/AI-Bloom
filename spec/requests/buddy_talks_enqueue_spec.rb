@@ -1,35 +1,32 @@
 require "rails_helper"
 
 RSpec.describe "BuddyTalks enqueue", type: :request do
-  let(:user) { create_user(email: "t_enqueue2@example.com") }
+  include ActiveJob::TestHelper
 
-  let!(:buddy) do
-    Buddy.find_by(code: "normal") || Buddy.create!(code: "normal", name: "ノーマル")
-  end
-
-  def valid_category
-    if Post.respond_to?(:categories) && Post.categories.is_a?(Hash) && Post.categories.any?
-      Post.categories.keys.first
-    else
-      "general"
-    end
-  end
-
-  let!(:buddy_talk) do
-    user.posts.create!(
-      body: "テスト投稿",
-      posted_at: Time.zone.now,
-      title: "テスト",
-      category: valid_category,
-      buddy: buddy
+  let(:password) { "password123" }
+  let(:user) do
+    create(
+      :user,
+      email: "test_enqueue@example.com",
+      password: password,
+      password_confirmation: password
     )
   end
+  let!(:buddy) { create(:buddy) }
+  let!(:post_record) { create(:post, user: user, buddy: buddy) }
 
-  before { sign_in user }
+  before do
+    post user_session_path, params: {
+      user: {
+        email: user.email,
+        password: password
+      }
+    }
+  end
 
   it "reply で Ai::GenerateBuddyReplyJob が呼ばれる（perform_later）" do
-    expect(Ai::GenerateBuddyReplyJob).to receive(:perform_later)
-
-    post "/buddy_talks/#{buddy_talk.id}/reply", params: { message: "こんにちは" }
+    expect do
+      post reply_buddy_talk_path(post_record), params: { message: "ありがとう" }
+    end.to have_enqueued_job(Ai::GenerateBuddyReplyJob)
   end
 end

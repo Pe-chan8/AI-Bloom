@@ -5,17 +5,17 @@ class BuddyTalksController < ApplicationController
   before_action :set_bottom_nav
 
   before_action :set_current_buddy_talk, only: [ :show ]
-  before_action :set_topic_buddy_talk,   only: [ :topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart ]
+  before_action :set_topic_buddy_talk, only: [ :topic, :reply, :deep_dive, :summary, :praise_summary, :close, :restart ]
 
   def show
     @post = Post.new(posted_at: Time.zone.now)
 
     if @buddy_talk.present?
       @messages = build_timeline(@buddy_talk)
-      @buddy    = @buddy_talk.buddy || current_buddy_fallback
+      @buddy = @buddy_talk.buddy || current_buddy_fallback
     else
       @messages = []
-      @buddy    = current_buddy_fallback
+      @buddy = current_buddy_fallback
     end
   end
 
@@ -49,8 +49,8 @@ class BuddyTalksController < ApplicationController
       )
 
       @buddy_talk = @post
-      @messages   = build_timeline(@buddy_talk)
-      @buddy      = @buddy_talk.buddy || current_buddy_fallback
+      @messages = build_timeline(@buddy_talk)
+      @buddy = @buddy_talk.buddy || current_buddy_fallback
 
       respond_to do |format|
         format.turbo_stream do
@@ -105,10 +105,10 @@ class BuddyTalksController < ApplicationController
   def topic
     session[:buddy_talk_post_id] = @buddy_talk.id
     @messages = build_timeline(@buddy_talk)
-    @buddy    = @buddy_talk.buddy || current_buddy_fallback
+    @buddy = @buddy_talk.buddy || current_buddy_fallback
 
     if params[:created].present?
-      has_ai = @messages.any? { |m| m.is_a?(AiMessage) }
+      has_ai = @messages.any? { |message| message.is_a?(AiMessage) }
       @show_initial_pending = !has_ai
     end
 
@@ -119,21 +119,16 @@ class BuddyTalksController < ApplicationController
     text = params[:message].to_s.strip
     return redirect_to buddy_talk_topic_path(@buddy_talk) if text.blank?
 
-    BuddyMessage.create!(user: current_user, post: @buddy_talk, role: :user, content: text) if defined?(BuddyMessage)
-
     buddy = @buddy_talk.buddy || current_buddy_fallback
 
-    @placeholder_id = build_placeholder_id
+    result = BuddyTalks::EnqueueService.new(
+      user: current_user,
+      post: @buddy_talk,
+      buddy: buddy,
+      session: session
+    ).enqueue_reply!(message_text: text)
 
-    session[:ai_polling_started_at] ||= {}
-    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
-
-    Ai::GenerateBuddyReplyJob.perform_later(
-      post_id: @buddy_talk.id,
-      user_id: current_user.id,
-      buddy_id: buddy.id,
-      placeholder_id: @placeholder_id
-    )
+    @placeholder_id = result.placeholder_id
 
     rerender_messages_and_composer(
       notice_text: "送信できたよ。バディが返事を考えてる…🐧💭",
@@ -142,27 +137,16 @@ class BuddyTalksController < ApplicationController
   end
 
   def deep_dive
-    if defined?(BuddyMessage)
-      BuddyMessage.create!(
-        user: current_user,
-        post: @buddy_talk,
-        role: :user,
-        content: "（バディと一緒に、もう少し振り返りたい）"
-      )
-    end
-
     buddy = @buddy_talk.buddy || current_buddy_fallback
-    @placeholder_id = build_placeholder_id
 
-    session[:ai_polling_started_at] ||= {}
-    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
+    result = BuddyTalks::EnqueueService.new(
+      user: current_user,
+      post: @buddy_talk,
+      buddy: buddy,
+      session: session
+    ).enqueue_deep_dive!
 
-    Ai::GenerateDeepDiveJob.perform_later(
-      post_id: @buddy_talk.id,
-      user_id: current_user.id,
-      buddy_id: buddy.id,
-      placeholder_id: @placeholder_id
-    )
+    @placeholder_id = result.placeholder_id
 
     rerender_messages_and_composer(
       notice_text: "いいね。もう少しだけ一緒に深掘りしよう🐧",
@@ -171,27 +155,16 @@ class BuddyTalksController < ApplicationController
   end
 
   def praise_summary
-    if defined?(BuddyMessage)
-      BuddyMessage.create!(
-        user: current_user,
-        post: @buddy_talk,
-        role: :user,
-        content: "（この会話を、やさしくまとめてほしい）"
-      )
-    end
-
     buddy = @buddy_talk.buddy || current_buddy_fallback
-    @placeholder_id = build_placeholder_id
 
-    session[:ai_polling_started_at] ||= {}
-    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
+    result = BuddyTalks::EnqueueService.new(
+      user: current_user,
+      post: @buddy_talk,
+      buddy: buddy,
+      session: session
+    ).enqueue_praise_summary!
 
-    Ai::GeneratePraiseSummaryJob.perform_later(
-      post_id: @buddy_talk.id,
-      user_id: current_user.id,
-      buddy_id: buddy.id,
-      placeholder_id: @placeholder_id
-    )
+    @placeholder_id = result.placeholder_id
 
     rerender_messages_and_composer(
       notice_text: "うん、やさしくまとめるね🐧🫶",
@@ -201,17 +174,15 @@ class BuddyTalksController < ApplicationController
 
   def summary
     buddy = @buddy_talk.buddy || current_buddy_fallback
-    @placeholder_id = build_placeholder_id
 
-    session[:ai_polling_started_at] ||= {}
-    session[:ai_polling_started_at][@buddy_talk.id.to_s] = Time.zone.now.iso8601
+    result = BuddyTalks::EnqueueService.new(
+      user: current_user,
+      post: @buddy_talk,
+      buddy: buddy,
+      session: session
+    ).enqueue_summary!
 
-    Ai::GenerateSelfPrSummaryJob.perform_later(
-      post_id: @buddy_talk.id,
-      user_id: current_user.id,
-      buddy_id: buddy.id,
-      placeholder_id: @placeholder_id
-    )
+    @placeholder_id = result.placeholder_id
 
     rerender_messages_and_composer(
       notice_text: "振り返りを“言葉”に整えるね🐧✨",
@@ -234,9 +205,9 @@ class BuddyTalksController < ApplicationController
 
     started_at =
       begin
-        t = session.dig(:ai_polling_started_at, post.id.to_s)
-        t.present? ? Time.zone.parse(t) : nil
-      rescue
+        time = session.dig(:ai_polling_started_at, post.id.to_s)
+        time.present? ? Time.zone.parse(time) : nil
+      rescue StandardError
         nil
       end
 
