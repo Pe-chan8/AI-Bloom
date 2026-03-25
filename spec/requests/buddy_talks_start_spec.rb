@@ -1,33 +1,41 @@
 require "rails_helper"
 
-RSpec.describe "BuddyTalks POST /buddy_talk/start", type: :request do
+RSpec.describe "BuddyTalks", type: :request do
   include ActiveJob::TestHelper
 
-  let(:user) { create_user(email: "t_start@example.com") }
+  let(:password) { "password123" }
+  let(:user) do
+    create(
+      :user,
+      email: "test_start@example.com",
+      password: password,
+      password_confirmation: password
+    )
+  end
+  let!(:buddy) { create(:buddy) }
 
   before do
-    sign_in user
-    clear_enqueued_jobs
-  end
-
-  def valid_category
-    if Post.respond_to?(:categories) && Post.categories.is_a?(Hash) && Post.categories.any?
-      Post.categories.keys.first
-    else
-      "general"
-    end
-  end
-
-  it "ログイン済みで開始すると Ai::GenerateBuddyReplyJob が enqueue される" do
-    expect {
-      post "/buddy_talk/start", params: {
-        post: {
-          body: "開始テスト",
-          posted_at: Time.zone.now,
-          title: "テスト",
-          category: valid_category
-        }
+    post user_session_path, params: {
+      user: {
+        email: user.email,
+        password: password
       }
-    }.to have_enqueued_job(Ai::GenerateBuddyReplyJob)
+    }
+  end
+
+  describe "POST /buddy_talk/start" do
+    it "ログイン済みで開始すると Ai::GenerateBuddyReplyJob が enqueue される" do
+      expect do
+        post start_buddy_talk_path, params: {
+          post: {
+            title: "今日のこと",
+            body: "ちょっと疲れた",
+            mood: "positive",
+            posted_at: Time.zone.now,
+            category: "work"
+          }
+        }
+      end.to have_enqueued_job(Ai::GenerateBuddyReplyJob)
+    end
   end
 end
