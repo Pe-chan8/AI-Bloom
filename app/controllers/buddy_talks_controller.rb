@@ -25,29 +25,21 @@ class BuddyTalksController < ApplicationController
     tags = Array(params.dig(:post, :tag_list)).reject(&:blank?)
     @post.tags_text = tags.join(",") if @post.respond_to?(:tags_text=)
 
-    # この会話の返信担当バディを固定
     @post.buddy = current_buddy_fallback
 
     if @post.save
       session[:buddy_talk_post_id] = @post.id
 
       first_text = @post.body.to_s.strip
-      if first_text.present? && defined?(BuddyMessage)
-        BuddyMessage.create!(user: current_user, post: @post, role: :user, content: first_text)
-      end
 
-      @placeholder_id = build_placeholder_id
+      result = BuddyTalks::EnqueueService.new(
+        user: current_user,
+        post: @post,
+        buddy: @post.buddy,
+        session: session
+      ).enqueue_reply!(message_text: first_text)
 
-      session[:ai_polling_started_at] ||= {}
-      session[:ai_polling_started_at][@post.id.to_s] = Time.zone.now.iso8601
-
-      Ai::GenerateBuddyReplyJob.perform_later(
-        post_id: @post.id,
-        user_id: current_user.id,
-        buddy_id: @post.buddy_id,
-        placeholder_id: @placeholder_id
-      )
-
+      @placeholder_id = result.placeholder_id
       @buddy_talk = @post
       @messages = build_timeline(@buddy_talk)
       @buddy = @buddy_talk.buddy || current_buddy_fallback
@@ -254,10 +246,6 @@ class BuddyTalksController < ApplicationController
       end
       format.html { redirect_to buddy_talk_topic_path(@buddy_talk) }
     end
-  end
-
-  def build_placeholder_id
-    "ai_pending_#{SecureRandom.hex(8)}"
   end
 
   def set_bottom_nav

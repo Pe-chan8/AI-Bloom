@@ -12,7 +12,7 @@ module BuddyTalks
     end
 
     def enqueue_reply!(message_text:)
-      create_user_message!(message_text)
+      create_user_message!(message_text) if message_text.present?
 
       placeholder_id = prepare_polling!
 
