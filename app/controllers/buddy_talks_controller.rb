@@ -275,13 +275,13 @@ class BuddyTalksController < ApplicationController
     list = []
 
     if defined?(BuddyMessage)
-      list += BuddyMessage.where(post: post, role: :user).order(:created_at).to_a
+      list += BuddyMessage.where(post: post, role: :user).order(created_at: :asc).to_a
     end
 
     ai_scope = AiMessage.where(post: post, kind: %i[reply tip weekly])
     ai_scope = ai_scope.where(buddy_id: post.buddy_id) if post.buddy_id.present?
 
-    list += ai_scope.order(:created_at).to_a
+    list += ai_scope.order(created_at: :asc).to_a
 
     list.sort_by(&:created_at)
   end

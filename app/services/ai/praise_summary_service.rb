@@ -180,13 +180,13 @@ module Ai
       parts = []
 
       if defined?(BuddyMessage)
-        BuddyMessage.where(post: post).order(:created_at).each do |m|
+        BuddyMessage.where(post: post).order(created_at: :asc).each do |m|
           parts << "【ユーザー】#{m.content}"
         end
       end
 
       AiMessage.where(post: post, kind: %i[reply tip])
-              .order(:created_at)
+              .order(created_at: :asc)
               .each do |m|
         parts << "【AI】#{m.content}"
       end
