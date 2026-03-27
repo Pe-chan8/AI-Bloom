@@ -102,9 +102,9 @@ module Ai
 
       rows =
         BuddyMessage.where(post: post)
-                   .order(:created_at)
-                   .last(limit)
-                   .map do |m|
+                  .order(created_at: :asc)
+                  .last(limit)
+                  .map do |m|
                      prefix = (m.role.to_s == "ai") ? "AI:" : "USER:"
                      "#{prefix} #{m.content}"
                    end

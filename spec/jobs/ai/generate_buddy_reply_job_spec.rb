@@ -6,7 +6,9 @@ RSpec.describe Ai::GenerateBuddyReplyJob, type: :job do
   it "実行しても例外にならない（外部AIはスタブ）" do
     user = create_user(email: "job1@example.com")
 
-    buddy = Buddy.find_by(code: "normal") || Buddy.create!(code: "normal", name: "ノーマル")
+    buddy = Buddy.find_or_create_by!(code: "normal") do |record|
+      record.name = "ノーマル"
+    end
 
     category =
       if Post.respond_to?(:categories) && Post.categories.is_a?(Hash) && Post.categories.any?
