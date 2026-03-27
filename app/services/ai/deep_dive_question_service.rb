@@ -67,10 +67,10 @@ module Ai
 
     def build_recent_log(post)
       list = []
-      list += BuddyMessage.where(post: post).order(:created_at).to_a if defined?(BuddyMessage)
+      list += BuddyMessage.where(post: post).order(created_at: :asc).to_a if defined?(BuddyMessage)
       list += AiMessage.where(post: post, kind: %i[reply tip weekly])
                       .includes(:buddy)
-                      .order(:created_at)
+                      .order(created_at: :asc)
                       .to_a
       list = list.sort_by(&:created_at)
       list = list.last(RECENT_TURNS * 2)
