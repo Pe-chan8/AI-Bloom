@@ -25,7 +25,7 @@ module Ai
       )
 
       # 4) 返信が作れなかった場合のフォールバック（表示だけはする）
-      if ai_message.blank?
+      unless ai_message
         ai_message = AiMessage.create!(
           user: user,
           buddy: buddy,

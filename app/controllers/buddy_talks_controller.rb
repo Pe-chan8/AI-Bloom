@@ -10,7 +10,7 @@ class BuddyTalksController < ApplicationController
   def show
     @post = Post.new(posted_at: Time.zone.now)
 
-    if @buddy_talk.present?
+    if @buddy_talk
       @messages = build_timeline(@buddy_talk)
       @buddy = @buddy_talk.buddy || current_buddy_fallback
     else
@@ -254,10 +254,10 @@ class BuddyTalksController < ApplicationController
 
   def set_current_buddy_talk
     id = params[:id].presence || session[:buddy_talk_post_id]
-    return if id.blank?
+    return unless id
 
     @buddy_talk = current_user.posts.find_by(id: id)
-    session[:buddy_talk_post_id] = @buddy_talk.id if @buddy_talk.present?
+    session[:buddy_talk_post_id] = @buddy_talk.id if @buddy_talk
   end
 
   def set_topic_buddy_talk

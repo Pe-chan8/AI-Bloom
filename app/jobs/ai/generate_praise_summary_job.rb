@@ -18,7 +18,7 @@ module Ai
                  .order(created_at: :desc)
                  .first
 
-      if ai_message.blank?
+      unless ai_message
         ai_message = AiMessage.create!(
           user: user,
           buddy: buddy,
